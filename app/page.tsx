@@ -99,11 +99,7 @@ const translations = {
 };
 
 /* Font scale map — LGWS 4.0 mandates at least 3 sizes */
-const fontScaleMap = {
-  small: 0.875,
-  medium: 1,
-  large: 1.2,
-};
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
   const [lang, setLang] = useState<"en" | "si" | "ta">("en");
@@ -133,7 +129,7 @@ export default function Home() {
         {/* Logo */}
         <div className="header-logo">
           <Image
-            src="/logo.png"
+            src={`${basePath}/logo.png`}
             alt="Ministry of Education, Sri Lanka — Official Logo"
             width={768}
             height={107}
@@ -284,7 +280,7 @@ export default function Home() {
             <div className="brand-header">
               <div className="brand-icon-box" aria-hidden="true">
                 <Image
-                  src="/icon.svg"
+                  src={`${basePath}/icon.svg`}
                   alt=""
                   width={32}
                   height={32}
