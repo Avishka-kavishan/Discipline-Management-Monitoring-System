@@ -1,121 +1,33 @@
 "use client";
 
+import "../i18n";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { TextInput } from "@/components/TextInput";
 import { Select } from "@/components/Select";
 import { Button } from "@/components/Button";
-
-/* ============================================================
-   TRANSLATIONS (trilingual — LGWS 4.0)
-   ============================================================ */
-const translations = {
-  en: {
-    subtitle: "Disciplinary Case Management & Monitoring System",
-    portalHeading: "Internal Staff Portal",
-    portalDesc:
-      "This system is restricted to authorized personnel of the organization. All activity is logged and monitored in accordance with internal policy.",
-    warningCreds:
-      "Credentials are confidential — do not share your account.",
-    warningAuth:
-      "Unauthorized access is prohibited and subject to disciplinary action.",
-    cardTitle: "Account Access",
-    cardSubtitle: "Sign in to your account or register a new one.",
-    emailLabel: "E-mail:",
-    passwordLabel: "Password:",
-    roleLabel: "Role:",
-    selectRole: "Select Role",
-    roleAdmin: "Administrator",
-    roleDailyMail: "Daily mail officer",
-    roleSubject: "Subject officer",
-    roleInvestigation: "Investigation officer",
-    loginBtn: "Login",
-    footerText:
-      "© 2026 Ministry of Education, Sri Lanka. All rights reserved.",
-    skipLink: "Skip to main content",
-    fontSmall: "Decrease font size",
-    fontMedium: "Reset font size",
-    fontLarge: "Increase font size",
-    docTitle:
-      "Login | Disciplinary Case Management & Monitoring System",
-  },
-  si: {
-    subtitle: "විනය නඩු කළමනාකරණ සහ අධීක්ෂණ පද්ධතිය",
-    portalHeading: "අභ්‍යන්තර කාර්ය මණ්ඩල ද්වාරය",
-    portalDesc:
-      "මෙම පද්ධතිය සංවිධානයේ බලයලත් නිලධාරීන්ට පමණක් සීමා වේ. සියලුම ක්‍රියාකාරකම් අභ්‍යන්තර ප්‍රතිපත්තියට අනුකූලව ලොග් කර නිරීක්ෂණය කරනු ලැබේ.",
-    warningCreds:
-      "අක්තපත්‍ර රහස්‍ය වේ — ඔබේ ගිණුම බෙදා නොගන්න.",
-    warningAuth:
-      "අනවසර ප්‍රවේශය තහනම් වන අතර විනය ක්‍රියාමාර්ගවලට යටත් වේ.",
-    cardTitle: "ගිණුම් ප්‍රවේශය",
-    cardSubtitle:
-      "ඔබගේ ගිණුමට ලොග් වන්න හෝ අලුත් එකක් ලියාපදිංචි කරන්න.",
-    emailLabel: "විද්‍යුත් තැපෑල:",
-    passwordLabel: "මුරපදය:",
-    roleLabel: "භූමිකාව:",
-    selectRole: "භූමිකාව තෝරන්න",
-    roleAdmin: "පරිපාලක",
-    roleDailyMail: "දෛනික තැපැල් නිලධාරී",
-    roleSubject: "විෂය භාර නිලධාරී",
-    roleInvestigation: "විමර්ශන නිලධාරී",
-    loginBtn: "ඇතුළු වන්න",
-    footerText:
-      "© 2026 අධ්‍යාපන අමාත්‍යාංශය, ශ්‍රී ලංකාව. සියලුම හිමිකම් ඇවිරිණි.",
-    skipLink: "ප්‍රධාන අන්තර්ගතයට යන්න",
-    fontSmall: "අකුරු ප්‍රමාණය අඩු කරන්න",
-    fontMedium: "අකුරු ප්‍රමාණය යළි සකසන්න",
-    fontLarge: "අකුරු ප්‍රමාණය වැඩි කරන්න",
-    docTitle: "ඇතුළු වීම | විනය නඩු කළමනාකරණ සහ අධීක්ෂණ පද්ධතිය",
-  },
-  ta: {
-    subtitle:
-      "ஒழுக்காற்று வழக்கு மேலாண்மை மற்றும் கண்காணிப்பு அமைப்பு",
-    portalHeading: "உள்வாரி பணியாளர் நுழைவாயில்",
-    portalDesc:
-      "இந்த அமைப்பு அமைப்பின் அங்கீகரிக்கப்பட்ட பணியாளர்களுக்கு மட்டுமே வரையறுக்கப்பட்டுள்ளது. அனைத்து செயல்பாடுகளும் உள் கொள்கையின்படி பதிவு செய்யப்பட்டு கண்காணிக்கப்படுகின்றன.",
-    warningCreds:
-      "சான்றுகள் ரகசியமானவை — உங்கள் கணக்கைப் பகிர வேண்டாம்.",
-    warningAuth:
-      "அங்கீகரிக்கப்படாத அணுகல் தடைசெய்யப்பட்டுள்ளது மற்றும் ஒழுங்கு நடவடிக்கைக்கு உட்பட்டது.",
-    cardTitle: "கணக்கு அணுகல்",
-    cardSubtitle:
-      "உங்கள் கணக்கில் உள்நுழையவும் அல்லது புதியதை பதிவு செய்யவும்.",
-    emailLabel: "மின்னஞ்சல்:",
-    passwordLabel: "கடவுச்சொல்:",
-    roleLabel: "பதவி:",
-    selectRole: "பதவியைத் தேர்ந்தெடுக்கவும்",
-    roleAdmin: "நிர்வாகி",
-    roleDailyMail: "தினசரி அஞ்சல் அதிகாரி",
-    roleSubject: "விடய உத்தியோகத்தர்",
-    roleInvestigation: "விசாரணை உத்தியோகத்தர்",
-    loginBtn: "உள்நுழைக",
-    footerText:
-      "© 2026 கல்வி அமைச்சு, இலங்கை. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
-    skipLink: "முதன்மை உள்ளடக்கத்திற்கு செல்லவும்",
-    fontSmall: "எழுத்து அளவை குறைக்கவும்",
-    fontMedium: "எழுத்து அளவை மீட்டமைக்கவும்",
-    fontLarge: "எழுத்து அளவை அதிகரிக்கவும்",
-    docTitle:
-      "உள்நுழைவு | ஒழுக்காற்று வழக்கு மேலாண்மை மற்றும் கண்காணிப்பு அமைப்பு",
-  },
-};
 
 /* Font scale map — LGWS 4.0 mandates at least 3 sizes */
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
-  const [lang, setLang] = useState<"en" | "si" | "ta">("en");
+  const { t, i18n } = useTranslation();
   const [fontScale, setFontScale] = useState<"small" | "medium" | "large">(
     "medium"
   );
-  const t = translations[lang];
+
+  const lang = i18n.language;
 
   /* Sync html[lang] and document.title with active language */
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = t.docTitle;
-  }, [lang, t.docTitle]);
+    document.title = t("docTitle");
+  }, [lang, t]);
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div
@@ -124,7 +36,7 @@ export default function Home() {
     >
       {/* ── Skip Navigation Link (WCAG 2.4.1) ─────────────── */}
       <a href="#main-content" className="skip-link">
-        {t.skipLink}
+        {t("skipLink")}
       </a>
 
       {/* ── Header Bar ──────────────────────────────────────── */}
@@ -177,7 +89,7 @@ export default function Home() {
                 value="small"
                 checked={fontScale === "small"}
                 onChange={() => setFontScale("small")}
-                aria-label={t.fontSmall}
+                aria-label={t("fontSmall")}
                 className="sr-only"
               />
               A
@@ -193,7 +105,7 @@ export default function Home() {
                 value="medium"
                 checked={fontScale === "medium"}
                 onChange={() => setFontScale("medium")}
-                aria-label={t.fontMedium}
+                aria-label={t("fontMedium")}
                 className="sr-only"
               />
               A
@@ -209,7 +121,7 @@ export default function Home() {
                 value="large"
                 checked={fontScale === "large"}
                 onChange={() => setFontScale("large")}
-                aria-label={t.fontLarge}
+                aria-label={t("fontLarge")}
                 className="sr-only"
               />
               A
@@ -233,7 +145,7 @@ export default function Home() {
                 name="language"
                 value="si"
                 checked={lang === "si"}
-                onChange={() => setLang("si")}
+                onChange={() => changeLanguage("si")}
                 aria-label="Switch language to Sinhala"
                 className="sr-only"
               />
@@ -248,7 +160,7 @@ export default function Home() {
                 name="language"
                 value="ta"
                 checked={lang === "ta"}
-                onChange={() => setLang("ta")}
+                onChange={() => changeLanguage("ta")}
                 aria-label="Switch language to Tamil"
                 className="sr-only"
               />
@@ -263,7 +175,7 @@ export default function Home() {
                 name="language"
                 value="en"
                 checked={lang === "en"}
-                onChange={() => setLang("en")}
+                onChange={() => changeLanguage("en")}
                 aria-label="Switch language to English"
                 className="sr-only"
               />
@@ -292,14 +204,14 @@ export default function Home() {
               </div>
               <div className="brand-text">
                 <h1 className="brand-title">DCMMS</h1>
-                <p className="brand-subtitle">{t.subtitle}</p>
+                <p className="brand-subtitle">{t("subtitle")}</p>
               </div>
             </div>
 
             {/* Internal Staff Portal section */}
             <div className="portal-info">
-              <h2 className="portal-heading">{t.portalHeading}</h2>
-              <p className="portal-description">{t.portalDesc}</p>
+              <h2 className="portal-heading">{t("portalHeading")}</h2>
+              <p className="portal-description">{t("portalDesc")}</p>
             </div>
 
             {/* Security Warning Notices */}
@@ -324,7 +236,7 @@ export default function Home() {
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
-                <p className="warning-text">{t.warningCreds}</p>
+                <p className="warning-text">{t("warningCreds")}</p>
               </div>
               <div className="warning-item">
                 <svg
@@ -342,7 +254,7 @@ export default function Home() {
                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                   />
                 </svg>
-                <p className="warning-text">{t.warningAuth}</p>
+                <p className="warning-text">{t("warningAuth")}</p>
               </div>
             </div>
           </div>
@@ -352,8 +264,8 @@ export default function Home() {
             <div className="login-card">
               {/* Card Header */}
               <div className="card-header">
-                <h2 className="card-title">{t.cardTitle}</h2>
-                <p className="card-subtitle">{t.cardSubtitle}</p>
+                <h2 className="card-title">{t("cardTitle")}</h2>
+                <p className="card-subtitle">{t("cardSubtitle")}</p>
               </div>
 
               {/* Login Form */}
@@ -362,7 +274,7 @@ export default function Home() {
                   id="email"
                   name="email"
                   type="email"
-                  label={t.emailLabel}
+                  label={t("emailLabel")}
                   required
                   autoComplete="email"
                   aria-required="true"
@@ -372,7 +284,7 @@ export default function Home() {
                   id="password"
                   name="password"
                   type="password"
-                  label={t.passwordLabel}
+                  label={t("passwordLabel")}
                   required
                   autoComplete="current-password"
                   aria-required="true"
@@ -381,23 +293,23 @@ export default function Home() {
                 <Select
                   id="role"
                   name="role"
-                  label={t.roleLabel}
+                  label={t("roleLabel")}
                   required
                   defaultValue=""
                   aria-required="true"
-                  placeholder={t.selectRole}
+                  placeholder={t("selectRole")}
                   options={[
-                    { value: "admin", label: t.roleAdmin },
-                    { value: "dailymail", label: t.roleDailyMail },
-                    { value: "subject", label: t.roleSubject },
-                    { value: "investigation", label: t.roleInvestigation },
+                    { value: "admin", label: t("roleAdmin") },
+                    { value: "dailymail", label: t("roleDailyMail") },
+                    { value: "subject", label: t("roleSubject") },
+                    { value: "investigation", label: t("roleInvestigation") },
                   ]}
                 />
 
                 {/* Login Button */}
                 <div className="submit-wrapper">
                   <Button type="submit">
-                    {t.loginBtn}
+                    {t("loginBtn")}
                   </Button>
                 </div>
               </form>
@@ -409,7 +321,7 @@ export default function Home() {
 
       {/* ── Footer ──────────────────────────────────────────── */}
       <footer className="footer">
-        <p className="footer-text">{t.footerText}</p>
+        <p className="footer-text">{t("footerText")}</p>
       </footer>
     </div>
   );
