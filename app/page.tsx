@@ -7,7 +7,7 @@ export default function Home() {
       <header className="header">
         <div className="header-logo">
           <Image
-            src="/logo.jpg"
+            src="/logo.png"
             alt="Ministry of Education Logo"
             width={320}
             height={70}
@@ -29,9 +29,13 @@ export default function Home() {
             {/* DCMMS Branding Header */}
             <div className="brand-header">
               <div className="brand-icon-box">
-                <svg className="brand-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7h12m-3 0l-3-1m0 0l3 9a5.002 5.002 0 006.001 0M15 7l3 9m-3-9h-6M12 3v18m-6-3h12" />
-                </svg>
+                <Image
+                  src="/icon.svg"
+                  alt="DCMMS Brand Icon"
+                  width={32}
+                  height={32}
+                  className="brand-icon"
+                />
               </div>
               <div className="brand-text">
                 <h1 className="brand-title">DCMMS</h1>
