@@ -63,7 +63,7 @@ body {
 
 .header-title-sinhala {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -71,7 +71,7 @@ body {
 
 .header-title-tamil {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -79,7 +79,7 @@ body {
 
 .header-title-english {
   font-family: var(--font-bebas);
-  font-size: 15px;
+  font-size: 22px;
   color: #000000;
   letter-spacing: 0.05em;
   font-weight: 300;
@@ -88,15 +88,15 @@ body {
 
 @media (min-width: 768px) {
   .header-title-sinhala {
-    font-size: 13px;
+    font-size: 18px;
   }
 
   .header-title-tamil {
-    font-size: 12px;
+    font-size: 17px;
   }
 
   .header-title-english {
-    font-size: 18px;
+    font-size: 28px;
   }
 }
 
@@ -113,9 +113,9 @@ body {
   border: 1px solid var(--border-color);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border-radius: 9999px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -166,15 +166,15 @@ body {
 
 @media (min-width: 1200px) {
   .header-title-sinhala {
-    font-size: 15px;
+    font-size: 22px;
   }
 
   .header-title-tamil {
-    font-size: 14px;
+    font-size: 20px;
   }
 
   .header-title-english {
-    font-size: 20px;
+    font-size: 34px;
   }
 }
 
