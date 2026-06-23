@@ -63,7 +63,7 @@ body {
 
 .header-title-sinhala {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -71,7 +71,7 @@ body {
 
 .header-title-tamil {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -79,23 +79,58 @@ body {
 
 .header-title-english {
   font-family: var(--font-bebas);
-  font-size: 20px;
+  font-size: 15px;
   color: #000000;
   letter-spacing: 0.05em;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.1;
 }
 
 @media (min-width: 768px) {
   .header-title-sinhala {
-    font-size: 15px;
+    font-size: 13px;
   }
+
   .header-title-tamil {
-    font-size: 14px;
+    font-size: 12px;
   }
+
   .header-title-english {
-    font-size: 24px;
+    font-size: 18px;
   }
+}
+
+/* Language Switcher */
+.header-lang-selector {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.lang-btn {
+  background-color: var(--input-background);
+  border: 1px solid var(--border-color);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  background-color: rgba(228, 228, 231, 0.8);
+  border-color: #cbd5e1;
+}
+
+.lang-btn.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(14, 22, 47, 0.1);
 }
 
 @media (min-width: 1024px) {
@@ -119,17 +154,27 @@ body {
   .brand-logo-img {
     height: 48px;
   }
+
+  .header-lang-selector {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+  }
 }
 
 @media (min-width: 1200px) {
   .header-title-sinhala {
-    font-size: 17px;
+    font-size: 15px;
   }
+
   .header-title-tamil {
-    font-size: 16px;
+    font-size: 14px;
   }
+
   .header-title-english {
-    font-size: 28px;
+    font-size: 20px;
   }
 }
 
