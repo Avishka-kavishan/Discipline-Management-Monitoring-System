@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { TextInput } from "@/components/TextInput";
+import { Select } from "@/components/Select";
+import { Button } from "@/components/Button";
 
 /* ============================================================
    TRANSLATIONS (trilingual — LGWS 4.0)
@@ -355,76 +358,47 @@ export default function Home() {
 
               {/* Login Form */}
               <form className="login-form" noValidate>
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    {t.emailLabel}
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    aria-required="true"
-                    className="form-input"
-                  />
-                </div>
+                <TextInput
+                  id="email"
+                  name="email"
+                  type="email"
+                  label={t.emailLabel}
+                  required
+                  autoComplete="email"
+                  aria-required="true"
+                />
 
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    {t.passwordLabel}
-                  </label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    autoComplete="current-password"
-                    aria-required="true"
-                    className="form-input"
-                  />
-                </div>
+                <TextInput
+                  id="password"
+                  name="password"
+                  type="password"
+                  label={t.passwordLabel}
+                  required
+                  autoComplete="current-password"
+                  aria-required="true"
+                />
 
-                <div className="form-group">
-                  <label htmlFor="role" className="form-label">
-                    {t.roleLabel}
-                  </label>
-                  <div className="select-wrapper">
-                    <select
-                      id="role"
-                      name="role"
-                      required
-                      defaultValue=""
-                      aria-required="true"
-                      className="form-select"
-                    >
-                      <option value="" disabled>
-                        {t.selectRole}
-                      </option>
-                      <option value="admin">{t.roleAdmin}</option>
-                      <option value="dailymail">{t.roleDailyMail}</option>
-                      <option value="subject">{t.roleSubject}</option>
-                      <option value="investigation">
-                        {t.roleInvestigation}
-                      </option>
-                    </select>
-                    <div className="select-arrow-container" aria-hidden="true">
-                      <svg
-                        className="select-arrow"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+                <Select
+                  id="role"
+                  name="role"
+                  label={t.roleLabel}
+                  required
+                  defaultValue=""
+                  aria-required="true"
+                  placeholder={t.selectRole}
+                  options={[
+                    { value: "admin", label: t.roleAdmin },
+                    { value: "dailymail", label: t.roleDailyMail },
+                    { value: "subject", label: t.roleSubject },
+                    { value: "investigation", label: t.roleInvestigation },
+                  ]}
+                />
 
                 {/* Login Button */}
                 <div className="submit-wrapper">
-                  <button type="submit" className="btn-login">
+                  <Button type="submit">
                     {t.loginBtn}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
