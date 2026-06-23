@@ -16,8 +16,8 @@ export default function Home() {
           />
         </div>
         <div className="header-title">
-          <div className="header-title-sinhala">විනය දෙපාර්තමේන්තුව</div>
-          <div className="header-title-tamil">ஒழுக்காற்றுத் திணைக்களம்</div>
+          <div className="header-title-sinhala">විනය ශාඛාව</div>
+          <div className="header-title-tamil">ஒழுக்காற்றுப் பிரிவு</div>
           <div className="header-title-english">DISCIPLINE BRANCH</div>
         </div>
       </header>
