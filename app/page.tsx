@@ -9,14 +9,16 @@ export default function Home() {
           <Image
             src="/logo.png"
             alt="Ministry of Education Logo"
-            width={320}
-            height={70}
-            className="h-12 w-auto object-contain"
+            width={768}
+            height={107}
+            className="brand-logo-img"
             priority
           />
         </div>
         <div className="header-title">
-          DEPARTMENT OF DISCIPLINE
+          <div className="header-title-sinhala">විනය දෙපාර්තමේන්තුව</div>
+          <div className="header-title-tamil">ஒழுக்காற்றுத் திணைக்களம்</div>
+          <div className="header-title-english">DISCIPLINE BRANCH</div>
         </div>
       </header>
 

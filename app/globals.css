@@ -46,18 +46,55 @@ body {
   justify-content: center;
 }
 
+.brand-logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 .header-title {
-  font-family: var(--font-bebas);
-  font-size: 28px;
-  color: #000000;
-  letter-spacing: 0.05em;
-  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   text-align: center;
 }
 
+.header-title-sinhala {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.header-title-tamil {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.header-title-english {
+  font-family: var(--font-bebas);
+  font-size: 20px;
+  color: #000000;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
 @media (min-width: 768px) {
-  .header-title {
-    font-size: 32px;
+  .header-title-sinhala {
+    font-size: 15px;
+  }
+  .header-title-tamil {
+    font-size: 14px;
+  }
+  .header-title-english {
+    font-size: 24px;
   }
 }
 
@@ -75,12 +112,24 @@ body {
     left: 24px;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .brand-logo-img {
+    height: 48px;
   }
 }
 
 @media (min-width: 1200px) {
-  .header-title {
-    font-size: 36px;
+  .header-title-sinhala {
+    font-size: 17px;
+  }
+  .header-title-tamil {
+    font-size: 16px;
+  }
+  .header-title-english {
+    font-size: 28px;
   }
 }
 
@@ -389,7 +438,7 @@ body {
   .main-content {
     padding: 16px;
   }
-  
+
   .card-header {
     padding: 20px 24px;
   }
@@ -398,15 +447,15 @@ body {
     padding: 24px;
     gap: 16px;
   }
-  
+
   .left-panel {
     gap: 20px;
   }
-  
+
   .brand-title {
     font-size: 26px;
   }
-  
+
   .portal-heading {
     font-size: 18px;
   }
