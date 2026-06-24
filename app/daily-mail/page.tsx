@@ -307,7 +307,7 @@ export default function DailyMailPage() {
                 className="menu-toggle-btn" 
                 aria-label="Toggle Sidebar Menu"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                aria-expanded={isSidebarOpen ? "true" : "false"}
+                {...(isSidebarOpen ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
               >
                 <svg className="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
