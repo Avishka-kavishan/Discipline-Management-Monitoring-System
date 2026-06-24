@@ -338,8 +338,10 @@ export default function DailyMailPage() {
                 </div>
               </div>
               <div className="hero-action-details">
-                <h4 className="hero-action-title">{t("registerLetterComplainBanner")}</h4>
-                <p className="hero-action-description">Easily log new incoming correspondence and files for dispatching to subject officers.</p>
+                <div className="sub-action">
+                  <h4 className="hero-action-title">{t("registerLetterComplainBanner")}</h4>
+                  <p className="hero-action-description">Easily log new incoming correspondence and files for dispatching to subject officers.</p>
+                </div>
                 <button className="btn-hero-action" onClick={() => setIsModalOpen(true)}>
                   {t("newLetterBtn")}
                 </button>
