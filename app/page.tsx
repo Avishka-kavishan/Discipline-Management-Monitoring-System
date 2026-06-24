@@ -3,6 +3,7 @@
 import "../i18n";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { TextInput } from "@/components/TextInput";
 import { Select } from "@/components/Select";
@@ -13,11 +14,23 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
   const { t, i18n } = useTranslation();
+  const router = useRouter();
   const [fontScale, setFontScale] = useState<"small" | "medium" | "large">(
     "medium"
   );
 
   const lang = i18n.language;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const role = formData.get("role");
+    if (role === "dailymail") {
+      router.push("/daily-mail");
+    } else {
+      alert("Redirect is only implemented for the Daily Mail Officer role in this assignment.");
+    }
+  };
 
   /* Sync html[lang] and document.title with active language */
   useEffect(() => {
@@ -269,7 +282,7 @@ export default function Home() {
               </div>
 
               {/* Login Form */}
-              <form className="login-form" noValidate>
+              <form className="login-form" onSubmit={handleSubmit} noValidate>
                 <TextInput
                   id="email"
                   name="email"
