@@ -98,6 +98,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(10, 17, 63, 0.4);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 999;
   animation: sidebarBackdropFade 0.25s ease-out;
