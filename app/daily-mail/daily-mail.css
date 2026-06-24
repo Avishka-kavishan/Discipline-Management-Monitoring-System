@@ -650,7 +650,6 @@
 .table-responsive-container {
   width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .letters-data-table {
@@ -824,6 +823,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(15, 23, 42, 0.4);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 999;
   display: flex;

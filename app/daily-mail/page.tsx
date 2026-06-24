@@ -1,6 +1,7 @@
 "use client";
 
 import "../../i18n";
+import "./daily-mail.css";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -433,6 +434,7 @@ export default function DailyMailPage() {
                     value={priorityFilter}
                     onChange={(e: any) => setPriorityFilter(e.target.value)}
                     className="filter-priority-select"
+                    aria-label={t("priority")}
                   >
                     <option value="all">All Priorities</option>
                     <option value="high">High</option>
