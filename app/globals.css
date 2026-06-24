@@ -126,7 +126,7 @@ body {
 
 .header-title-sinhala {
   font-family: var(--font-sans);
-  font-size: calc(14px * var(--font-scale));
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -134,7 +134,7 @@ body {
 
 .header-title-tamil {
   font-family: var(--font-sans);
-  font-size: calc(14px * var(--font-scale));
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.2;
@@ -142,7 +142,7 @@ body {
 
 .header-title-english {
   font-family: var(--font-bebas);
-  font-size: calc(22px * var(--font-scale));
+  font-size: 22px;
   color: #000000;
   letter-spacing: 0.05em;
   font-weight: 300;
@@ -305,9 +305,9 @@ body {
    HEADER — DESKTOP LAYOUT (>= 1024px)
    ============================================================ */
 @media (min-width: 768px) {
-  .header-title-sinhala { font-size: calc(18px * var(--font-scale)); }
-  .header-title-tamil   { font-size: calc(17px * var(--font-scale)); }
-  .header-title-english { font-size: calc(28px * var(--font-scale)); }
+  .header-title-sinhala { font-size: 18px; }
+  .header-title-tamil   { font-size: 17px; }
+  .header-title-english { font-size: 28px; }
 }
 
 @media (min-width: 1024px) {
@@ -343,9 +343,9 @@ body {
 }
 
 @media (min-width: 1200px) {
-  .header-title-sinhala { font-size: calc(22px * var(--font-scale)); }
-  .header-title-tamil   { font-size: calc(20px * var(--font-scale)); }
-  .header-title-english { font-size: calc(34px * var(--font-scale)); }
+  .header-title-sinhala { font-size: 22px; }
+  .header-title-tamil   { font-size: 20px; }
+  .header-title-english { font-size: 34px; }
 }
 
 /* ============================================================
