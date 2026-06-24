@@ -1,0 +1,51 @@
+/* Common styles for stats grids and cards across dashboards */
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.dashboard-stats-grid .hero-action-card {
+  padding: 20px;
+}
+
+.dashboard-stats-grid h4 {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dashboard-stats-grid p {
+  margin: 10px 0 0 0;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* Value status color helper classes */
+.dashboard-stats-grid p.val-success {
+  font-size: 24px;
+  color: #4caf50;
+}
+
+.dashboard-stats-grid p.val-warning {
+  color: #ff9800;
+}
+
+.dashboard-stats-grid p.val-danger {
+  color: #f44336;
+}
+
+.dashboard-stats-grid p.val-info {
+  color: #2196f3;
+}
+
+.dashboard-stats-grid p.val-purple {
+  color: #9c27b0;
+}
+
+/* Active status badge styling for User Management tables */
+.badge-status-active {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+}

@@ -2,7 +2,7 @@
    DAILY MAIL OFFICER DASHBOARD VIEWS
    ============================================================ */
 :root {
-  --sidebar-background: #0A113F;
+  --sidebar-background: #0e162f;
   --sidebar-active-bg: #d2e4fc;
   --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
 }
@@ -100,7 +100,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(10, 17, 63, 0.4);
+  background-color: rgba(14, 22, 47, 0.4);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 999;
@@ -1065,12 +1065,12 @@
   font-size: calc(13px * var(--font-scale));
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgba(10, 17, 63, 0.15);
+  box-shadow: 0 4px 6px -1px rgba(14, 22, 47, 0.15);
   transition: background-color 0.2s, transform 0.1s;
 }
 
 .btn-modal-save:hover {
-  background-color: #1c295c;
+  background-color: #1c294a;
 }
 
 .btn-modal-save:active {

@@ -27,8 +27,14 @@ export default function Home() {
     const role = formData.get("role");
     if (role === "dailymail") {
       router.push("/daily-mail");
+    } else if (role === "admin") {
+      router.push("/admin");
+    } else if (role === "subject") {
+      router.push("/subject");
+    } else if (role === "investigation") {
+      router.push("/investigation");
     } else {
-      alert("Redirect is only implemented for the Daily Mail Officer role in this assignment.");
+      alert("Please select a valid role.");
     }
   };
 
