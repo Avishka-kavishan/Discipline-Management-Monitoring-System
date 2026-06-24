@@ -33,7 +33,7 @@
 }
 
 /* ============================================================
-   SIDEBAR
+   SIDEBAR & DRAWER LAYOUT
    ============================================================ */
 .sidebar {
   background-color: var(--sidebar-background);
@@ -43,14 +43,86 @@
   padding: 24px;
   gap: 28px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Mobile default overlay drawer styling */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  box-shadow: none;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.btn-sidebar-close {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.btn-sidebar-close:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: #ffffff;
+}
+
+.close-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 17, 63, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  animation: sidebarBackdropFade 0.25s ease-out;
+}
+
+@keyframes sidebarBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (min-width: 1024px) {
   .sidebar {
-    min-height: 100vh;
     position: sticky;
     top: 0;
+    width: auto;
+    height: 100vh;
+    min-height: 100vh;
+    transform: none !important;
+    box-shadow: none !important;
     justify-content: space-between;
+    z-index: 10;
+  }
+  
+  .btn-sidebar-close {
+    display: none;
   }
 }
 

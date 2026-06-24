@@ -29,6 +29,20 @@ export default function DailyMailPage() {
   const [fontScale, setFontScale] = useState<"small" | "medium" | "large">("medium");
   const lang = i18n.language;
 
+  // Mobile sidebar visibility state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Close sidebar on Escape key press (A11y compliance)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // Sync document properties
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -178,24 +192,41 @@ export default function DailyMailPage() {
         {t("skipLink")}
       </a>
 
+      {/* Backdrop overlay for mobile viewport */}
+      {isSidebarOpen && (
+        <div className="sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
+      )}
+
       {/* ── Layout Grid Wrapper ── */}
       <div className="dashboard-layout">
         
         {/* ============================================================
            SIDEBAR PANEL
            ============================================================ */}
-        <aside className="sidebar">
-          {/* Logo Section */}
-          <div className="sidebar-brand">
-            <div className="sidebar-brand-icon">
-              <svg className="scales-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 3v17M12 5l-8 3M12 5l8 3M4 8v5c0 2 2 3 4 3s4-1 4-3V8M20 8v5c0 2-2 3-4 3s-4-1-4-3V8" />
+        <aside className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+          {/* Logo & Close Button Header */}
+          <div className="sidebar-header">
+            <div className="sidebar-brand">
+              <div className="sidebar-brand-icon">
+                <svg className="scales-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 3v17M12 5l-8 3M12 5l8 3M4 8v5c0 2 2 3 4 3s4-1 4-3V8M20 8v5c0 2-2 3-4 3s-4-1-4-3V8" />
+                </svg>
+              </div>
+              <div className="sidebar-brand-text">
+                <h1 className="sidebar-brand-title">DCMMS</h1>
+                <p className="sidebar-brand-subtitle">{t("subtitle")}</p>
+              </div>
+            </div>
+
+            <button 
+              className="btn-sidebar-close" 
+              onClick={() => setIsSidebarOpen(false)} 
+              aria-label="Close sidebar"
+            >
+              <svg className="close-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </div>
-            <div className="sidebar-brand-text">
-              <h1 className="sidebar-brand-title">DCMMS</h1>
-              <p className="sidebar-brand-subtitle">{t("subtitle")}</p>
-            </div>
+            </button>
           </div>
 
           {/* Quick Action Sidebar Button */}
@@ -272,7 +303,12 @@ export default function DailyMailPage() {
           {/* ── Top App Bar Header ── */}
           <header className="dashboard-header">
             <div className="dashboard-header-left">
-              <button className="menu-toggle-btn" aria-label="Toggle Sidebar Menu">
+              <button 
+                className="menu-toggle-btn" 
+                aria-label="Toggle Sidebar Menu"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-expanded={isSidebarOpen}
+              >
                 <svg className="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
