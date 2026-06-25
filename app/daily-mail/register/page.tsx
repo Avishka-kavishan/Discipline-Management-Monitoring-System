@@ -40,8 +40,8 @@ export default function RegisterComplaintPage() {
   // Sync document properties
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.title = `Register New Complaint | DCMMS`;
-  }, [lang]);
+    document.title = `${t("registerComplaintTitle")} | DCMMS`;
+  }, [lang, t]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -196,7 +196,12 @@ export default function RegisterComplaintPage() {
                 <svg className="date-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span>June 24, 2026</span>
+                <span suppressHydrationWarning>
+                  {new Date("2026-06-24").toLocaleDateString(
+                    lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US",
+                    { year: "numeric", month: "long", day: "numeric" }
+                  )}
+                </span>
               </div>
 
               <div className="divider-line" aria-hidden="true" />
@@ -322,7 +327,7 @@ export default function RegisterComplaintPage() {
                       type="text"
                       value={formState.letterNo}
                       onChange={(e) => setFormState({ ...formState, letterNo: e.target.value })}
-                      placeholder="Enter letter number"
+                      placeholder={t("placeholderLetterNo")}
                       className="field-input"
                     />
                   </div>
@@ -336,7 +341,7 @@ export default function RegisterComplaintPage() {
                       required
                       value={formState.senderName}
                       onChange={(e) => setFormState({ ...formState, senderName: e.target.value })}
-                      placeholder="Enter sender's name"
+                      placeholder={t("senderPlaceholder")}
                       className="field-input"
                     />
                   </div>
@@ -349,7 +354,7 @@ export default function RegisterComplaintPage() {
                       type="text"
                       value={formState.letterType}
                       onChange={(e) => setFormState({ ...formState, letterType: e.target.value })}
-                      placeholder="Enter letter type"
+                      placeholder={t("placeholderLetterType")}
                       className="field-input"
                     />
                   </div>
@@ -364,9 +369,9 @@ export default function RegisterComplaintPage() {
                       className="field-select"
                     >
                       <option value="">{t("selectRole")}</option>
-                      <option value="Kamal Perera">Kamal Perera (Subject Officer)</option>
-                      <option value="Suresh Silva">Suresh Silva (Investigation Officer)</option>
-                      <option value="Aruni Rajapaksha">Aruni Rajapaksha (Administrator)</option>
+                      <option value="Kamal Perera">{t("optKamalPerera")}</option>
+                      <option value="Suresh Silva">{t("optSureshSilva")}</option>
+                      <option value="Aruni Rajapaksha">{t("optAruniRajapaksha")}</option>
                     </select>
                   </div>
 
@@ -381,11 +386,11 @@ export default function RegisterComplaintPage() {
                       className="field-select"
                     >
                       <option value="">{t("selectRole")}</option>
-                      <option value="Student Misconduct">Student Misconduct</option>
-                      <option value="Teacher Absenteeism">Teacher Absenteeism</option>
-                      <option value="Financial Mismanagement">Financial Mismanagement</option>
-                      <option value="Administrative Issues">Administrative Issues</option>
-                      <option value="Other">Other</option>
+                      <option value="Student Misconduct">{t("optStudentMisconduct")}</option>
+                      <option value="Teacher Absenteeism">{t("optTeacherAbsenteeism")}</option>
+                      <option value="Financial Mismanagement">{t("optFinancialMismanagement")}</option>
+                      <option value="Administrative Issues">{t("optAdministrativeIssues")}</option>
+                      <option value="Other">{t("optOther")}</option>
                     </select>
                   </div>
 
@@ -401,7 +406,7 @@ export default function RegisterComplaintPage() {
                         type="text"
                         value={formState.instituteName}
                         onChange={(e) => setFormState({ ...formState, instituteName: e.target.value })}
-                        placeholder="Search institute name"
+                        placeholder={t("placeholderInstituteName")}
                         className="field-input input-with-left-icon"
                       />
                     </div>
@@ -416,7 +421,7 @@ export default function RegisterComplaintPage() {
                       required
                       value={formState.refNo}
                       onChange={(e) => setFormState({ ...formState, refNo: e.target.value })}
-                      placeholder="e.g. DCMMS/2026/001"
+                      placeholder={t("refPlaceholder")}
                       className="field-input"
                     />
                   </div>
@@ -445,7 +450,7 @@ export default function RegisterComplaintPage() {
                       id="subject"
                       value={formState.subject}
                       onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
-                      placeholder="Enter letter title"
+                      placeholder={t("subjectPlaceholder")}
                       className="field-textarea"
                     />
                   </div>

@@ -83,5 +83,16 @@
   "province": "மாகாணம்",
   "saveAsDraft": "வரைவாகச் சேமிக்கவும்",
   "submitBtn": "சமர்ப்பிக்கவும்",
-  "backToHome": "முகப்புப்பக்கத்திற்குத் திரும்பு"
+  "backToHome": "முகப்புப்பக்கத்திற்குத் திரும்பு",
+  "placeholderLetterNo": "கடித எண்ணை உள்ளிடவும்",
+  "placeholderLetterType": "கடித வகையை உள்ளிடவும்",
+  "placeholderInstituteName": "நிறுவனத்தின் பெயரைத் தேடுங்கள்",
+  "optKamalPerera": "கமல் பெரேரா (விடய உத்தியோகத்தர்)",
+  "optSureshSilva": "சுரேஷ் சில்வா (விசாரணை உத்தியோகத்தர்)",
+  "optAruniRajapaksha": "அருணி ராஜபக்ஷ (நிர்வாகி)",
+  "optStudentMisconduct": "மாணவர் ஒழுங்கீனம்",
+  "optTeacherAbsenteeism": "ஆசிரியர் வருகை தராமை",
+  "optFinancialMismanagement": "நிதி முறைகேடு",
+  "optAdministrativeIssues": "நிர்வாக சிக்கல்கள்",
+  "optOther": "மற்றவை"
 }

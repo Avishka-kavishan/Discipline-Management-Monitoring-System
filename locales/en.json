@@ -83,5 +83,16 @@
   "province": "Province",
   "saveAsDraft": "Save as draft",
   "submitBtn": "Submit",
-  "backToHome": "Back to Home"
+  "backToHome": "Back to Home",
+  "placeholderLetterNo": "Enter letter number",
+  "placeholderLetterType": "Enter letter type",
+  "placeholderInstituteName": "Search institute name",
+  "optKamalPerera": "Kamal Perera (Subject Officer)",
+  "optSureshSilva": "Suresh Silva (Investigation Officer)",
+  "optAruniRajapaksha": "Aruni Rajapaksha (Administrator)",
+  "optStudentMisconduct": "Student Misconduct",
+  "optTeacherAbsenteeism": "Teacher Absenteeism",
+  "optFinancialMismanagement": "Financial Mismanagement",
+  "optAdministrativeIssues": "Administrative Issues",
+  "optOther": "Other"
 }

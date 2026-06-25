@@ -83,5 +83,16 @@
   "province": "පළාත",
   "saveAsDraft": "කටු පටක් ලෙස සුරකින්න",
   "submitBtn": "ඉදිරිපත් කරන්න",
-  "backToHome": "නැවත මුල් පිටුවට"
+  "backToHome": "නැවත මුල් පිටුවට",
+  "placeholderLetterNo": "ලිපි අංකය ඇතුළත් කරන්න",
+  "placeholderLetterType": "ලිපි වර්ගය ඇතුළත් කරන්න",
+  "placeholderInstituteName": "ආයතනයේ නම සොයන්න",
+  "optKamalPerera": "කමල් පෙරේරා (විෂය භාර නිලධාරී)",
+  "optSureshSilva": "සුරේෂ් සිල්වා (විමර්ශන නිලධාරී)",
+  "optAruniRajapaksha": "අරුණි රාජපක්ෂ (පරිපාලක)",
+  "optStudentMisconduct": "ශිෂ්‍ය නොමනා හැසිරීම්",
+  "optTeacherAbsenteeism": "ගුරු නොපැමිණීම",
+  "optFinancialMismanagement": "මූල්‍ය අවභාවිතය",
+  "optAdministrativeIssues": "පරිපාලන ගැටළු",
+  "optOther": "වෙනත්"
 }
