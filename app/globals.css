@@ -2,7 +2,8 @@
    DESIGN TOKENS
    ============================================================ */
 :root {
-  color-scheme: light; /* Force light mode — disable OS dark-mode inheritance */
+  color-scheme: light;
+  /* Force light mode — disable OS dark-mode inheritance */
 
   --background: #f5f6f8;
   --foreground: #1e293b;
@@ -20,15 +21,25 @@
 }
 
 /* Font scale levels — LGWS 4.0 mandates at least 3 sizes (no inline styles) */
-.login-page[data-font-scale="small"]  { --font-scale: 0.875; }
-.login-page[data-font-scale="medium"] { --font-scale: 1;     }
-.login-page[data-font-scale="large"]  { --font-scale: 1.2;   }
+.login-page[data-font-scale="small"] {
+  --font-scale: 0.875;
+}
+
+.login-page[data-font-scale="medium"] {
+  --font-scale: 1;
+}
+
+.login-page[data-font-scale="large"] {
+  --font-scale: 1.2;
+}
 
 
 /* ============================================================
    RESET & BASE
    ============================================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -125,24 +136,24 @@ body {
 }
 
 .header-title-sinhala {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e293b;
+  font-family: "Abhaya Libre", "FMAbhaya", serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
   line-height: 1.2;
 }
 
 .header-title-tamil {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
-  color: #1e293b;
+  color: #000000;
   line-height: 1.2;
 }
 
 .header-title-english {
   font-family: var(--font-bebas);
-  font-size: 22px;
+  font-size: 10px;
   color: #000000;
   letter-spacing: 0.05em;
   font-weight: 300;
@@ -198,9 +209,17 @@ body {
   user-select: none;
 }
 
-.size-btn-small  { font-size: 11px; }
-.size-btn-medium { font-size: 14px; }
-.size-btn-large  { font-size: 18px; }
+.size-btn-small {
+  font-size: 11px;
+}
+
+.size-btn-medium {
+  font-size: 14px;
+}
+
+.size-btn-large {
+  font-size: 18px;
+}
 
 .size-btn:hover,
 .size-btn.active {
@@ -266,7 +285,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: calc(13px * var(--font-scale));
-  font-weight: 600;
+  font-weight: 800;
   padding: 7px 14px;
   border-radius: 9999px;
   cursor: pointer;
@@ -291,9 +310,9 @@ body {
 }
 
 /* Focus ring on the hidden radio/checkbox input inside each label */
-.lang-btn input[type="radio"]:focus-visible ~ *,
+.lang-btn input[type="radio"]:focus-visible~*,
 .lang-btn:has(input[type="radio"]:focus-visible),
-.size-btn input[type="radio"]:focus-visible ~ *,
+.size-btn input[type="radio"]:focus-visible~*,
 .size-btn:has(input[type="radio"]:focus-visible),
 .contrast-btn:has(input[type="checkbox"]:focus-visible),
 .btn-login:focus-visible {
@@ -305,9 +324,17 @@ body {
    HEADER — DESKTOP LAYOUT (>= 1024px)
    ============================================================ */
 @media (min-width: 768px) {
-  .header-title-sinhala { font-size: 18px; }
-  .header-title-tamil   { font-size: 17px; }
-  .header-title-english { font-size: 28px; }
+  .header-title-sinhala {
+    font-size: 22px;
+  }
+
+  .header-title-tamil {
+    font-size: 20px;
+  }
+
+  .header-title-english {
+    font-size: 20px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -330,7 +357,9 @@ body {
     justify-content: flex-start;
   }
 
-  .brand-logo-img { height: 48px; }
+  .brand-logo-img {
+    height: 48px;
+  }
 
   .header-controls-bar {
     position: absolute;
@@ -339,13 +368,23 @@ body {
     transform: translateY(-50%);
   }
 
-  .header-lang-selector { margin-top: 0; }
+  .header-lang-selector {
+    margin-top: 0;
+  }
 }
 
 @media (min-width: 1200px) {
-  .header-title-sinhala { font-size: 22px; }
-  .header-title-tamil   { font-size: 20px; }
-  .header-title-english { font-size: 34px; }
+  .header-title-sinhala {
+    font-size: 28px;
+  }
+
+  .header-title-tamil {
+    font-size: 22px;
+  }
+
+  .header-title-english {
+    font-size: 22px;
+  }
 }
 
 /* ============================================================
@@ -359,8 +398,17 @@ body {
   padding: 24px;
 }
 
-@media (min-width: 768px)  { .main-content { padding: 48px; } }
-@media (min-width: 1280px) { .main-content { padding: 80px; } }
+@media (min-width: 768px) {
+  .main-content {
+    padding: 48px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .main-content {
+    padding: 80px;
+  }
+}
 
 .content-grid {
   width: 100%;
@@ -378,7 +426,11 @@ body {
   }
 }
 
-@media (min-width: 1280px) { .content-grid { gap: 80px; } }
+@media (min-width: 1280px) {
+  .content-grid {
+    gap: 80px;
+  }
+}
 
 /* ============================================================
    LEFT COLUMN / BRANDING
