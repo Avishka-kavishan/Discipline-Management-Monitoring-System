@@ -321,7 +321,7 @@ export default function DailyMailPage() {
                   <h4 className="hero-action-title">{t("registerLetterComplainBanner")}</h4>
                   <p className="hero-action-description">Easily log new incoming correspondence and files for dispatching to subject officers.</p>
                 </div>
-                <button className="btn-hero-action" onClick={() => router.push(`${basePath}/daily-mail/register`)}>
+                <button className="btn-hero-action" onClick={() => router.push("/daily-mail/register")}>
                   {t("newLetterBtn")}
                 </button>
               </div>

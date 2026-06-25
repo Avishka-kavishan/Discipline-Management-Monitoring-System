@@ -295,7 +295,7 @@ export default function RegisterComplaintPage() {
                   <h1 className="register-title">Register New Complaint</h1>
                   <p className="register-subtitle">Enter the general details of the received letter.</p>
                 </div>
-                <Link href={`${basePath}/daily-mail`} className="btn-back-home">
+                <Link href="/daily-mail" className="btn-back-home">
                   <svg className="btn-back-home-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
@@ -503,7 +503,7 @@ export default function RegisterComplaintPage() {
                     <button
                       type="button"
                       className="btn-action-cancel"
-                      onClick={() => router.push(`${basePath}/daily-mail`)}
+                      onClick={() => router.push("/daily-mail")}
                     >
                       {t("cancelBtn")}
                     </button>

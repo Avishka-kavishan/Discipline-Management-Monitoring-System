@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   let quickActionButton = null;
   if (activeRole === "dailymail") {
     quickActionButton = (
-      <Link href={`${basePath}/daily-mail/register`} className="btn-sidebar-action" style={{ textDecoration: 'none' }}>
+      <Link href="/daily-mail/register" className="btn-sidebar-action" style={{ textDecoration: 'none' }}>
         <span className="plus-icon">+</span> {t("newLetterBtn")}
       </Link>
     );
