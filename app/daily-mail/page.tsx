@@ -39,6 +39,21 @@ export default function DailyMailPage() {
   // Mobile sidebar visibility state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // Dynamic localized greeting based on time of day
+  const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    let greetingKey = "greetingMorning";
+    if (hour >= 12 && hour < 17) {
+      greetingKey = "greetingAfternoon";
+    } else if (hour >= 17 || hour < 5) {
+      greetingKey = "greetingEvening";
+    }
+    const firstName = t("welcomeUser").split(" ")[0];
+    setGreeting(`${t(greetingKey)}, ${firstName}!`);
+  }, [t]);
+
   // Close sidebar on Escape key press (A11y compliance)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -308,7 +323,7 @@ export default function DailyMailPage() {
 
           {/* ── Dynamic Welcome Banner Greeting ── */}
           <section className="welcome-greeting-section">
-            <h3 className="greeting-text">{t("goodMorning")}</h3>
+            <h3 className="greeting-text">{greeting}</h3>
           </section>
 
           {/* ── Quick Action Hero Cards (Figma Hero Banner) ── */}
