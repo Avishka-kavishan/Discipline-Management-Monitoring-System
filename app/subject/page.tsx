@@ -3,6 +3,7 @@
 import "../../i18n";
 import "../daily-mail/daily-mail.css";
 import "../dashboard-common.css";
+import "./subject.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -24,6 +25,18 @@ export default function SubjectPage() {
   // Accessibility & language state
   const [fontScale, setFontScale] = useState<"small" | "medium" | "large">("medium");
   const lang = i18n.language;
+
+  // Format date statically to match mockup
+  const getFormattedDate = () => {
+    const date = new Date("2026-06-23");
+    if (lang === "si") {
+      return date.toLocaleDateString("si-LK", { day: "numeric", month: "long", year: "numeric" });
+    }
+    if (lang === "ta") {
+      return date.toLocaleDateString("ta-LK", { day: "numeric", month: "long", year: "numeric" });
+    }
+    return "23 June, 2026";
+  };
 
   // Mobile sidebar visibility state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -68,27 +81,11 @@ export default function SubjectPage() {
   const [cases, setCases] = useState<Case[]>([
     {
       id: "1",
-      caseNo: "CAS/2026/001",
-      assignedDate: "2026-06-20",
-      subject: "Complaint on student discipline issues at Royal College",
+      caseNo: "CA/2026/01",
+      assignedDate: "2026/01/03",
+      subject: "Vilation of guidlines during annual sport meet",
       priority: "high",
       status: "In Progress",
-    },
-    {
-      id: "2",
-      caseNo: "CAS/2026/002",
-      assignedDate: "2026-06-22",
-      subject: "Teacher absenteeism inquiry report - Jaffna Zone",
-      priority: "medium",
-      status: "In Progress",
-    },
-    {
-      id: "3",
-      caseNo: "CAS/2026/003",
-      assignedDate: "2026-06-23",
-      subject: "Violation of guidelines during annual sport meet",
-      priority: "low",
-      status: "Pending",
     },
   ]);
 
@@ -147,23 +144,20 @@ export default function SubjectPage() {
                 </svg>
               </button>
               <div className="dashboard-title-area">
-                <h2 className="dashboard-main-title">{t("subjectDashboardTitle")}</h2>
-                <p className="dashboard-main-subtitle">{t("subjectDashboardDesc")}</p>
+                <h2 className="dashboard-main-title">Subject Officer</h2>
+                <p className="dashboard-main-subtitle">{t("subjectOfficerDesc")}</p>
               </div>
             </div>
 
             <div className="dashboard-header-right">
               {/* Date display badge */}
               <div className="date-badge">
+                <span suppressHydrationWarning>
+                  {getFormattedDate()}
+                </span>
                 <svg className="date-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <span suppressHydrationWarning>
-                  {new Date("2026-06-24").toLocaleDateString(
-                    lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US",
-                    { year: "numeric", month: "long", day: "numeric" }
-                  )}
-                </span>
               </div>
 
               <div className="divider-line" aria-hidden="true" />
@@ -258,18 +252,42 @@ export default function SubjectPage() {
           </section>
 
           {/* Stats section */}
-          <section className="dashboard-stats-grid">
-            <div className="hero-action-card">
-              <h4>Assigned Cases</h4>
-              <p>{cases.length}</p>
+          <section className="dashboard-stats-grid subject-stats-grid">
+            <div className="hero-action-card stat-card-total">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h4>{t("totalCases")}</h4>
+              </div>
+              <p className="stat-value text-blue">56</p>
             </div>
-            <div className="hero-action-card">
-              <h4>In Progress</h4>
-              <p className="val-warning">2</p>
+            <div className="hero-action-card stat-card-inprogress">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
+                </svg>
+                <h4>{t("inProgressCases")}</h4>
+              </div>
+              <p className="stat-value text-orange">10</p>
             </div>
-            <div className="hero-action-card">
-              <h4>Pending Review</h4>
-              <p className="val-danger">1</p>
+            <div className="hero-action-card stat-card-pending">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h4>{t("pendingCases")}</h4>
+              </div>
+              <p className="stat-value text-yellow">05</p>
+            </div>
+            <div className="hero-action-card stat-card-close">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h4>{t("closeCases")}</h4>
+              </div>
+              <p className="stat-value text-green">32</p>
             </div>
           </section>
 
@@ -277,7 +295,12 @@ export default function SubjectPage() {
           <section className="letters-list-section">
             {/* Header Filter Panel */}
             <div className="letters-list-header">
-              <h3 className="section-title">Assigned Cases</h3>
+              <h3 className="section-title">
+                <svg className="section-title-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span>{t("assignedCases")}</span>
+              </h3>
 
               <div className="letters-filters-group">
                 {/* Search Bar Input */}
@@ -289,28 +312,25 @@ export default function SubjectPage() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search cases..."
+                    placeholder={t("searchCasesPlaceholder")}
                     className="search-input"
                   />
                 </div>
 
-                {/* Priority Selection Filter */}
-                <div className="filter-dropdown-wrapper">
+                {/* Filter button */}
+                <button
+                  className="btn-filter-icon"
+                  aria-label="Filter"
+                  onClick={() => setPriorityFilter(priorityFilter === "all" ? "high" : "all")}
+                >
                   <svg className="filter-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
-                  <select
-                    value={priorityFilter}
-                    onChange={(e: any) => setPriorityFilter(e.target.value)}
-                    className="filter-priority-select"
-                    aria-label="Filter Priority"
-                  >
-                    <option value="all">All Priorities</option>
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
-                  </select>
-                </div>
+                </button>
+
+                <a href="#" className="view-all-reset-link" onClick={(e) => { e.preventDefault(); setSearchQuery(""); setPriorityFilter("all"); }}>
+                  {t("viewAll")} <span className="arrow-span">→</span>
+                </a>
               </div>
             </div>
 
@@ -319,12 +339,12 @@ export default function SubjectPage() {
               <table className="letters-data-table">
                 <thead>
                   <tr>
-                    <th scope="col">Case No</th>
-                    <th scope="col">Assigned Date</th>
-                    <th scope="col">Subject</th>
-                    <th scope="col">Priority</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" className="text-center">Actions</th>
+                    <th scope="col">{t("caseNo")}</th>
+                    <th scope="col">{t("assignedDate")}</th>
+                    <th scope="col">{t("subjectText")}</th>
+                    <th scope="col">{t("priority")}</th>
+                    <th scope="col">{t("status")}</th>
+                    <th scope="col" className="text-center">{t("addDetails")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -335,28 +355,28 @@ export default function SubjectPage() {
                         <td>{item.assignedDate}</td>
                         <td className="subject-cell">{item.subject}</td>
                         <td>
-                          <span className={`badge-badge badge-priority-${item.priority}`}>
-                            {t(`priority${item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}`)}
-                          </span>
+                          {item.priority === "high" ? t("priorityHigh") : item.priority === "medium" ? t("priorityMedium") : t("priorityLow")}
                         </td>
                         <td>
-                          <span className="badge-badge badge-status-assigned">
-                            {item.status}
+                          <span className={`badge-badge ${
+                            item.status === "In Progress" ? "badge-status-inprogress" :
+                            item.status === "Closed" ? "badge-status-closed" : "badge-status-pending"
+                          }`}>
+                            {item.status === "In Progress" ? t("statusInProgress") :
+                             item.status === "Closed" ? t("statusClosed") : t("statusPending")}
                           </span>
                         </td>
                         <td className="text-center actions-cell">
-                          <button
-                            className="btn-action-view"
-                            onClick={() => {
-                              alert(`Case details:\nCase No: ${item.caseNo}\nSubject: ${item.subject}\nStatus: ${item.status}`);
+                          <a
+                            href="#"
+                            className="add-details-link"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              alert(`Add case details for Case No: ${item.caseNo}`);
                             }}
-                            title="View Case Details"
                           >
-                            <svg className="action-row-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          </button>
+                            {t("addDetails")}
+                          </a>
                         </td>
                       </tr>
                     ))
@@ -367,6 +387,10 @@ export default function SubjectPage() {
                       </td>
                     </tr>
                   )}
+                  {/* Mock placeholder stripes as shown in the screenshot */}
+                  <tr className="placeholder-stripe-row"><td colSpan={6} aria-hidden="true"></td></tr>
+                  <tr className="placeholder-stripe-row"><td colSpan={6} aria-hidden="true"></td></tr>
+                  <tr className="placeholder-stripe-row"><td colSpan={6} aria-hidden="true"></td></tr>
                 </tbody>
               </table>
             </div>

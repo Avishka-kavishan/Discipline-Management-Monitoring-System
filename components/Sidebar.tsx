@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   } else if (activeRole === "subject") {
     userName = t("subjectName");
     userEmail = t("subjectEmail");
-    userInitials = "KP";
+    userInitials = "NS";
   } else if (activeRole === "investigation") {
     userName = t("investigationName");
     userEmail = t("investigationEmail");
