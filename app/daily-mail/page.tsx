@@ -16,10 +16,16 @@ interface Letter {
   receivedDate: string;
   letterDate: string;
   senderName: string;
-  senderAddress: string;
+  senderAddress?: string;
   subject: string;
   priority: "high" | "medium" | "low";
   status: "registered" | "assigned" | "pending";
+  letterNo?: string;
+  letterType?: string;
+  officerName?: string;
+  subjectCategory?: string;
+  instituteName?: string;
+  regionProvince?: "region" | "province";
 }
 
 export default function DailyMailPage() {
@@ -49,6 +55,33 @@ export default function DailyMailPage() {
     document.documentElement.lang = lang;
     document.title = `${t("dailyMailReporter")} | DCMMS`;
   }, [lang, t]);
+
+  // Sync letters with localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("dcmms_letters");
+      if (stored) {
+        try {
+          setLetters(JSON.parse(stored));
+        } catch (e) {
+          console.error("Error parsing stored letters", e);
+        }
+      } else {
+        localStorage.setItem("dcmms_letters", JSON.stringify(letters));
+      }
+    }
+  }, []);
+
+  // Check for registration success flag on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const showSuccess = localStorage.getItem("show_register_success");
+      if (showSuccess === "true") {
+        triggerToast(t("toastSuccess"));
+        localStorage.removeItem("show_register_success");
+      }
+    }
+  }, [t]);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -95,19 +128,6 @@ export default function DailyMailPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [priorityFilter, setPriorityFilter] = useState<"all" | "high" | "medium" | "low">("all");
 
-  // Modal form state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newLetterForm, setNewLetterForm] = useState({
-    refNo: "",
-    senderName: "",
-    senderAddress: "",
-    letterDate: "",
-    receivedDate: "",
-    subject: "",
-    priority: "medium" as "high" | "medium" | "low",
-    status: "registered" as "registered" | "assigned" | "pending",
-  });
-
   // Success Notification Toast state
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -125,46 +145,6 @@ export default function DailyMailPage() {
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push("/");
-  };
-
-  // Register New Letter Submit Handler
-  const handleRegisterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Check basic required fields
-    if (!newLetterForm.refNo || !newLetterForm.senderName || !newLetterForm.subject) {
-      alert("Please fill in all required fields (Reference Number, Sender Name, and Subject).");
-      return;
-    }
-
-    const createdLetter: Letter = {
-      id: Date.now().toString(),
-      refNo: newLetterForm.refNo,
-      senderName: newLetterForm.senderName,
-      senderAddress: newLetterForm.senderAddress || "N/A",
-      letterDate: newLetterForm.letterDate || new Date().toISOString().split("T")[0],
-      receivedDate: newLetterForm.receivedDate || new Date().toISOString().split("T")[0],
-      subject: newLetterForm.subject,
-      priority: newLetterForm.priority,
-      status: newLetterForm.status,
-    };
-
-    setLetters([createdLetter, ...letters]);
-    setIsModalOpen(false);
-
-    // Reset Form
-    setNewLetterForm({
-      refNo: "",
-      senderName: "",
-      senderAddress: "",
-      letterDate: "",
-      receivedDate: "",
-      subject: "",
-      priority: "medium",
-      status: "registered",
-    });
-
-    triggerToast(t("toastSuccess"));
   };
 
   // Filter letters list in real-time
@@ -196,7 +176,6 @@ export default function DailyMailPage() {
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        setIsModalOpen={setIsModalOpen}
         handleLogout={handleLogout}
       />
 
@@ -342,7 +321,7 @@ export default function DailyMailPage() {
                   <h4 className="hero-action-title">{t("registerLetterComplainBanner")}</h4>
                   <p className="hero-action-description">Easily log new incoming correspondence and files for dispatching to subject officers.</p>
                 </div>
-                <button className="btn-hero-action" onClick={() => setIsModalOpen(true)}>
+                <button className="btn-hero-action" onClick={() => router.push(`${basePath}/daily-mail/register`)}>
                   {t("newLetterBtn")}
                 </button>
               </div>
@@ -437,7 +416,18 @@ export default function DailyMailPage() {
                           <button
                             className="btn-action-view"
                             onClick={() => {
-                              alert(`Letter Ref: ${letter.refNo}\nSubject: ${letter.subject}\nSender: ${letter.senderName}\nAddress: ${letter.senderAddress}`);
+                              alert(
+                                `Letter No: ${letter.letterNo || "N/A"}\n` +
+                                `Reference Number: ${letter.refNo}\n` +
+                                `Letter Type: ${letter.letterType || "N/A"}\n` +
+                                `Name of Officer: ${letter.officerName || "N/A"}\n` +
+                                `Subject Category: ${letter.subjectCategory || "N/A"}\n` +
+                                `Institute Name: ${letter.instituteName || "N/A"}\n` +
+                                `Letter Date: ${letter.letterDate}\n` +
+                                `Received Date: ${letter.receivedDate}\n` +
+                                `Region/Province: ${letter.regionProvince ? (letter.regionProvince.charAt(0).toUpperCase() + letter.regionProvince.slice(1)) : "N/A"}\n` +
+                                `Letter Title: ${letter.subject}`
+                              );
                             }}
                             title="View Details"
                           >
@@ -473,167 +463,7 @@ export default function DailyMailPage() {
         </main>
       </div>
 
-      {/* ============================================================
-         REGISTER NEW LETTER BACKDROP MODAL FORM
-         ============================================================ */}
-      {isModalOpen && (
-        <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-          <div className="modal-card">
-            
-            {/* Modal Header */}
-            <div className="modal-header">
-              <h3 id="modal-title" className="modal-title">{t("newLetterModalTitle")}</h3>
-              <button className="modal-close-x-btn" onClick={() => setIsModalOpen(false)} aria-label="Close modal">
-                &times;
-              </button>
-            </div>
-
-            {/* Modal Body / Register Letter Input Form */}
-            <form onSubmit={handleRegisterSubmit} className="modal-form">
-              
-              <div className="modal-form-grid">
-                
-                {/* Reference Number */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-refNo" className="modal-label">
-                    {t("refNo")} <span className="required-star">*</span>
-                  </label>
-                  <input
-                    id="modal-refNo"
-                    type="text"
-                    required
-                    value={newLetterForm.refNo}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, refNo: e.target.value })}
-                    placeholder={t("refPlaceholder")}
-                    className="modal-input"
-                  />
-                </div>
-
-                {/* Sender Name */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-sender" className="modal-label">
-                    {t("senderName")} <span className="required-star">*</span>
-                  </label>
-                  <input
-                    id="modal-sender"
-                    type="text"
-                    required
-                    value={newLetterForm.senderName}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, senderName: e.target.value })}
-                    placeholder={t("senderPlaceholder")}
-                    className="modal-input"
-                  />
-                </div>
-
-                {/* Sender Address */}
-                <div className="modal-form-group full-width">
-                  <label htmlFor="modal-address" className="modal-label">
-                    {t("senderAddress")}
-                  </label>
-                  <textarea
-                    id="modal-address"
-                    rows={2}
-                    value={newLetterForm.senderAddress}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, senderAddress: e.target.value })}
-                    placeholder="e.g., School address or organization department"
-                    className="modal-textarea"
-                  />
-                </div>
-
-                {/* Letter Date */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-letterDate" className="modal-label">
-                    {t("letterDate")}
-                  </label>
-                  <input
-                    id="modal-letterDate"
-                    type="date"
-                    value={newLetterForm.letterDate}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, letterDate: e.target.value })}
-                    className="modal-input"
-                  />
-                </div>
-
-                {/* Received Date */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-receivedDate" className="modal-label">
-                    {t("receivedDate")}
-                  </label>
-                  <input
-                    id="modal-receivedDate"
-                    type="date"
-                    value={newLetterForm.receivedDate}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, receivedDate: e.target.value })}
-                    className="modal-input"
-                  />
-                </div>
-
-                {/* Subject Description */}
-                <div className="modal-form-group full-width">
-                  <label htmlFor="modal-subject" className="modal-label">
-                    {t("subjectText")} <span className="required-star">*</span>
-                  </label>
-                  <input
-                    id="modal-subject"
-                    type="text"
-                    required
-                    value={newLetterForm.subject}
-                    onChange={(e) => setNewLetterForm({ ...newLetterForm, subject: e.target.value })}
-                    placeholder={t("subjectPlaceholder")}
-                    className="modal-input"
-                  />
-                </div>
-
-                {/* Priority Selection */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-priority" className="modal-label">
-                    {t("priority")}
-                  </label>
-                  <select
-                    id="modal-priority"
-                    value={newLetterForm.priority}
-                    onChange={(e: any) => setNewLetterForm({ ...newLetterForm, priority: e.target.value })}
-                    className="modal-select"
-                  >
-                    <option value="high">{t("priorityHigh")}</option>
-                    <option value="medium">{t("priorityMedium")}</option>
-                    <option value="low">{t("priorityLow")}</option>
-                  </select>
-                </div>
-
-                {/* Status Selection */}
-                <div className="modal-form-group">
-                  <label htmlFor="modal-status" className="modal-label">
-                    {t("status")}
-                  </label>
-                  <select
-                    id="modal-status"
-                    value={newLetterForm.status}
-                    onChange={(e: any) => setNewLetterForm({ ...newLetterForm, status: e.target.value })}
-                    className="modal-select"
-                  >
-                    <option value="registered">{t("statusRegistered")}</option>
-                    <option value="assigned">{t("statusAssigned")}</option>
-                    <option value="pending">{t("statusPending")}</option>
-                  </select>
-                </div>
-
-              </div>
-
-              {/* Form Action Buttons */}
-              <div className="modal-footer">
-                <button type="button" className="btn-modal-cancel" onClick={() => setIsModalOpen(false)}>
-                  {t("cancelBtn")}
-                </button>
-                <button type="submit" className="btn-modal-save">
-                  {t("saveBtn")}
-                </button>
-              </div>
-
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Modal and success toast removed or placed globally */}
 
       {/* ============================================================
          SUCCESS TOAST COMPONENT

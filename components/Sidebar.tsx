@@ -4,6 +4,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -67,11 +68,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Quick Action button based on active role
   let quickActionButton = null;
-  if (activeRole === "dailymail" && setIsModalOpen) {
+  if (activeRole === "dailymail") {
     quickActionButton = (
-      <button className="btn-sidebar-action" onClick={() => setIsModalOpen(true)}>
+      <Link href={`${basePath}/daily-mail/register`} className="btn-sidebar-action" style={{ textDecoration: 'none' }}>
         <span className="plus-icon">+</span> {t("newLetterBtn")}
-      </button>
+      </Link>
     );
   } else if (activeRole === "admin") {
     quickActionButton = (
