@@ -770,6 +770,22 @@
   margin-top: 2px;
 }
 
+.ref-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.ref-no-display {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.letter-no-display {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
 .subject-cell {
   max-width: 250px;
   white-space: nowrap;

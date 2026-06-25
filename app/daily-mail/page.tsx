@@ -107,33 +107,48 @@ export default function DailyMailPage() {
     {
       id: "1",
       refNo: "DCMMS/2026/001",
+      letterNo: "L-5421",
       receivedDate: "2026-06-20",
       letterDate: "2026-06-18",
-      senderName: "W. M. Perera (Principal - Royal College)",
-      senderAddress: "Royal College, Colombo 07",
+      senderName: "W. M. Perera",
+      instituteName: "Royal College, Colombo 07",
       subject: "Complaint on student discipline issues",
+      subjectCategory: "Student Misconduct",
+      officerName: "Kamal Perera",
+      letterType: "Complaint",
+      regionProvince: "province",
       priority: "high",
       status: "registered",
     },
     {
       id: "2",
       refNo: "DCMMS/2026/002",
+      letterNo: "L-8762",
       receivedDate: "2026-06-22",
       letterDate: "2026-06-20",
-      senderName: "S. K. Rajan (Zonal Director - Jaffna)",
-      senderAddress: "Zonal Education Office, Jaffna",
+      senderName: "S. K. Rajan",
+      instituteName: "Zonal Education Office, Jaffna",
       subject: "Teacher absenteeism inquiry report",
+      subjectCategory: "Teacher Absenteeism",
+      officerName: "Suresh Silva",
+      letterType: "Inquiry",
+      regionProvince: "region",
       priority: "medium",
       status: "assigned",
     },
     {
       id: "3",
       refNo: "DCMMS/2026/003",
+      letterNo: "L-1092",
       receivedDate: "2026-06-23",
       letterDate: "2026-06-21",
-      senderName: "Ministry of Education (Secretary)",
-      senderAddress: "Isurupaya, Battaramulla",
+      senderName: "Secretary",
+      instituteName: "Ministry of Education (Isurupaya)",
       subject: "Guidelines for annual sport meets",
+      subjectCategory: "Administrative Issues",
+      officerName: "Aruni Rajapaksha",
+      letterType: "Circular",
+      regionProvince: "province",
       priority: "low",
       status: "pending",
     },
@@ -166,7 +181,12 @@ export default function DailyMailPage() {
   const filteredLetters = letters.filter((letter) => {
     const matchesSearch =
       letter.refNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (letter.letterNo || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       letter.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (letter.instituteName || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (letter.letterType || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (letter.subjectCategory || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (letter.officerName || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       letter.subject.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesPriority = priorityFilter === "all" || letter.priority === priorityFilter;
@@ -400,12 +420,13 @@ export default function DailyMailPage() {
               <table className="letters-data-table">
                 <thead>
                   <tr>
-                    <th scope="col">{t("refNo")}</th>
+                    <th scope="col">{t("refNo")} / {t("letterNo")}</th>
                     <th scope="col">{t("receivedDate")}</th>
-                    <th scope="col">{t("senderName")}</th>
-                    <th scope="col">{t("subjectText")}</th>
-                    <th scope="col">{t("priority")}</th>
-                    <th scope="col">{t("status")}</th>
+                    <th scope="col">{t("senderName")} / {t("instituteName")}</th>
+                    <th scope="col">{t("letterType")}</th>
+                    <th scope="col">{t("subjectCategory")}</th>
+                    <th scope="col">{t("nameOfOfficer")}</th>
+                    <th scope="col">{t("letterTitle")}</th>
                     <th scope="col" className="text-center">{t("actions")}</th>
                   </tr>
                 </thead>
@@ -413,25 +434,39 @@ export default function DailyMailPage() {
                   {filteredLetters.length > 0 ? (
                     filteredLetters.map((letter) => (
                       <tr key={letter.id} className="letter-table-row">
-                        <td className="font-semibold text-primary">{letter.refNo}</td>
+                        <td className="font-semibold text-primary">
+                          <div className="ref-cell">
+                            <span className="ref-no-display">{letter.refNo}</span>
+                            {letter.letterNo && (
+                              <span className="letter-no-display">{letter.letterNo}</span>
+                            )}
+                          </div>
+                        </td>
                         <td>{letter.receivedDate}</td>
                         <td>
                           <div className="sender-cell">
                             <span className="sender-display-name">{letter.senderName}</span>
-                            <span className="sender-display-address">{letter.senderAddress}</span>
+                            {letter.instituteName && (
+                              <span className="sender-display-address">{letter.instituteName}</span>
+                            )}
                           </div>
                         </td>
+                        <td>{letter.letterType || "—"}</td>
+                        <td>
+                          {letter.subjectCategory ? (
+                            t(`opt${letter.subjectCategory.replace(/\s+/g, "")}`, letter.subjectCategory)
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td>
+                          {letter.officerName ? (
+                            t(`opt${letter.officerName.replace(/\s+/g, "")}`, letter.officerName)
+                          ) : (
+                            "—"
+                          )}
+                        </td>
                         <td className="subject-cell">{letter.subject}</td>
-                        <td>
-                          <span className={`badge-badge badge-priority-${letter.priority}`}>
-                            {t(`priority${letter.priority.charAt(0).toUpperCase() + letter.priority.slice(1)}`)}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`badge-badge badge-status-${letter.status}`}>
-                            {t(`status${letter.status.charAt(0).toUpperCase() + letter.status.slice(1)}`)}
-                          </span>
-                        </td>
                         <td className="text-center actions-cell">
                           <button
                             className="btn-action-view"
@@ -443,7 +478,7 @@ export default function DailyMailPage() {
                                 `Name of Officer: ${letter.officerName || "N/A"}\n` +
                                 `Subject Category: ${letter.subjectCategory || "N/A"}\n` +
                                 `Institute Name: ${letter.instituteName || "N/A"}\n` +
-                                `Letter Date: ${letter.letterDate}\n` +
+                                `Letter Date: ${letter.letterDate || "N/A"}\n` +
                                 `Received Date: ${letter.receivedDate}\n` +
                                 `Region/Province: ${letter.regionProvince ? (letter.regionProvince.charAt(0).toUpperCase() + letter.regionProvince.slice(1)) : "N/A"}\n` +
                                 `Letter Title: ${letter.subject}`
@@ -461,10 +496,10 @@ export default function DailyMailPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="empty-table-state-cell">
+                      <td colSpan={8} className="empty-table-state-cell">
                         <div className="empty-state-card">
                           <svg className="empty-state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.333a2 2 0 012.22 0l8 5.333A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-2.25-1.5a2 2 0 00-2.22 0l-2.25 1.5" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.333a2 2 0 012.22 0l8 5.333A2 2 0 0121 10.07V19M3 19a2 2 0 002-2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-2.25-1.5a2 2 0 00-2.22 0l-2.25 1.5" />
                           </svg>
                           <p>{t("noLettersFound")}</p>
                         </div>
