@@ -4,8 +4,6 @@
 .register-page-wrapper {
   background-color: var(--background);
   min-height: calc(100vh - 120px);
-  /* Adjust to leave room for header & footer */
-  padding: 0px 0;
 }
 
 .register-card {
