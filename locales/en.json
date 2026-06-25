@@ -69,5 +69,19 @@
   "refPlaceholder": "e.g., DCMMS/2026/001",
   "senderPlaceholder": "e.g., John Doe / School Board",
   "subjectPlaceholder": "e.g., Complaint regarding misconduct",
-  "noLettersFound": "No letter entries found matching search"
+  "noLettersFound": "No letter entries found matching search",
+  "registerComplaintTitle": "Register New Complaint",
+  "registerComplaintDesc": "Enter the general details of the received letter.",
+  "letterNo": "Letter No.",
+  "letterType": "Letter Type",
+  "nameOfOfficer": "Name of Officer",
+  "subjectCategory": "Subject Category",
+  "instituteName": "Institute Name",
+  "letterTitle": "Letter Title",
+  "regionProvince": "Region/Province",
+  "region": "Region",
+  "province": "Province",
+  "saveAsDraft": "Save as draft",
+  "submitBtn": "Submit",
+  "backToHome": "Back to Home"
 }

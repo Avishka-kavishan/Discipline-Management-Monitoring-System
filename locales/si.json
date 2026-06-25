@@ -69,5 +69,19 @@
   "refPlaceholder": "නිද. DCMMS/2026/001",
   "senderPlaceholder": "නිද. ජෝන් ඩෝ / පාසල් මණ්ඩලය",
   "subjectPlaceholder": "නිද. විනය විරෝධී ක්‍රියා සම්බන්ධ පැමිණිල්ල",
-  "noLettersFound": "සොයන ලිපි කිසිවක් හමු නොවීය"
+  "noLettersFound": "සොයන ලිපි කිසිවක් හමු නොවීය",
+  "registerComplaintTitle": "නව පැමිණිල්ල ලියාපදිංචි කිරීම",
+  "registerComplaintDesc": "ලැබුණු ලිපියේ සාමාන්‍ය තොරතුරු ඇතුළත් කරන්න.",
+  "letterNo": "ලිපි අංකය",
+  "letterType": "ලිපි වර්ගය",
+  "nameOfOfficer": "නිලධාරියාගේ නම",
+  "subjectCategory": "විෂය කාණ්ඩය",
+  "instituteName": "ආයතනයේ නම",
+  "letterTitle": "ලිපියේ මාතෘකාව",
+  "regionProvince": "කලාපය/පළාත",
+  "region": "කලාපය",
+  "province": "පළාත",
+  "saveAsDraft": "කටු පටක් ලෙස සුරකින්න",
+  "submitBtn": "ඉදිරිපත් කරන්න",
+  "backToHome": "නැවත මුල් පිටුවට"
 }

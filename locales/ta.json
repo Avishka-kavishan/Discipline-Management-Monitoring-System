@@ -69,5 +69,19 @@
   "refPlaceholder": "உதா. DCMMS/2026/001",
   "senderPlaceholder": "உதா. ஜோன் டோ / பள்ளி வாரியம்",
   "subjectPlaceholder": "உதா. தவறான நடத்தை தொடர்பான புகார்",
-  "noLettersFound": "தேடலுக்குரிய கடிதப் பதிவுகள் எதுவும் இல்லை"
+  "noLettersFound": "தேடலுக்குரிய கடிதப் பதிவுகள் எதுவும் இல்லை",
+  "registerComplaintTitle": "புதிய புகாரைப் பதிவுசெய்க",
+  "registerComplaintDesc": "பெறப்பட்ட கடிதத்தின் பொதுவான விபரங்களை உள்ளிடவும்.",
+  "letterNo": "கடித எண்",
+  "letterType": "கடித வகை",
+  "nameOfOfficer": "அதிகாரியின் பெயர்",
+  "subjectCategory": "விடயப் பிரிவு",
+  "instituteName": "நிறுவனத்தின் பெயர்",
+  "letterTitle": "கடிதத் தலைப்பு",
+  "regionProvince": "வளையம்/மாகாணம்",
+  "region": "வளையம்",
+  "province": "மாகாணம்",
+  "saveAsDraft": "வரைவாகச் சேமிக்கவும்",
+  "submitBtn": "சமர்ப்பிக்கவும்",
+  "backToHome": "முகப்புப்பக்கத்திற்குத் திரும்பு"
 }

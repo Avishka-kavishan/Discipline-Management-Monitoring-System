@@ -292,14 +292,14 @@ export default function RegisterComplaintPage() {
               {/* Layout title area */}
               <div className="register-header-container">
                 <div className="register-header-left">
-                  <h1 className="register-title">Register New Complaint</h1>
-                  <p className="register-subtitle">Enter the general details of the received letter.</p>
+                  <h1 className="register-title">{t("registerComplaintTitle")}</h1>
+                  <p className="register-subtitle">{t("registerComplaintDesc")}</p>
                 </div>
                 <Link href="/daily-mail" className="btn-back-home">
                   <svg className="btn-back-home-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
-                  Back to Home
+                  {t("backToHome")}
                 </Link>
               </div>
 
@@ -309,14 +309,14 @@ export default function RegisterComplaintPage() {
                   <svg className="entries-header-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  Letter Entries
+                  {t("letterEntries")}
                 </h2>
 
                 <form onSubmit={handleSubmit} className="register-grid-form">
                   
                   {/* Column 1 */}
                   <div className="form-field-group">
-                    <label htmlFor="letterNo" className="field-label">Letter No.</label>
+                    <label htmlFor="letterNo" className="field-label">{t("letterNo")}</label>
                     <input
                       id="letterNo"
                       type="text"
@@ -329,7 +329,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Column 2 */}
                   <div className="form-field-group">
-                    <label htmlFor="senderName" className="field-label">Name of Sender <span className="required-star">*</span></label>
+                    <label htmlFor="senderName" className="field-label">{t("senderName")} <span className="required-star">*</span></label>
                     <input
                       id="senderName"
                       type="text"
@@ -343,7 +343,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Column 3 */}
                   <div className="form-field-group">
-                    <label htmlFor="letterType" className="field-label">Letter Type</label>
+                    <label htmlFor="letterType" className="field-label">{t("letterType")}</label>
                     <input
                       id="letterType"
                       type="text"
@@ -356,14 +356,14 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 2 - Column 1 */}
                   <div className="form-field-group">
-                    <label htmlFor="officerName" className="field-label">Name of Officer</label>
+                    <label htmlFor="officerName" className="field-label">{t("nameOfOfficer")}</label>
                     <select
                       id="officerName"
                       value={formState.officerName}
                       onChange={(e) => setFormState({ ...formState, officerName: e.target.value })}
                       className="field-select"
                     >
-                      <option value="">Select Officer</option>
+                      <option value="">{t("selectRole")}</option>
                       <option value="Kamal Perera">Kamal Perera (Subject Officer)</option>
                       <option value="Suresh Silva">Suresh Silva (Investigation Officer)</option>
                       <option value="Aruni Rajapaksha">Aruni Rajapaksha (Administrator)</option>
@@ -372,7 +372,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 2 - Column 2 */}
                   <div className="form-field-group">
-                    <label htmlFor="subjectCategory" className="field-label">Subject Category <span className="required-star">*</span></label>
+                    <label htmlFor="subjectCategory" className="field-label">{t("subjectCategory")} <span className="required-star">*</span></label>
                     <select
                       id="subjectCategory"
                       required
@@ -380,7 +380,7 @@ export default function RegisterComplaintPage() {
                       onChange={(e) => setFormState({ ...formState, subjectCategory: e.target.value })}
                       className="field-select"
                     >
-                      <option value="">Select Category</option>
+                      <option value="">{t("selectRole")}</option>
                       <option value="Student Misconduct">Student Misconduct</option>
                       <option value="Teacher Absenteeism">Teacher Absenteeism</option>
                       <option value="Financial Mismanagement">Financial Mismanagement</option>
@@ -391,7 +391,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 2 - Column 3 */}
                   <div className="form-field-group">
-                    <label htmlFor="instituteName" className="field-label">Institute Name</label>
+                    <label htmlFor="instituteName" className="field-label">{t("instituteName")}</label>
                     <div className="input-icon-wrapper">
                       <svg className="input-left-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -409,7 +409,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 3 - Column 1 */}
                   <div className="form-field-group">
-                    <label htmlFor="refNo" className="field-label">Reference Number <span className="required-star">*</span></label>
+                    <label htmlFor="refNo" className="field-label">{t("refNo")} <span className="required-star">*</span></label>
                     <input
                       id="refNo"
                       type="text"
@@ -423,7 +423,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 3 - Column 2 */}
                   <div className="form-field-group">
-                    <label htmlFor="letterDate" className="field-label">Letter Date.</label>
+                    <label htmlFor="letterDate" className="field-label">{t("letterDate")}</label>
                     <div className="input-icon-wrapper">
                       <input
                         id="letterDate"
@@ -440,7 +440,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 3 - Column 3 (Spans 2 rows) */}
                   <div className="form-field-group grid-row-span-2">
-                    <label htmlFor="subject" className="field-label">Letter Title</label>
+                    <label htmlFor="subject" className="field-label">{t("letterTitle")}</label>
                     <textarea
                       id="subject"
                       value={formState.subject}
@@ -452,7 +452,7 @@ export default function RegisterComplaintPage() {
 
                   {/* Row 4 - Column 1 */}
                   <div className="form-field-group">
-                    <span className="field-label">Region/Province</span>
+                    <span className="field-label">{t("regionProvince")}</span>
                     <div className="radio-group-container">
                       <label className="radio-option-label">
                         <input
@@ -464,7 +464,7 @@ export default function RegisterComplaintPage() {
                           className="radio-input-styled"
                           aria-label="Region"
                         />
-                        Region
+                        {t("region")}
                       </label>
                       <label className="radio-option-label">
                         <input
@@ -476,14 +476,14 @@ export default function RegisterComplaintPage() {
                           className="radio-input-styled"
                           aria-label="Province"
                         />
-                        Province
+                        {t("province")}
                       </label>
                     </div>
                   </div>
 
                   {/* Row 4 - Column 2 */}
                   <div className="form-field-group">
-                    <label htmlFor="receivedDate" className="field-label">Received Date</label>
+                    <label htmlFor="receivedDate" className="field-label">{t("receivedDate")}</label>
                     <div className="input-icon-wrapper">
                       <input
                         id="receivedDate"
@@ -512,13 +512,13 @@ export default function RegisterComplaintPage() {
                       className="btn-action-draft"
                       onClick={handleSaveDraft}
                     >
-                      Save as draft
+                      {t("saveAsDraft")}
                     </button>
                     <button
                       type="submit"
                       className="btn-action-submit"
                     >
-                      Submit
+                      {t("submitBtn")}
                     </button>
                   </div>
 
