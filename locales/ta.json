@@ -125,5 +125,6 @@
   "nicNumber": "தேசிய அடையாள அட்டை எண்",
   "positionLabel": "பதவி",
   "appointmentDate": "நியமன தேதி",
-  "addressLabel": "முகவரி"
+  "addressLabel": "முகவரி",
+  "caseClosedBtn": "வழக்கு முடிவுற்றது"
 }
