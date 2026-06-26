@@ -403,3 +403,18 @@
 .btn-action-submit:active {
   transform: translateY(0);
 }
+
+@media (max-width: 640px) {
+  .add-details-form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .add-details-form-actions .btn-action-cancel,
+  .add-details-form-actions .btn-action-draft,
+  .add-details-form-actions .btn-action-submit {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
