@@ -354,28 +354,37 @@ function CaseDetailsForm() {
           {/* Form container section */}
           <section className="add-details-page-wrapper">
             <div className="add-details-main-card">
-              {/* Layout title area */}
-              <div className="add-details-header-container">
-              <div className="add-details-header-left">
-                <h1 className="add-details-title">{t("addSubjectDetailsTitle")}</h1>
-                <p className="add-details-subtitle">{t("addSubjectDetailsDesc")}</p>
-              </div>
-              <Link href="/subject" className="btn-back-home">
-                <svg
-                  className="btn-back-home-icon"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                {t("backToHome")}
-              </Link>
-            </div>
+              <form onSubmit={handleSubmit}>
+                {/* Layout title area */}
+                <div className="add-details-header-container">
+                  <div className="add-details-header-left">
+                    <h1 className="add-details-title">{t("addSubjectDetailsTitle")}</h1>
+                    <p className="add-details-subtitle">{t("addSubjectDetailsDesc")}</p>
+                  </div>
+                  <div className="add-details-header-right-btns">
+                    <Link href="/subject" className="btn-back-home">
+                      <svg
+                        className="btn-back-home-icon"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      {t("backToHome")}
+                    </Link>
+                    <button
+                      type="button"
+                      className="btn-action-draft-top"
+                      onClick={handleSaveDraft}
+                    >
+                      {t("saveAsDraft")}
+                    </button>
+                  </div>
+                </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="add-details-cards-grid">
+                <div className="add-details-cards-grid">
                 {/* ───────────────── Left Card ("Add Details") ───────────────── */}
                 <div className="add-details-card">
                   <h2 className="card-title-header">
@@ -703,13 +712,6 @@ function CaseDetailsForm() {
                   onClick={() => router.push("/subject")}
                 >
                   {t("cancelBtn")}
-                </button>
-                <button
-                  type="button"
-                  className="btn-action-draft"
-                  onClick={handleSaveDraft}
-                >
-                  {t("saveAsDraft")}
                 </button>
                 <button
                   type="submit"

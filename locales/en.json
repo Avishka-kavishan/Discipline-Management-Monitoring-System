@@ -125,5 +125,6 @@
   "nicNumber": "NIC Number",
   "positionLabel": "Position",
   "appointmentDate": "Appointment Date",
-  "addressLabel": "Address"
+  "addressLabel": "Address",
+  "caseClosedBtn": "Case Closed"
 }
