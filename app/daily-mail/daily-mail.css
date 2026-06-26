@@ -890,14 +890,28 @@
 .dashboard-content-footer {
   text-align: center;
   border-top: 1px solid var(--border-color);
-  padding-top: 20px;
+  padding: 16px 24px;
   margin-top: auto;
+  background-color: #ffffff; /* White background */
+  
+  /* Bleed out of the dashboard-content padding */
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: -20px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-content-footer {
+    margin-left: -32px;
+    margin-right: -32px;
+    margin-bottom: -32px;
+  }
 }
 
 .dashboard-content-footer p {
   margin: 0;
   font-size: calc(11px * var(--font-scale));
-  color: #64748b;
+  color: #4a5568; /* High contrast compliant text color */
   font-weight: 500;
 }
 
