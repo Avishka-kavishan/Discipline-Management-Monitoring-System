@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Sidebar } from "@/components/Sidebar";
+import Link from "next/link";
 
 interface Case {
   id: string;
@@ -88,6 +89,22 @@ export default function SubjectPage() {
       status: "In Progress",
     },
   ]);
+
+  // Load cases dynamically from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("dcmms_cases");
+      if (stored) {
+        try {
+          setCases(JSON.parse(stored));
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        localStorage.setItem("dcmms_cases", JSON.stringify(cases));
+      }
+    }
+  }, []);
 
   // Search & filter state
   const [searchQuery, setSearchQuery] = useState("");
@@ -367,16 +384,12 @@ export default function SubjectPage() {
                           </span>
                         </td>
                         <td className="text-center actions-cell">
-                          <a
-                            href="#"
+                          <Link
+                            href={`/subject/add-details?caseNo=${item.caseNo}`}
                             className="add-details-link"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              alert(`Add case details for Case No: ${item.caseNo}`);
-                            }}
                           >
                             {t("addDetails")}
-                          </a>
+                          </Link>
                         </td>
                       </tr>
                     ))
@@ -395,6 +408,11 @@ export default function SubjectPage() {
               </table>
             </div>
           </section>
+
+          {/* Footer Branding Notice */}
+          <footer className="dashboard-content-footer">
+            <p>{t("footerText")}</p>
+          </footer>
         </main>
       </div>
     </div>

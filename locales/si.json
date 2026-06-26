@@ -109,5 +109,21 @@
   "optTeacherAbsenteeism": "ගුරු නොපැමිණීම",
   "optFinancialMismanagement": "මූල්‍ය අවභාවිතය",
   "optAdministrativeIssues": "පරිපාලන ගැටළු",
-  "optOther": "වෙනත්"
+  "optOther": "වෙනත්",
+  "addSubjectDetailsTitle": "නඩුව පිළිබඳ විෂය විස්තර එක් කරන්න",
+  "addSubjectDetailsDesc": "ලැබුණු ලිපියේ සාමාන්‍ය තොරතුරු ඇතුළත් කරන්න.",
+  "subjectOfficerLabel": "විෂය භාර නිලධාරී",
+  "reportState": "වාර්තා තත්ත්වය",
+  "stepTaken": "ගෙන ඇති පියවර",
+  "fileRelatedToLetter": "ලිපියට අදාළ ගොනුව",
+  "specialNotes": "විශේෂ සටහන්",
+  "officerConcernedQuestion": "පැමිණිල්ලට අදාළ නිලධාරියා නම්",
+  "yesLabel": "ඔව්",
+  "noLabel": "නැත",
+  "concernedName": "නම",
+  "dateOfBirth": "උපන් දිනය",
+  "nicNumber": "ජාතික හැඳුනුම්පත් අංකය",
+  "positionLabel": "තනතුර",
+  "appointmentDate": "පත්වීම් දිනය",
+  "addressLabel": "ලිපිනය"
 }

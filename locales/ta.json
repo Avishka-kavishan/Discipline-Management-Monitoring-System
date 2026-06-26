@@ -109,5 +109,21 @@
   "optTeacherAbsenteeism": "ஆசிரியர் வருகை தராமை",
   "optFinancialMismanagement": "நிதி முறைகேடு",
   "optAdministrativeIssues": "நிர்வாக சிக்கல்கள்",
-  "optOther": "மற்றவை"
+  "optOther": "மற்றவை",
+  "addSubjectDetailsTitle": "வழக்கு பற்றிய விடய விபரங்களைச் சேர்க்கவும்",
+  "addSubjectDetailsDesc": "பெறப்பட்ட கடிதத்தின் பொதுவான விபரங்களை உள்ளிடவும்.",
+  "subjectOfficerLabel": "விடய உத்தியோகத்தர்",
+  "reportState": "அறிக்கை நிலை",
+  "stepTaken": "மேற்கொள்ளப்பட்ட நடவடிக்கை",
+  "fileRelatedToLetter": "கடிதத்துடன் தொடர்புடைய கோப்பு",
+  "specialNotes": "சிறப்புக் குறிப்புகள்",
+  "officerConcernedQuestion": "புகாருடன் தொடர்புடைய அதிகாரி என்றால்",
+  "yesLabel": "ஆம்",
+  "noLabel": "இல்லை",
+  "concernedName": "பெயர்",
+  "dateOfBirth": "பிறந்த தேதி",
+  "nicNumber": "தேசிய அடையாள அட்டை எண்",
+  "positionLabel": "பதவி",
+  "appointmentDate": "நியமன தேதி",
+  "addressLabel": "முகவரி"
 }

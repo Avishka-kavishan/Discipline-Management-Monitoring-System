@@ -109,5 +109,21 @@
   "optTeacherAbsenteeism": "Teacher Absenteeism",
   "optFinancialMismanagement": "Financial Mismanagement",
   "optAdministrativeIssues": "Administrative Issues",
-  "optOther": "Other"
+  "optOther": "Other",
+  "addSubjectDetailsTitle": "Add Subject Details about Case",
+  "addSubjectDetailsDesc": "Enter the general details of the received letter.",
+  "subjectOfficerLabel": "Subject officer",
+  "reportState": "Report State",
+  "stepTaken": "Step Taken",
+  "fileRelatedToLetter": "File related to Letter",
+  "specialNotes": "Special Notes",
+  "officerConcernedQuestion": "If officer concerned with the Complaint",
+  "yesLabel": "Yes",
+  "noLabel": "No",
+  "concernedName": "Name",
+  "dateOfBirth": "Date of Birth",
+  "nicNumber": "NIC Number",
+  "positionLabel": "Position",
+  "appointmentDate": "Appointment Date",
+  "addressLabel": "Address"
 }
