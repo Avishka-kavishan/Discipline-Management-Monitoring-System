@@ -300,12 +300,34 @@ export default function RegisterComplaintPage() {
                   <h1 className="register-title">{t("registerComplaintTitle")}</h1>
                   <p className="register-subtitle">{t("registerComplaintDesc")}</p>
                 </div>
-                <Link href="/daily-mail" className="btn-back-home">
-                  <svg className="btn-back-home-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                  </svg>
-                  {t("backToHome")}
-                </Link>
+                <div className="register-header-right-btns">
+                  <Link href="/daily-mail" className="btn-back-home">
+                    <svg className="btn-back-home-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    {t("backToHome")}
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn-action-draft"
+                    onClick={handleSaveDraft}
+                    title={t("saveAsDraft")}
+                    aria-label={t("saveAsDraft")}
+                  >
+                    <svg
+                      className="btn-action-icon"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      width="20"
+                      height="20"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-4-4H8z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 20v-8M9 12h6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               {/* Form entries section */}
@@ -512,26 +534,7 @@ export default function RegisterComplaintPage() {
                     >
                       {t("cancelBtn")}
                     </button>
-                    <button
-                      type="button"
-                      className="btn-action-draft"
-                      onClick={handleSaveDraft}
-                      title={t("saveAsDraft")}
-                      aria-label={t("saveAsDraft")}
-                    >
-                      <svg
-                        className="btn-action-icon"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        width="20"
-                        height="20"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-4-4H8z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 20v-8M9 12h6" />
-                      </svg>
-                    </button>
+
                     <button
                       type="submit"
                       className="btn-action-submit"
