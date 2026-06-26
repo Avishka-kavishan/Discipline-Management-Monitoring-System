@@ -217,6 +217,69 @@ function CaseDetailsForm() {
     router.push("/subject");
   };
 
+  // Close case handler
+  const handleCloseCase = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!refNo) {
+      alert("Reference Number is required.");
+      return;
+    }
+
+    const caseDetails = {
+      caseNo: refNo,
+      subjectOfficer,
+      reportState: "Closed", // Force Closed
+      receivedDate,
+      stepTaken,
+      fileRelated,
+      specialNotes,
+      isConcerned,
+      officerName,
+      officerDob,
+      officerNic,
+      officerPosition,
+      officerApptDate,
+      officerAddress,
+    };
+
+    if (typeof window !== "undefined") {
+      // Save details map
+      const storedDetails = localStorage.getItem("dcmms_case_details") || "{}";
+      let detailsMap = {};
+      try {
+        detailsMap = JSON.parse(storedDetails);
+      } catch (err) {
+        console.error(err);
+      }
+      (detailsMap as any)[refNo] = caseDetails;
+      localStorage.setItem("dcmms_case_details", JSON.stringify(detailsMap));
+
+      // Update state in main cases list in localStorage to Closed
+      const storedCases = localStorage.getItem("dcmms_cases");
+      if (storedCases) {
+        try {
+          const casesList = JSON.parse(storedCases);
+          const updatedCases = casesList.map((item: any) => {
+            if (item.caseNo === refNo) {
+              return {
+                ...item,
+                status: "Closed", // Force Closed status
+              };
+            }
+            return item;
+          });
+          localStorage.setItem("dcmms_cases", JSON.stringify(updatedCases));
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+
+    alert("Case closed and submitted successfully!");
+    router.push("/subject");
+  };
+
   return (
     <div className="dashboard-container" data-font-scale={fontScale}>
       {/* Skip Link (A11y) */}
@@ -712,6 +775,13 @@ function CaseDetailsForm() {
                   onClick={() => router.push("/subject")}
                 >
                   {t("cancelBtn")}
+                </button>
+                <button
+                  type="button"
+                  className="btn-action-close-case"
+                  onClick={handleCloseCase}
+                >
+                  {t("caseClosedBtn")}
                 </button>
                 <button
                   type="submit"
