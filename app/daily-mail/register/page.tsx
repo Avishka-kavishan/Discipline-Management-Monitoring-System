@@ -516,8 +516,21 @@ export default function RegisterComplaintPage() {
                       type="button"
                       className="btn-action-draft"
                       onClick={handleSaveDraft}
+                      title={t("saveAsDraft")}
+                      aria-label={t("saveAsDraft")}
                     >
-                      {t("saveAsDraft")}
+                      <svg
+                        className="btn-action-icon"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        width="20"
+                        height="20"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V8l-4-4H8z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 20v-8M9 12h6" />
+                      </svg>
                     </button>
                     <button
                       type="submit"

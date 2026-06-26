@@ -347,7 +347,7 @@
 }
 
 .btn-action-cancel {
-  background-color: #800c0c;
+  background-color: #DC2626; /* Red */
   color: #ffffff;
   border: none;
   border-radius: 24px;
@@ -368,25 +368,24 @@
 }
 
 .btn-action-draft-top {
-  background-color: #0b8043; /* Green Submit-style background */
+  background-color: #2563EB; /* Blue */
   color: #ffffff;
   border: none;
-  border-radius: 24px;
-  padding: 10px 32px;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   font-family: inherit;
-  font-size: calc(13px * var(--font-scale, 1));
-  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
-  min-width: 120px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
 .btn-action-submit {
-  background-color: #800c0c; /* Red Close-style background */
+  background-color: #16A34A; /* Green */
   color: #ffffff;
   border: none;
   border-radius: 24px;
@@ -401,7 +400,7 @@
 }
 
 .btn-action-close-case {
-  background-color: #0066ff; /* Blue background */
+  background-color: #EA580C; /* Orange */
   color: #ffffff;
   border: none;
   border-radius: 24px;
