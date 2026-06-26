@@ -334,16 +334,23 @@ export default function SubjectPage() {
                   />
                 </div>
 
-                {/* Filter button */}
-                <button
-                  className="btn-filter-icon"
-                  aria-label="Filter"
-                  onClick={() => setPriorityFilter(priorityFilter === "all" ? "high" : "all")}
-                >
+                {/* Priority Selection Filter */}
+                <div className="filter-dropdown-wrapper">
                   <svg className="filter-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
-                </button>
+                  <select
+                    value={priorityFilter}
+                    onChange={(e: any) => setPriorityFilter(e.target.value)}
+                    className="filter-priority-select"
+                    aria-label={t("priority")}
+                  >
+                    <option value="all">All Priorities</option>
+                    <option value="high">{t("priorityHigh")}</option>
+                    <option value="medium">{t("priorityMedium")}</option>
+                    <option value="low">{t("priorityLow")}</option>
+                  </select>
+                </div>
 
                 <a href="#" className="view-all-reset-link" onClick={(e) => { e.preventDefault(); setSearchQuery(""); setPriorityFilter("all"); }}>
                   {t("viewAll")} <span className="arrow-span">→</span>
