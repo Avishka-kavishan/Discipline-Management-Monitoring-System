@@ -23,14 +23,14 @@ function CaseDetailsForm() {
 
   // Format date statically to match mockup
   const getFormattedDate = () => {
-    const date = new Date("2026-06-23");
+    const date = new Date();
     if (lang === "si") {
       return date.toLocaleDateString("si-LK", { day: "numeric", month: "long", year: "numeric" });
     }
     if (lang === "ta") {
       return date.toLocaleDateString("ta-LK", { day: "numeric", month: "long", year: "numeric" });
     }
-    return "23 June, 2026";
+    return date.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
   };
 
   // Mobile sidebar visibility state
