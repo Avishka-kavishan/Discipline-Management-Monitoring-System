@@ -111,9 +111,34 @@ function CaseDetailsForm() {
     router.push("/");
   };
 
+  const syncCalendar = async (apptDate: string) => {
+    if (!apptDate) return;
+    try {
+      await fetch("/api/calendar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          summary: `Officer Appointment: ${refNo}`,
+          description: `Appointment date for Inquiry Officer ${officerName || ""} for Subject: ${subjectOfficer || ""}.`,
+          startDateTime: `${apptDate}T09:00:00+05:30`,
+          endDateTime: `${apptDate}T10:00:00+05:30`,
+          location: officerAddress || "Discipline Branch, Isurupaya",
+          source: "Officer Appointment Date",
+          metadata: { inquiryNo: refNo }
+        })
+      });
+    } catch (err) {
+      console.error("Failed to sync to calendar API", err);
+    }
+  };
+
   // Submit case details form handler
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (officerApptDate) {
+      syncCalendar(officerApptDate);
+    }
 
     if (!refNo) {
       alert("Reference Number is required.");
@@ -224,6 +249,10 @@ function CaseDetailsForm() {
     if (!refNo) {
       alert("Reference Number is required.");
       return;
+    }
+
+    if (officerApptDate) {
+      syncCalendar(officerApptDate);
     }
 
     const caseDetails = {

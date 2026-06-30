@@ -88,6 +88,31 @@ export default function InvestigationPage() {
     },
   ]);
 
+  // Calendar Events State for widget
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+  const [isCalendarLoading, setIsCalendarLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWidgetEvents = async () => {
+      try {
+        const res = await fetch("/api/calendar");
+        if (res.ok) {
+          const data = await res.json();
+          // Sort events by starting dateTime
+          const sorted = (data.events || []).sort((a: any, b: any) => {
+            return new Date(a.start?.dateTime).getTime() - new Date(b.start?.dateTime).getTime();
+          });
+          setCalendarEvents(sorted);
+        }
+      } catch (err) {
+        console.error("Failed to fetch calendar events in widget", err);
+      } finally {
+        setIsCalendarLoading(false);
+      }
+    };
+    fetchWidgetEvents();
+  }, []);
+
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -267,6 +292,44 @@ export default function InvestigationPage() {
             <div className="hero-action-card">
               <h4>Scheduled Hearings</h4>
               <p className="val-warning">1</p>
+            </div>
+          </section>
+
+          {/* Upcoming Calendar Events widget */}
+          <section className="upcoming-events-widget">
+            <div className="upcoming-events-container">
+              <div className="upcoming-events-header">
+                <h4 className="upcoming-events-title">
+                  <svg className="upcoming-events-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Upcoming Disciplinary Events (Calendar API)
+                </h4>
+                <a href="/calendar" className="upcoming-events-link">View Full Calendar &rarr;</a>
+              </div>
+              
+              {isCalendarLoading ? (
+                <div className="upcoming-events-loading">Loading upcoming calendar events...</div>
+              ) : calendarEvents.length > 0 ? (
+                <div className="upcoming-events-grid">
+                  {calendarEvents.slice(0, 3).map((ev: any, index: number) => {
+                    const dateStr = new Date(ev.start?.dateTime).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+                    const timeStr = new Date(ev.start?.dateTime).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+                    return (
+                      <div key={index} className="upcoming-event-card">
+                        <div className="upcoming-event-time-row">
+                          <span>{dateStr}</span>
+                          <span>{timeStr}</span>
+                        </div>
+                        <h5 className="upcoming-event-subject">{ev.summary}</h5>
+                        <p className="upcoming-event-description">{ev.description}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="upcoming-events-empty">No upcoming events synced in Calendar.</div>
+              )}
             </div>
           </section>
 
