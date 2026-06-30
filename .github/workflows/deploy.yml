@@ -6,18 +6,14 @@ on:
   workflow_dispatch:          # Allow manual trigger from the Actions tab
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write             # Required to commit to gh-pages branch
 
-# Only allow one deployment at a time; cancel any in-progress run
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # ── Build ──────────────────────────────────────────────────────
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -37,19 +33,12 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: /Discipline-Management-Monitoring-System
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
+      - name: Add .nojekyll file
+        run: touch ./out/.nojekyll
 
-  # ── Deploy ─────────────────────────────────────────────────────
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy to gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: out
+          branch: gh-pages
+
