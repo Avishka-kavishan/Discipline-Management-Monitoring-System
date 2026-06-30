@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[97367,["/Discipline-Management-Monitoring-System/_next/static/chunks/ff1a16fafef87110.js","/Discipline-Management-Monitoring-System/_next/static/chunks/533d381c9fb443f2.js"],"ViewportBoundary"]
+3:I[97367,["/Discipline-Management-Monitoring-System/_next/static/chunks/ff1a16fafef87110.js","/Discipline-Management-Monitoring-System/_next/static/chunks/533d381c9fb443f2.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[27201,["/Discipline-Management-Monitoring-System/_next/static/chunks/ff1a16fafef87110.js","/Discipline-Management-Monitoring-System/_next/static/chunks/533d381c9fb443f2.js"],"IconMark"]
+0:{"buildId":"kFYmMtipWtiDZtNbCOGfw","rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Login | Discipline Management System"}],["$","meta","1",{"name":"description","content":"Login to the discipline management dashboard for behavior tracking and classroom coordination."}],["$","link","2",{"rel":"icon","href":"/Discipline-Management-Monitoring-System/logo.png"}],["$","$L5","3",{}]]}]}]}],null]}],"loading":null,"isPartial":false}
