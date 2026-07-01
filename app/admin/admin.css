@@ -800,3 +800,69 @@
   color: #64748b;
   font-weight: 700;
 }
+
+/* ── Inline Style Replacements ── */
+#dashboard-main-content {
+  padding: 0;
+}
+
+.admin-tab-content {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.bar-fill.active-filter {
+  background: linear-gradient(90deg, #1d4ed8 0%, #1e3a8a 100%);
+}
+
+.dot-registered {
+  background-color: #1565c0;
+}
+.dot-under-subject {
+  background-color: #9e9d24;
+}
+.dot-under-investigation {
+  background-color: #e65100;
+}
+.dot-closed {
+  background-color: #c62828;
+}
+
+.ledger-badge-info {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.table-cell-truncate {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge-status-registered {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+.badge-status-under-subject {
+  background-color: #f9fbe7;
+  color: #827717;
+}
+.badge-status-under-investigation {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+.badge-status-closed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.table-status-select {
+  padding: 4px 8px;
+  font-size: 11px;
+  width: auto;
+}
+
+.users-directory-section {
+  margin: 24px;
+}
+

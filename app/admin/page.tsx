@@ -388,7 +388,7 @@ export default function AdminPage() {
         {/* ============================================================
            MAIN WORKSPACE CONTENT AREA
            ============================================================ */}
-        <main id="dashboard-main-content" className="dashboard-content" style={{ padding: 0 }}>
+        <main id="dashboard-main-content" className="dashboard-content">
           
           {/* ── Header exactly matching the Screenshot ── */}
           <header className="dashboard-header">
@@ -397,7 +397,7 @@ export default function AdminPage() {
                 className="menu-toggle-btn"
                 aria-label="Toggle Sidebar Menu"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                aria-expanded={isSidebarOpen ? "true" : "false"}
+                aria-expanded={isSidebarOpen}
               >
                 <svg className="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -585,7 +585,7 @@ export default function AdminPage() {
              TAB 1: POWER BI ANALYTICS DASHBOARD
              ============================================================ */}
           {activeTab === "analytics" && (
-            <div style={{ animation: "fadeIn 0.2s" }}>
+            <div className="admin-tab-content">
               
               {/* ── Power BI Interactive Filter Slicer ── */}
               <section className="slicer-filter-panel">
@@ -682,13 +682,8 @@ export default function AdminPage() {
                         <div className="bar-label" title={item.name}>{item.name}</div>
                         <div className="bar-container">
                           <div 
-                            className="bar-fill" 
-                            style={{ 
-                              width: `${item.percent}%`,
-                              background: item.name === filterInstitute 
-                                ? "linear-gradient(90deg, #1d4ed8 0%, #1e3a8a 100%)"
-                                : "linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%)"
-                            }}
+                            className={`bar-fill${item.name === filterInstitute ? " active-filter" : ""}`}
+                            style={{ width: `${item.percent}%` }}
                           >
                             {item.percent > 12 && (
                               <span className="bar-percentage">{item.percent}%</span>
@@ -740,7 +735,7 @@ export default function AdminPage() {
                           className="legend-item"
                           onClick={() => setFilterStatus(slice.name === "Under Subject" ? "Under Subject Officer" : slice.name === filterStatus ? "All" : slice.name)}
                         >
-                          <span className="legend-color-dot" style={{ backgroundColor: slice.color }} />
+                          <span className={`legend-color-dot dot-${slice.name.toLowerCase().replace(" ", "-")}`} />
                           <span>{slice.name} ({slice.count})</span>
                         </div>
                       ))}
@@ -824,7 +819,7 @@ export default function AdminPage() {
                 <div className="letters-list-header">
                   <h3 className="section-title">Disciplinary Cases Ledger</h3>
                   <div className="letters-filters-group">
-                    <span className="badge-badge badge-status-active" style={{ fontSize: "12px", fontWeight: "700" }}>
+                    <span className="badge-badge badge-status-active ledger-badge-info">
                       Showing {filteredCases.length} of {cases.length} entries
                     </span>
                   </div>
@@ -848,7 +843,7 @@ export default function AdminPage() {
                         filteredCases.map((item) => (
                           <tr key={item.id} className="letter-table-row">
                             <td className="font-semibold text-primary">{item.refNo}</td>
-                            <td title={item.subject} style={{ maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            <td title={item.subject} className="table-cell-truncate">
                               {item.subject}
                             </td>
                             <td>{item.officer}</td>
@@ -860,24 +855,17 @@ export default function AdminPage() {
                             </td>
                             <td>
                               <span className={`badge-badge ${
-                                item.status === "Closed" ? "badge-status-active" : "badge-status-pending"
-                              }`} style={{
-                                backgroundColor: 
-                                  item.status === "Under Investigation" ? "#fff3e0" :
-                                  item.status === "Under Subject Officer" ? "#f9fbe7" : 
-                                  item.status === "Closed" ? "#e8f5e9" : "#e3f2fd",
-                                color:
-                                  item.status === "Under Investigation" ? "#e65100" :
-                                  item.status === "Under Subject Officer" ? "#827717" : 
-                                  item.status === "Closed" ? "#2e7d32" : "#1565c0"
-                              }}>
+                                item.status === "Under Investigation" ? "badge-status-under-investigation" :
+                                item.status === "Under Subject Officer" ? "badge-status-under-subject" :
+                                item.status === "Closed" ? "badge-status-closed" : "badge-status-registered"
+                              }`}>
                                 {item.status === "Under Subject Officer" ? "Under Subject" : item.status}
                               </span>
                             </td>
                             <td className="text-center actions-cell">
                               <select
-                                className="slicer-select"
-                                style={{ padding: "4px 8px", fontSize: "11px", width: "auto" }}
+                                className="slicer-select table-status-select"
+                                aria-label="Change case status"
                                 value={item.status}
                                 onChange={(e) => {
                                   const newStatus = e.target.value as any;
@@ -912,8 +900,8 @@ export default function AdminPage() {
              TAB 2: USER DIRECTORY
              ============================================================ */}
           {activeTab === "users" && (
-            <div style={{ animation: "fadeIn 0.2s" }}>
-              <section className="letters-list-section" style={{ margin: "24px" }}>
+            <div className="admin-tab-content">
+              <section className="letters-list-section users-directory-section">
                 <div className="letters-list-header">
                   <h3 className="section-title">User Account Directory</h3>
                   <div className="letters-filters-group">
