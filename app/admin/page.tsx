@@ -136,6 +136,7 @@ export default function AdminPage() {
   // ── Modals State ──
   const [isAddInstituteOpen, setIsAddInstituteOpen] = useState(false);
   const [isAddOfficerOpen, setIsAddOfficerOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   // Form Fields State
   const [newInstName, setNewInstName] = useState("");
@@ -865,6 +866,9 @@ export default function AdminPage() {
                     <span className="badge-badge badge-status-active ledger-badge-info">
                       Showing {filteredCases.length} of {cases.length} entries
                     </span>
+                    <button className="see-all-btn" onClick={() => setShowAll(prev => !prev)}>
+                      {showAll ? 'Show Less' : 'See All'}
+                    </button>
                   </div>
                 </div>
 
@@ -883,7 +887,7 @@ export default function AdminPage() {
                     </thead>
                     <tbody>
                       {filteredCases.length > 0 ? (
-                        filteredCases.map((item) => (
+                        filteredCases.slice(0, showAll ? filteredCases.length : 15).map((item) => (
                           <tr key={item.id} className="letter-table-row">
                             <td className="font-semibold text-primary">{item.refNo}</td>
                             <td title={item.subject} className="table-cell-truncate">

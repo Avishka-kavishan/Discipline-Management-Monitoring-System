@@ -181,6 +181,9 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* Margin top for the Cases Ledger section */
+.letters-list-section { margin-top: 20px; }
+
 .slicer-header {
   display: flex;
   justify-content: space-between;
