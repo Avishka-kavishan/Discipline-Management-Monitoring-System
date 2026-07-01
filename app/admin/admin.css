@@ -58,6 +58,18 @@
 
 .action-pill-btn:active {
   transform: translateY(1px);
+} 
+.see-all-btn {
+  background: transparent;
+  border: none;
+  color: #1d4ed8;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: calc(14px * var(--font-scale, 1));
+}
+.see-all-btn:hover {
+  text-decoration: underline;
 }
 
 /* Gradient Variants */
