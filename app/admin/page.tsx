@@ -382,7 +382,7 @@ export default function AdminPage() {
     
     const maxVal = Math.max(...counts, 1);
     const points = counts.map((count, index) => {
-      const x = 50 + index * 100;
+      const x = 80 + index * 168;
       const y = 160 - (count / maxVal) * 120; // 160 is base height, 120 range
       return { month: months[index], count, x, y };
     });
@@ -796,7 +796,7 @@ export default function AdminPage() {
                 <div className="pbi-chart-card chart-full-width">
                   <h3 className="pbi-chart-title">Monthly Case Registration Trend (2026)</h3>
                   <div className="trend-chart-wrapper">
-                    <svg className="trend-svg" viewBox="0 0 600 200">
+                    <svg className="trend-svg" viewBox="0 0 1000 200">
                       <defs>
                         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
@@ -806,7 +806,7 @@ export default function AdminPage() {
 
                       {/* Grid Lines */}
                       {[40, 80, 120, 160].map((yVal, index) => (
-                        <line key={index} x1="30" y1={yVal} x2="570" y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
+                        <line key={index} x1="50" y1={yVal} x2="950" y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
                       ))}
 
                       {/* Area Fill */}
