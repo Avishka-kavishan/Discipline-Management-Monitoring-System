@@ -6,7 +6,9 @@ on:
   workflow_dispatch:          # Allow manual trigger from the Actions tab
 
 permissions:
-  contents: write             # Required to commit to gh-pages branch
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: "pages"
@@ -14,6 +16,9 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps:deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,7 +27,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
@@ -33,12 +38,12 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: /Discipline-Management-Monitoring-System
 
-      - name: Add .nojekyll file
-        run: touch ./out/.nojekyll
-
-      - name: Deploy to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: out
-          branch: gh-pages
+          path: ./out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
