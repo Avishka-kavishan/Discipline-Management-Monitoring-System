@@ -43,13 +43,14 @@ const generateMockCases = (institutes: string[]): Case[] => {
   
   // 10 Closed Cases
   for (let i = 1; i <= 10; i++) {
+    const year = i <= 3 ? "2024" : i <= 7 ? "2025" : "2026";
     cases.push({
-      id: `C-2026-0${i}`,
-      refNo: `DCMMS/2026/0${100 + i}`,
+      id: `C-${year}-0${i}`,
+      refNo: `DCMMS/${year}/0${100 + i}`,
       subject: `Misconduct Case Investigation ${i}`,
       officer: i % 2 === 0 ? "Suresh Silva" : "Kamal Perera",
       institute: institutes[i % institutes.length],
-      receivedDate: `2026-0${(i % 5) + 1}-10`,
+      receivedDate: `${year}-0${(i % 5) + 1}-10`,
       priority: priorities[i % 3],
       status: "Closed"
     });
@@ -57,13 +58,14 @@ const generateMockCases = (institutes: string[]): Case[] => {
   
   // 10 Under Investigation
   for (let i = 11; i <= 20; i++) {
+    const year = i <= 13 ? "2024" : i <= 17 ? "2025" : "2026";
     cases.push({
-      id: `C-2026-0${i}`,
-      refNo: `DCMMS/2026/0${100 + i}`,
+      id: `C-${year}-0${i}`,
+      refNo: `DCMMS/${year}/0${100 + i}`,
       subject: `Audit report query on funds ${i - 10}`,
       officer: "Suresh Silva",
       institute: institutes[i % institutes.length],
-      receivedDate: `2026-0${(i % 5) + 1}-15`,
+      receivedDate: `${year}-0${(i % 5) + 1}-15`,
       priority: priorities[i % 3],
       status: "Under Investigation"
     });
@@ -182,6 +184,8 @@ export default function AdminPage() {
   const [filterPriority, setFilterPriority] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [trendInterval, setTrendInterval] = useState<"daily" | "weekly" | "monthly" | "yearly">("monthly");
+  const [chartType, setChartType] = useState<"line" | "bar">("bar");
 
   // ── Synchronization of Local Storage and Headers ──
   useEffect(() => {
@@ -207,7 +211,7 @@ export default function AdminPage() {
   // Sync tooltip position styling to satisfy static analysis tool
   useEffect(() => {
     if (tooltipRef.current) {
-      tooltipRef.current.style.left = `${(tooltipPos.x / 600) * 100}%`;
+      tooltipRef.current.style.left = `${(tooltipPos.x / 1000) * 100}%`;
       tooltipRef.current.style.top = `${(tooltipPos.y / 200) * 100}%`;
     }
   }, [tooltipPos, hoveredPoint]);
@@ -231,6 +235,12 @@ export default function AdminPage() {
     if (monthName === "Apr") return t("monthApr");
     if (monthName === "May") return t("monthMay");
     if (monthName === "Jun") return t("monthJun");
+    if (monthName === "Jul") return t("monthJul");
+    if (monthName === "Aug") return t("monthAug");
+    if (monthName === "Sep") return t("monthSep");
+    if (monthName === "Oct") return t("monthOct");
+    if (monthName === "Nov") return t("monthNov");
+    if (monthName === "Dec") return t("monthDec");
     return monthName;
   };
 
@@ -383,23 +393,140 @@ export default function AdminPage() {
     });
   }, [casesByStatus]);
 
-  // 3. Monthly intake statistics (Trend Chart)
-  const monthlyTrendData = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-    const counts = [0, 0, 0, 0, 0, 0];
+  // 3. Dynamic intake statistics (Trend Chart)
+  const trendData = useMemo(() => {
+    let items: { label: string; count: number; tooltip: string }[] = [];
     
-    filteredCases.forEach((c) => {
-      const monthIdx = parseInt(c.receivedDate.split("-")[1], 10) - 1;
-      if (monthIdx >= 0 && monthIdx < 6) {
-        counts[monthIdx]++;
+    // Find min and max dates in filteredCases
+    const dates = filteredCases.map(c => new Date(c.receivedDate)).filter(d => !isNaN(d.getTime()));
+    
+    // Fallbacks if no cases match
+    const minDate = dates.length > 0 ? new Date(Math.min(...dates.map(d => d.getTime()))) : new Date(2024, 0, 1);
+    const maxDate = dates.length > 0 ? new Date(Math.max(...dates.map(d => d.getTime()))) : new Date(2026, 6, 2);
+    
+    if (trendInterval === "daily") {
+      // Generate all days from minDate to maxDate
+      const days: Date[] = [];
+      const current = new Date(minDate);
+      let countDays = 0;
+      // Cap at 366 days safety to avoid huge ranges causing lag
+      while (current <= maxDate && countDays < 366) {
+        days.push(new Date(current));
+        current.setDate(current.getDate() + 1);
+        countDays++;
       }
-    });
+      
+      items = days.map(d => {
+        const dateStr = d.toISOString().split("T")[0];
+        const label = d.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { year: "numeric", month: "short", day: "numeric" });
+        const count = filteredCases.filter(c => c.receivedDate === dateStr).length;
+        return {
+          label,
+          count,
+          tooltip: `${label}: ${count} ${t("cases")}`
+        };
+      });
+    } else if (trendInterval === "weekly") {
+      // Group by week starting Monday
+      const getMonday = (d: Date) => {
+        const date = new Date(d);
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(date.setDate(diff));
+      };
+      
+      const startMonday = getMonday(minDate);
+      const endMonday = getMonday(maxDate);
+      
+      const weeks: Date[] = [];
+      const current = new Date(startMonday);
+      let countWeeks = 0;
+      // Safety cap at 53 weeks
+      while (current <= endMonday && countWeeks < 53) {
+        weeks.push(new Date(current));
+        current.setDate(current.getDate() + 7);
+        countWeeks++;
+      }
+      
+      items = weeks.map(monday => {
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        
+        const startStr = monday.toISOString().split("T")[0];
+        const endStr = sunday.toISOString().split("T")[0];
+        
+        const label = `${monday.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { month: "short", day: "numeric" })} - ${sunday.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { month: "short", day: "numeric" })}`;
+        const count = filteredCases.filter(c => c.receivedDate >= startStr && c.receivedDate <= endStr).length;
+        return {
+          label,
+          count,
+          tooltip: `${label}: ${count} ${t("cases")}`
+        };
+      });
+    } else if (trendInterval === "monthly") {
+      const startYear = minDate.getFullYear();
+      const startMonth = minDate.getMonth();
+      const endYear = maxDate.getFullYear();
+      const endMonth = maxDate.getMonth();
+      
+      const months = [];
+      let y = startYear;
+      let m = startMonth;
+      
+      while (y < endYear || (y === endYear && m <= endMonth)) {
+        months.push({ year: y, month: m });
+        m++;
+        if (m > 11) {
+          m = 0;
+          y++;
+        }
+      }
+      
+      const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      items = months.map(item => {
+        const monthNum = String(item.month + 1).padStart(2, "0");
+        const count = filteredCases.filter(c => c.receivedDate.startsWith(`${item.year}-${monthNum}`)).length;
+        const translatedMonth = getTranslatedMonth(monthLabels[item.month]);
+        const label = `${translatedMonth} ${item.year}`;
+        return {
+          label,
+          count,
+          tooltip: `${label}: ${count} ${t("cases")}`
+        };
+      });
+    } else if (trendInterval === "yearly") {
+      const startYear = minDate.getFullYear();
+      const endYear = maxDate.getFullYear();
+      const years = [];
+      for (let yr = startYear; yr <= endYear; yr++) {
+        years.push(yr);
+      }
+      
+      items = years.map(yr => {
+        const count = filteredCases.filter(c => c.receivedDate.startsWith(String(yr))).length;
+        return {
+          label: String(yr),
+          count,
+          tooltip: `${yr}: ${count} ${t("cases")}`
+        };
+      });
+    }
+
+    // Dynamic width calculation for horizontal scrolling
+    const itemWidth = trendInterval === "daily" ? 35 : trendInterval === "weekly" ? 90 : trendInterval === "monthly" ? 80 : 140;
+    const paddingLeft = 60;
+    const paddingRight = 60;
+    const calculatedWidth = paddingLeft + paddingRight + items.length * itemWidth;
+    const width = Math.max(950, calculatedWidth);
+
+    const maxVal = Math.max(...items.map(item => item.count), 1);
+    const chartWidth = width - paddingLeft - paddingRight;
+    const numPoints = items.length;
     
-    const maxVal = Math.max(...counts, 1);
-    const points = counts.map((count, index) => {
-      const x = 80 + index * 168;
-      const y = 160 - (count / maxVal) * 120; // 160 is base height, 120 range
-      return { month: months[index], count, x, y };
+    const points = items.map((item, index) => {
+      const x = paddingLeft + (index / Math.max(numPoints - 1, 1)) * chartWidth;
+      const y = 160 - (item.count / maxVal) * 120; // 160 base height, 120 range
+      return { label: item.label, count: item.count, tooltip: item.tooltip, x, y };
     });
 
     const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
@@ -407,8 +534,8 @@ export default function AdminPage() {
       ? `${linePath} L ${points[points.length - 1].x} 160 L ${points[0].x} 160 Z`
       : "";
 
-    return { points, linePath, areaPath };
-  }, [filteredCases]);
+    return { points, linePath, areaPath, width };
+  }, [filteredCases, trendInterval, lang, t]);
 
   // Reset Slicer Panel filters
   const resetAllFilters = () => {
@@ -807,59 +934,181 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* 3. Trend Line Chart (Full Width) */}
+                {/* 3. Trend Line/Bar Chart (Full Width) */}
                 <div className="pbi-chart-card chart-full-width">
-                  <h3 className="pbi-chart-title">{t("monthlyRegistrationTrendChart")}</h3>
-                  <div className="trend-chart-wrapper">
-                    <svg className="trend-svg" viewBox="0 0 1000 200">
+                  <div className="chart-header-row">
+                    <h3 className="pbi-chart-title">{t("caseRegistrationTrendChart")}</h3>
+                    <div className="chart-header-controls">
+                      {/* Interval selector */}
+                      <div className="trend-interval-selector" role="radiogroup" aria-label="Select trend interval">
+                        <button
+                          className={`interval-btn${trendInterval === "daily" ? " active" : ""}`}
+                          onClick={() => setTrendInterval("daily")}
+                          type="button"
+                        >
+                          {t("dailyTrend")}
+                        </button>
+                        <button
+                          className={`interval-btn${trendInterval === "weekly" ? " active" : ""}`}
+                          onClick={() => setTrendInterval("weekly")}
+                          type="button"
+                        >
+                          {t("weeklyTrend")}
+                        </button>
+                        <button
+                          className={`interval-btn${trendInterval === "monthly" ? " active" : ""}`}
+                          onClick={() => setTrendInterval("monthly")}
+                          type="button"
+                        >
+                          {t("monthlyTrend")}
+                        </button>
+                        <button
+                          className={`interval-btn${trendInterval === "yearly" ? " active" : ""}`}
+                          onClick={() => setTrendInterval("yearly")}
+                          type="button"
+                        >
+                          {t("yearlyTrend")}
+                        </button>
+                      </div>
+
+                      {/* Chart Type selector */}
+                      <div className="trend-interval-selector" role="radiogroup" aria-label="Select chart type">
+                        <button
+                          className={`interval-btn${chartType === "bar" ? " active" : ""}`}
+                          onClick={() => setChartType("bar")}
+                          type="button"
+                        >
+                          {t("barChart")}
+                        </button>
+                        <button
+                          className={`interval-btn${chartType === "line" ? " active" : ""}`}
+                          onClick={() => setChartType("line")}
+                          type="button"
+                        >
+                          {t("lineChart")}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="trend-chart-wrapper scrollable-chart-container">
+                    <svg className="trend-svg" viewBox={`0 0 ${trendData.width} 200`} style={{ width: trendData.width, minWidth: trendData.width }}>
                       <defs>
                         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
                           <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
                         </linearGradient>
+                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#3b82f6" />
+                          <stop offset="100%" stopColor="#1d4ed8" />
+                        </linearGradient>
                       </defs>
 
                       {/* Grid Lines */}
                       {[40, 80, 120, 160].map((yVal, index) => (
-                        <line key={index} x1="50" y1={yVal} x2="950" y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
+                        <line key={index} x1="50" y1={yVal} x2={trendData.width - 50} y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
                       ))}
 
-                      {/* Area Fill */}
-                      {monthlyTrendData.areaPath && (
-                        <path d={monthlyTrendData.areaPath} fill="url(#areaGrad)" />
+                      {/* Area Fill (Line Chart Only) */}
+                      {chartType === "line" && trendData.areaPath && (
+                        <path d={trendData.areaPath} fill="url(#areaGrad)" />
                       )}
 
-                      {/* Connection Line */}
-                      {monthlyTrendData.linePath && (
-                        <path d={monthlyTrendData.linePath} fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" />
+                      {/* Connection Line (Line Chart Only) */}
+                      {chartType === "line" && trendData.linePath && (
+                        <path d={trendData.linePath} fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" />
                       )}
 
-                      {/* Trend Points */}
-                      {monthlyTrendData.points.map((p, i) => (
+                      {/* Bar Columns (Bar Chart Only) */}
+                      {chartType === "bar" && trendData.points.map((p, i) => {
+                        const barWidth = trendInterval === "daily" ? 12 : trendInterval === "weekly" ? 35 : trendInterval === "monthly" ? 25 : 55;
+                        return (
+                          <rect
+                            key={`bar-${i}`}
+                            x={p.x - barWidth / 2}
+                            y={p.y}
+                            width={barWidth}
+                            height={Math.max(160 - p.y, 2)}
+                            fill="url(#barGrad)"
+                            rx="3"
+                            ry="3"
+                            className="trend-bar"
+                            onMouseEnter={() => {
+                              setHoveredPoint(i);
+                              setTooltipPos({ x: p.x, y: p.y });
+                              setTooltipText(p.tooltip);
+                            }}
+                            onMouseLeave={() => setHoveredPoint(null)}
+                          />
+                        );
+                      })}
+
+                      {/* Trend Points (Line Chart Only) */}
+                      {chartType === "line" && trendData.points.map((p, i) => (
                         <circle
                           key={i}
                           className="trend-dot"
                           cx={p.x}
                           cy={p.y}
-                          r="5"
+                          r={trendInterval === "daily" ? "3" : "5"}
                           fill="#ffffff"
                           stroke="#2563eb"
                           strokeWidth="3"
                           onMouseEnter={() => {
                             setHoveredPoint(i);
                             setTooltipPos({ x: p.x, y: p.y });
-                            setTooltipText(t("trendTooltip", { month: getTranslatedMonth(p.month), count: p.count }));
+                            setTooltipText(p.tooltip);
                           }}
                           onMouseLeave={() => setHoveredPoint(null)}
                         />
                       ))}
 
+                      {/* Point Value Labels (High-contrast badges) */}
+                      {trendData.points.map((p, i) => {
+                        // For daily trend, only show labels for non-zero count points to avoid clutter
+                        if (trendInterval === "daily" && p.count === 0) {
+                          return null;
+                        }
+                        const isDoubleDigit = p.count >= 10;
+                        const badgeWidth = isDoubleDigit ? 24 : 18;
+                        const badgeHeight = 16;
+                        return (
+                          <g key={`val-${i}`} className="trend-badge-group">
+                            <rect
+                              x={p.x - badgeWidth / 2}
+                              y={p.y - 24}
+                              width={badgeWidth}
+                              height={badgeHeight}
+                              rx="4"
+                              ry="4"
+                              fill="#1e293b"
+                              stroke="#ffffff"
+                              strokeWidth="1.5"
+                            />
+                            <text
+                              x={p.x}
+                              y={p.y - 12}
+                              textAnchor="middle"
+                              fill="#ffffff"
+                              fontSize="9"
+                              fontWeight="800"
+                            >
+                              {p.count}
+                            </text>
+                          </g>
+                        );
+                      })}
+
                       {/* X Axis Labels */}
-                      {monthlyTrendData.points.map((p, i) => (
-                        <text key={i} x={p.x} y="190" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
-                          {getTranslatedMonth(p.month)}
-                        </text>
-                      ))}
+                      {trendData.points.map((p, i) => {
+                        if (trendInterval === "daily" && i % 3 !== 0 && i !== trendData.points.length - 1) {
+                          return null;
+                        }
+                        return (
+                          <text key={i} x={p.x} y="190" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
+                            {p.label}
+                          </text>
+                        );
+                      })}
                     </svg>
 
                     {/* Chart Point Tooltip */}

@@ -199,5 +199,18 @@
   "monthMar": "මාර්",
   "monthApr": "අප්‍රේ",
   "monthMay": "මැයි",
-  "monthJun": "ජූනි"
+  "monthJun": "ජූනි",
+  "monthJul": "ජූලි",
+  "monthAug": "අගෝ",
+  "monthSep": "සැප්",
+  "monthOct": "ඔක්",
+  "monthNov": "නොවැ",
+  "monthDec": "දෙසැ",
+  "dailyTrend": "දෛනික",
+  "weeklyTrend": "සතිපතා",
+  "monthlyTrend": "මාසික",
+  "yearlyTrend": "වාර්ෂික",
+  "caseRegistrationTrendChart": "නඩු ලියාපදිංචි වීමේ ප්‍රවණතාවය",
+  "lineChart": "රේඛීය",
+  "barChart": "තීරු"
 }

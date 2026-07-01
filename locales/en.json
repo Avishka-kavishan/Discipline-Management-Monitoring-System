@@ -199,5 +199,19 @@
   "monthMar": "Mar",
   "monthApr": "Apr",
   "monthMay": "May",
-  "monthJun": "Jun"
+  "monthJun": "Jun",
+  "monthJul": "Jul",
+  "monthAug": "Aug",
+  "monthSep": "Sep",
+  "monthOct": "Oct",
+  "monthNov": "Nov",
+  "monthDec": "Dec",
+  "dailyTrend": "Daily",
+  "weeklyTrend": "Weekly",
+  "monthlyTrend": "Monthly",
+  "yearlyTrend": "Yearly",
+  "caseRegistrationTrendChart": "Case Registration Trend",
+  "lineChart": "Line",
+  "barChart": "Bar"
 }
+

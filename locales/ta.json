@@ -199,5 +199,19 @@
   "monthMar": "மார்",
   "monthApr": "ஏப்",
   "monthMay": "மே",
-  "monthJun": "ஜூன்"
+  "monthJun": "ஜூன்",
+  "monthJul": "ஜூலை",
+  "monthAug": "ஆக",
+  "monthSep": "செப்",
+  "monthOct": "அக்",
+  "monthNov": "நவ",
+  "monthDec": "டிச",
+  "dailyTrend": "தினசரி",
+  "weeklyTrend": "வாராந்திர",
+  "monthlyTrend": "மாதாந்திர",
+  "yearlyTrend": "வருடாந்திர",
+  "caseRegistrationTrendChart": "வழக்கு பதிவு போக்கு",
+  "lineChart": "கோடு",
+  "barChart": "பட்டி"
 }
+
