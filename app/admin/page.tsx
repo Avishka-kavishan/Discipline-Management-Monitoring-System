@@ -168,10 +168,10 @@ export default function AdminPage() {
   ]);
 
   const [users, setUsers] = useState<User[]>([
-    { id: "1", name: "Aruni Rajapaksha", email: "arunirajapaksha@gmail.com", role: t("roleAdmin"), status: "Active" },
-    { id: "2", name: "Nathasha Sathsarani", email: "nathashasathsarani209@gmail.com", role: t("roleDailyMail"), status: "Active" },
-    { id: "3", name: "Kamal Perera", email: "kamalperera@gmail.com", role: t("roleSubject"), status: "Active" },
-    { id: "4", name: "Suresh Silva", email: "sureshsilva@gmail.com", role: t("roleInvestigation"), status: "Active" }
+    { id: "1", name: "Aruni Rajapaksha", email: "arunirajapaksha@gmail.com", role: "roleAdmin", status: "Active" },
+    { id: "2", name: "Nathasha Sathsarani", email: "nathashasathsarani209@gmail.com", role: "roleDailyMail", status: "Active" },
+    { id: "3", name: "Kamal Perera", email: "kamalperera@gmail.com", role: "roleSubject", status: "Active" },
+    { id: "4", name: "Suresh Silva", email: "sureshsilva@gmail.com", role: "roleInvestigation", status: "Active" }
   ]);
 
   const instNames = useMemo(() => institutes.map(i => i.name), [institutes]);
@@ -216,6 +216,24 @@ export default function AdminPage() {
     i18n.changeLanguage(lng);
   };
 
+  const getTranslatedStatus = (statusName: string) => {
+    if (statusName === "Registered") return t("statusRegistered");
+    if (statusName === "Under Subject" || statusName === "Under Subject Officer") return t("underSubject");
+    if (statusName === "Under Investigation") return t("underInvestigation");
+    if (statusName === "Closed") return t("statusClosed");
+    return statusName;
+  };
+
+  const getTranslatedMonth = (monthName: string) => {
+    if (monthName === "Jan") return t("monthJan");
+    if (monthName === "Feb") return t("monthFeb");
+    if (monthName === "Mar") return t("monthMar");
+    if (monthName === "Apr") return t("monthApr");
+    if (monthName === "May") return t("monthMay");
+    if (monthName === "Jun") return t("monthJun");
+    return monthName;
+  };
+
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     router.push("/");
@@ -234,7 +252,7 @@ export default function AdminPage() {
   const handleAddInstituteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newInstName || !newInstCode) {
-      setNewInstError("Please fill out all fields.");
+      setNewInstError(t("pleaseFillAllFields"));
       return;
     }
     const newInst: Institute = {
@@ -244,7 +262,7 @@ export default function AdminPage() {
       code: newInstCode.toUpperCase()
     };
     setInstitutes([...institutes, newInst]);
-    triggerToast(lang === "si" ? "ආයතනය සාර්ථකව එක් කරන ලදී!" : lang === "ta" ? "நிறுவனம் வெற்றிகரமாக சேர்க்கப்பட்டது!" : "Institute added successfully!");
+    triggerToast(t("instituteAddedSuccess"));
     
     // Clear & Close
     setNewInstName("");
@@ -256,23 +274,19 @@ export default function AdminPage() {
   const handleAddOfficerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newOfficerName || !newOfficerEmail) {
-      setNewOfficerError("Please fill out all fields.");
+      setNewOfficerError(t("pleaseFillAllFields"));
       return;
     }
-    const roleLabel = 
-      newOfficerRole === "roleAdmin" ? t("roleAdmin") :
-      newOfficerRole === "roleDailyMail" ? t("roleDailyMail") :
-      newOfficerRole === "roleSubject" ? t("roleSubject") : t("roleInvestigation");
 
     const newStaff: User = {
       id: String(users.length + 1),
       name: newOfficerName,
       email: newOfficerEmail,
-      role: roleLabel,
+      role: newOfficerRole,
       status: "Active"
     };
     setUsers([...users, newStaff]);
-    triggerToast(lang === "si" ? "නිලධාරියා සාර්ථකව එක් කරන ලදී!" : lang === "ta" ? "அதிகாரி வெற்றிகரமாக சேர்க்கப்பட்டார்!" : "Officer registered successfully!");
+    triggerToast(t("officerAddedSuccess"));
     
     // Clear & Close
     setNewOfficerName("");
@@ -550,16 +564,16 @@ export default function AdminPage() {
           {/* ── Quick Action Pills (Screenshot Matching) ── */}
           <section className="quick-actions-pills-row">
             <button className="action-pill-btn pill-cyan" onClick={() => setIsAddInstituteOpen(true)}>
-              <span>+</span> Add Institute
+              <span>+</span> {t("addInstitute")}
             </button>
             <button className="action-pill-btn pill-blue" onClick={() => openOfficerModalWithRole("roleInvestigation")}>
-              <span>+</span> Add Investigation officer
+              <span>+</span> {t("addInvestigationOfficer")}
             </button>
             <button className="action-pill-btn pill-purple" onClick={() => openOfficerModalWithRole("roleDailyMail")}>
-              <span>+</span> Add Daily Reporter
+              <span>+</span> {t("addDailyReporter")}
             </button>
             <button className="action-pill-btn pill-darkblue" onClick={() => openOfficerModalWithRole("roleSubject")}>
-              <span>+</span> Add Subject officer
+              <span>+</span> {t("addSubjectOfficer")}
             </button>
           </section>
 
@@ -571,7 +585,7 @@ export default function AdminPage() {
                 <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <h4>Total Cases</h4>
+                <h4>{t("totalCases")}</h4>
               </div>
               <p className="stat-value text-blue">
                 {String(metrics.total).padStart(2, "0")}
@@ -584,7 +598,7 @@ export default function AdminPage() {
                 <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h4>Closed Cases</h4>
+                <h4>{t("closedCases")}</h4>
               </div>
               <p className="stat-value text-green">
                 {String(metrics.closed).padStart(2, "0")}
@@ -597,7 +611,7 @@ export default function AdminPage() {
                 <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
                 </svg>
-                <h4>Under Investigation</h4>
+                <h4>{t("underInvestigation")}</h4>
               </div>
               <p className="stat-value text-orange">
                 {String(metrics.underInvestigation).padStart(2, "0")}
@@ -610,7 +624,7 @@ export default function AdminPage() {
                 <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h4>Under Subject</h4>
+                <h4>{t("underSubject")}</h4>
               </div>
               <p className="stat-value text-yellow">
                 {String(metrics.underSubject).padStart(2, "0")}
@@ -624,13 +638,13 @@ export default function AdminPage() {
               className={`admin-tab-btn${activeTab === "analytics" ? " active" : ""}`}
               onClick={() => setActiveTab("analytics")}
             >
-              Analytics Dashboard (Power BI)
+              {t("analyticsDashboardTab")}
             </button>
             <button
               className={`admin-tab-btn${activeTab === "users" ? " active" : ""}`}
               onClick={() => setActiveTab("users")}
             >
-              User Account Directory ({users.length})
+              {t("userDirectoryTab")} ({users.length})
             </button>
           </nav>
 
@@ -647,24 +661,24 @@ export default function AdminPage() {
                     <svg className="slicer-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
-                    Interactive Filters (Slicer Panel)
+                    {t("slicerTitle")}
                   </div>
                   <button className="reset-filter-btn" onClick={resetAllFilters}>
-                    Reset Slicers
+                    {t("resetSlicers")}
                   </button>
                 </div>
 
                 <div className="slicers-grid">
                   {/* Slicer 1: Institute */}
                   <div className="slicer-control">
-                    <label className="slicer-label" htmlFor="slicer-institute">Institute</label>
+                    <label className="slicer-label" htmlFor="slicer-institute">{t("institute")}</label>
                     <select
                       id="slicer-institute"
                       className="slicer-select"
                       value={filterInstitute}
                       onChange={(e) => setFilterInstitute(e.target.value)}
                     >
-                      <option value="All">All Institutes</option>
+                      <option value="All">{t("allInstitutes")}</option>
                       {institutes.map(inst => (
                         <option key={inst.id} value={inst.name}>{inst.name}</option>
                       ))}
@@ -673,45 +687,45 @@ export default function AdminPage() {
 
                   {/* Slicer 2: Priority */}
                   <div className="slicer-control">
-                    <label className="slicer-label" htmlFor="slicer-priority">Priority</label>
+                    <label className="slicer-label" htmlFor="slicer-priority">{t("priority")}</label>
                     <select
                       id="slicer-priority"
                       className="slicer-select"
                       value={filterPriority}
                       onChange={(e) => setFilterPriority(e.target.value)}
                     >
-                      <option value="All">All Priorities</option>
-                      <option value="High">High Priority</option>
-                      <option value="Medium">Medium Priority</option>
-                      <option value="Low">Low Priority</option>
+                      <option value="All">{t("allPriorities")}</option>
+                      <option value="High">{t("highPriority")}</option>
+                      <option value="Medium">{t("mediumPriority")}</option>
+                      <option value="Low">{t("lowPriority")}</option>
                     </select>
                   </div>
 
                   {/* Slicer 3: Case Status */}
                   <div className="slicer-control">
-                    <label className="slicer-label" htmlFor="slicer-status">Case Status</label>
+                    <label className="slicer-label" htmlFor="slicer-status">{t("status")}</label>
                     <select
                       id="slicer-status"
                       className="slicer-select"
                       value={filterStatus}
                       onChange={(e) => setFilterStatus(e.target.value)}
                     >
-                      <option value="All">All Statuses</option>
-                      <option value="Registered">Registered (Unassigned)</option>
-                      <option value="Under Subject Officer">Under Subject Officer</option>
-                      <option value="Under Investigation">Under Investigation</option>
-                      <option value="Closed">Closed</option>
+                      <option value="All">{t("allStatuses")}</option>
+                      <option value="Registered">{t("statusRegistered")} ({t("unassigned")})</option>
+                      <option value="Under Subject Officer">{t("underSubject")}</option>
+                      <option value="Under Investigation">{t("underInvestigation")}</option>
+                      <option value="Closed">{t("statusClosed")}</option>
                     </select>
                   </div>
 
                   {/* Slicer 4: Real-time Search */}
                   <div className="slicer-control">
-                    <label className="slicer-label" htmlFor="slicer-search">Search Keyword</label>
+                    <label className="slicer-label" htmlFor="slicer-search">{t("searchKeyword")}</label>
                     <input
                       id="slicer-search"
                       type="text"
                       className="slicer-input"
-                      placeholder="Search Ref, Subject, Officer..."
+                      placeholder={t("searchKeywordPlaceholder")}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -723,14 +737,14 @@ export default function AdminPage() {
               <section className="pbi-charts-container">
                 {/* 1. Bar Chart: Cases by Institute */}
                 <div className="pbi-chart-card">
-                  <h3 className="pbi-chart-title">Cases by Educational Institute</h3>
+                  <h3 className="pbi-chart-title">{t("casesByInstituteChart")}</h3>
                   <div className="bar-chart-list">
                     {casesByInstitute.map((item, idx) => (
                       <div 
                         key={idx} 
                         className="bar-chart-row"
                         onClick={() => setFilterInstitute(item.name === filterInstitute ? "All" : item.name)}
-                        title={`Click to filter by ${item.name}`}
+                        title={t("clickToFilter", { name: item.name })}
                       >
                         <div className="bar-label" title={item.name}>{item.name}</div>
                         <div className="bar-container">
@@ -748,7 +762,7 @@ export default function AdminPage() {
 
                 {/* 2. Donut Chart: Case Status Breakdown */}
                 <div className="pbi-chart-card">
-                  <h3 className="pbi-chart-title">Case Status Distribution</h3>
+                  <h3 className="pbi-chart-title">{t("caseStatusDistributionChart")}</h3>
                   <div className="donut-chart-wrapper">
                     <div className="donut-svg-box">
                       <svg width="100%" height="100%" viewBox="0 0 42 42" className="donut-svg">
@@ -767,14 +781,14 @@ export default function AdminPage() {
                             strokeDashoffset={slice.dashOffset}
                             onClick={() => setFilterStatus(slice.name === "Under Subject" ? "Under Subject Officer" : slice.name === filterStatus ? "All" : slice.name)}
                           >
-                            <title>{`${slice.name}: ${slice.count} cases (${slice.percent}%)`}</title>
+                            <title>{`${getTranslatedStatus(slice.name)}: ${slice.count} ${t("cases").toLowerCase()} (${slice.percent}%)`}</title>
                           </circle>
                         ))}
                       </svg>
                       
                       <div className="donut-center-text">
                         <span className="donut-center-num">{metrics.total}</span>
-                        <span className="donut-center-label">Cases</span>
+                        <span className="donut-center-label">{t("cases")}</span>
                       </div>
                     </div>
 
@@ -786,7 +800,7 @@ export default function AdminPage() {
                           onClick={() => setFilterStatus(slice.name === "Under Subject" ? "Under Subject Officer" : slice.name === filterStatus ? "All" : slice.name)}
                         >
                           <span className={`legend-color-dot dot-${slice.name.toLowerCase().replace(" ", "-")}`} />
-                          <span>{slice.name} ({slice.count})</span>
+                          <span>{getTranslatedStatus(slice.name)} ({slice.count})</span>
                         </div>
                       ))}
                     </div>
@@ -795,7 +809,7 @@ export default function AdminPage() {
 
                 {/* 3. Trend Line Chart (Full Width) */}
                 <div className="pbi-chart-card chart-full-width">
-                  <h3 className="pbi-chart-title">Monthly Case Registration Trend (2026)</h3>
+                  <h3 className="pbi-chart-title">{t("monthlyRegistrationTrendChart")}</h3>
                   <div className="trend-chart-wrapper">
                     <svg className="trend-svg" viewBox="0 0 1000 200">
                       <defs>
@@ -834,7 +848,7 @@ export default function AdminPage() {
                           onMouseEnter={() => {
                             setHoveredPoint(i);
                             setTooltipPos({ x: p.x, y: p.y });
-                            setTooltipText(`${p.month}: ${p.count} Cases`);
+                            setTooltipText(t("trendTooltip", { month: getTranslatedMonth(p.month), count: p.count }));
                           }}
                           onMouseLeave={() => setHoveredPoint(null)}
                         />
@@ -843,7 +857,7 @@ export default function AdminPage() {
                       {/* X Axis Labels */}
                       {monthlyTrendData.points.map((p, i) => (
                         <text key={i} x={p.x} y="190" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
-                          {p.month}
+                          {getTranslatedMonth(p.month)}
                         </text>
                       ))}
                     </svg>
@@ -861,13 +875,13 @@ export default function AdminPage() {
               {/* ── Cases Ledger Table ── */}
               <section className="letters-list-section">
                 <div className="letters-list-header">
-                  <h3 className="section-title">Disciplinary Cases Ledger</h3>
+                  <h3 className="section-title">{t("disciplinaryCasesLedger")}</h3>
                   <div className="letters-filters-group">
                     <span className="badge-badge badge-status-active ledger-badge-info">
-                      Showing {filteredCases.length} of {cases.length} entries
+                      {t("showingEntries", { count: filteredCases.length, total: cases.length })}
                     </span>
                     <button className="see-all-btn" onClick={() => setShowAll(prev => !prev)}>
-                      {showAll ? 'Show Less' : 'See All'}
+                      {showAll ? t("showLess") : t("seeAll")}
                     </button>
                   </div>
                 </div>
@@ -876,13 +890,13 @@ export default function AdminPage() {
                   <table className="letters-data-table">
                     <thead>
                       <tr>
-                        <th scope="col">Case Ref</th>
-                        <th scope="col">Subject Description</th>
-                        <th scope="col">Assigned Officer</th>
-                        <th scope="col">Institute</th>
-                        <th scope="col">Priority</th>
-                        <th scope="col">Status</th>
-                        <th scope="col" className="text-center">Actions</th>
+                        <th scope="col">{t("caseRef")}</th>
+                        <th scope="col">{t("subjectDescription")}</th>
+                        <th scope="col">{t("assignedOfficer")}</th>
+                        <th scope="col">{t("institute")}</th>
+                        <th scope="col">{t("priority")}</th>
+                        <th scope="col">{t("status")}</th>
+                        <th scope="col" className="text-center">{t("actions")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -897,7 +911,7 @@ export default function AdminPage() {
                             <td>{item.institute}</td>
                             <td>
                               <span className={`badge-priority priority-${item.priority.toLowerCase()}`}>
-                                {item.priority}
+                                {item.priority === "High" ? t("priorityHigh") : item.priority === "Medium" ? t("priorityMedium") : t("priorityLow")}
                               </span>
                             </td>
                             <td>
@@ -906,7 +920,7 @@ export default function AdminPage() {
                                 item.status === "Under Subject Officer" ? "badge-status-under-subject" :
                                 item.status === "Closed" ? "badge-status-closed" : "badge-status-registered"
                               }`}>
-                                {item.status === "Under Subject Officer" ? "Under Subject" : item.status}
+                                {getTranslatedStatus(item.status)}
                               </span>
                             </td>
                             <td className="text-center actions-cell">
@@ -918,13 +932,13 @@ export default function AdminPage() {
                                   const newStatus = e.target.value as any;
                                   // Update status locally
                                   setCases(cases.map(c => c.id === item.id ? { ...c, status: newStatus } : c));
-                                  triggerToast(`Status of ${item.refNo} updated to ${newStatus}`);
+                                  triggerToast(t("statusUpdatedToast", { refNo: item.refNo, status: getTranslatedStatus(newStatus) }));
                                 }}
                               >
-                                <option value="Registered">Registered</option>
-                                <option value="Under Subject Officer">Under Subject</option>
-                                <option value="Under Investigation">Under Investigation</option>
-                                <option value="Closed">Closed</option>
+                                <option value="Registered">{t("statusRegistered")}</option>
+                                <option value="Under Subject Officer">{t("underSubject")}</option>
+                                <option value="Under Investigation">{t("underInvestigation")}</option>
+                                <option value="Closed">{t("statusClosed")}</option>
                               </select>
                             </td>
                           </tr>
@@ -932,7 +946,7 @@ export default function AdminPage() {
                       ) : (
                         <tr>
                           <td colSpan={7} className="text-center py-4 text-muted">
-                            No cases found matching the active slicers
+                            {t("noCasesFound")}
                           </td>
                         </tr>
                       )}
@@ -950,7 +964,7 @@ export default function AdminPage() {
             <div className="admin-tab-content">
               <section className="letters-list-section users-directory-section">
                 <div className="letters-list-header">
-                  <h3 className="section-title">User Account Directory</h3>
+                  <h3 className="section-title">{t("userDirectoryTitle")}</h3>
                   <div className="letters-filters-group">
                     <div className="search-box">
                       <svg className="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -960,7 +974,7 @@ export default function AdminPage() {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search by name, role, email..."
+                        placeholder={t("searchUserPlaceholder")}
                         className="search-input"
                       />
                     </div>
@@ -971,35 +985,35 @@ export default function AdminPage() {
                   <table className="letters-data-table">
                     <thead>
                       <tr>
-                        <th scope="col">User Name</th>
-                        <th scope="col">E-mail Address</th>
-                        <th scope="col">Assigned System Role</th>
-                        <th scope="col">Account Status</th>
-                        <th scope="col" className="text-center">Actions</th>
+                        <th scope="col">{t("userName")}</th>
+                        <th scope="col">{t("emailAddress")}</th>
+                        <th scope="col">{t("assignedSystemRole")}</th>
+                        <th scope="col">{t("accountStatus")}</th>
+                        <th scope="col" className="text-center">{t("actions")}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {users.filter(u => 
                         u.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                        u.role.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                        t(u.role).toLowerCase().includes(searchQuery.toLowerCase()) || 
                         u.email.toLowerCase().includes(searchQuery.toLowerCase())
                       ).map((user) => (
                         <tr key={user.id} className="letter-table-row">
                           <td className="font-semibold text-primary">{user.name}</td>
                           <td>{user.email}</td>
-                          <td>{user.role}</td>
+                          <td>{t(user.role)}</td>
                           <td>
                             <span className="badge-badge badge-status-active">
-                              {user.status}
+                              {t(user.status === "Active" ? "active" : "inactive")}
                             </span>
                           </td>
                           <td className="text-center actions-cell">
                             <button
                               className="btn-action-view"
                               onClick={() => {
-                                alert(`User details:\nName: ${user.name}\nEmail: ${user.email}\nRole: ${user.role}`);
+                                alert(`${t("userDetailsPrompt")}\n${t("userName")}: ${user.name}\n${t("emailAddress")}: ${user.email}\n${t("assignedSystemRole")}: ${t(user.role)}`);
                               }}
-                              title="Inspect Details"
+                              title={t("inspectDetails")}
                             >
                               <svg className="action-row-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1030,7 +1044,7 @@ export default function AdminPage() {
         <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-inst-title">
           <div className="modal-content-card">
             <div className="modal-header-box">
-              <h3 id="modal-inst-title" className="modal-title-text">Add New Educational Institute</h3>
+              <h3 id="modal-inst-title" className="modal-title-text">{t("addNewInstituteTitle")}</h3>
               <button className="modal-close-x" onClick={() => setIsAddInstituteOpen(false)} aria-label="Close modal">&times;</button>
             </div>
             
@@ -1041,12 +1055,12 @@ export default function AdminPage() {
                 )}
                 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="inst-name">Name of Institute</label>
+                  <label className="form-label-txt" htmlFor="inst-name">{t("nameOfInstitute")}</label>
                   <input
                     id="inst-name"
                     type="text"
                     className="form-input-box"
-                    placeholder="e.g. Zonal Office - Kandy"
+                    placeholder={t("placeholderInstNameExample")}
                     value={newInstName}
                     onChange={(e) => setNewInstName(e.target.value)}
                     required
@@ -1054,32 +1068,32 @@ export default function AdminPage() {
                 </div>
 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="inst-province">Province/Region</label>
+                  <label className="form-label-txt" htmlFor="inst-province">{t("provinceRegion")}</label>
                   <select
                     id="inst-province"
                     className="form-select-box"
                     value={newInstProvince}
                     onChange={(e) => setNewInstProvince(e.target.value)}
                   >
-                    <option value="Western">Western</option>
-                    <option value="Central">Central</option>
-                    <option value="Southern">Southern</option>
-                    <option value="Northern">Northern</option>
-                    <option value="Eastern">Eastern</option>
-                    <option value="North Western">North Western</option>
-                    <option value="North Central">North Central</option>
-                    <option value="Uva">Uva</option>
-                    <option value="Sabaragamuwa">Sabaragamuwa</option>
+                    <option value="Western">{t("provinceWestern")}</option>
+                    <option value="Central">{t("provinceCentral")}</option>
+                    <option value="Southern">{t("provinceSouthern")}</option>
+                    <option value="Northern">{t("provinceNorthern")}</option>
+                    <option value="Eastern">{t("provinceEastern")}</option>
+                    <option value="North Western">{t("provinceNorthWestern")}</option>
+                    <option value="North Central">{t("provinceNorthCentral")}</option>
+                    <option value="Uva">{t("provinceUva")}</option>
+                    <option value="Sabaragamuwa">{t("provinceSabaragamuwa")}</option>
                   </select>
                 </div>
 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="inst-code">Institute Code</label>
+                  <label className="form-label-txt" htmlFor="inst-code">{t("instituteCode")}</label>
                   <input
                     id="inst-code"
                     type="text"
                     className="form-input-box"
-                    placeholder="e.g. ZONE-KD"
+                    placeholder={t("placeholderInstCodeExample")}
                     value={newInstCode}
                     onChange={(e) => setNewInstCode(e.target.value)}
                     required
@@ -1089,10 +1103,10 @@ export default function AdminPage() {
               
               <div className="modal-footer-box">
                 <button type="button" className="btn-form-cancel" onClick={() => setIsAddInstituteOpen(false)}>
-                  Cancel
+                  {t("cancelBtn")}
                 </button>
                 <button type="submit" className="btn-form-submit">
-                  Save Institute
+                  {t("saveInstituteBtn")}
                 </button>
               </div>
             </form>
@@ -1108,7 +1122,7 @@ export default function AdminPage() {
           <div className="modal-content-card">
             <div className="modal-header-box">
               <h3 id="modal-off-title" className="modal-title-text">
-                Add Disciplinary Staff Account
+                {t("addStaffAccountTitle")}
               </h3>
               <button className="modal-close-x" onClick={() => setIsAddOfficerOpen(false)} aria-label="Close modal">&times;</button>
             </div>
@@ -1120,12 +1134,12 @@ export default function AdminPage() {
                 )}
                 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="off-name">Officer Full Name</label>
+                  <label className="form-label-txt" htmlFor="off-name">{t("officerFullName")}</label>
                   <input
                     id="off-name"
                     type="text"
                     className="form-input-box"
-                    placeholder="e.g. Ranjith Bandara"
+                    placeholder={t("placeholderOfficerNameExample")}
                     value={newOfficerName}
                     onChange={(e) => setNewOfficerName(e.target.value)}
                     required
@@ -1133,12 +1147,12 @@ export default function AdminPage() {
                 </div>
 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="off-email">E-mail Address</label>
+                  <label className="form-label-txt" htmlFor="off-email">{t("emailAddress")}</label>
                   <input
                     id="off-email"
                     type="email"
                     className="form-input-box"
-                    placeholder="e.g. ranjithbandara@gmail.com"
+                    placeholder={t("placeholderEmailExample")}
                     value={newOfficerEmail}
                     onChange={(e) => setNewOfficerEmail(e.target.value)}
                     required
@@ -1146,27 +1160,27 @@ export default function AdminPage() {
                 </div>
 
                 <div className="form-group-item">
-                  <label className="form-label-txt" htmlFor="off-role">Assigned System Role</label>
+                  <label className="form-label-txt" htmlFor="off-role">{t("assignedSystemRole")}</label>
                   <select
                     id="off-role"
                     className="form-select-box"
                     value={newOfficerRole}
                     onChange={(e) => setNewOfficerRole(e.target.value)}
                   >
-                    <option value="roleAdmin">Administrator</option>
-                    <option value="roleDailyMail">Daily mail officer</option>
-                    <option value="roleSubject">Subject officer</option>
-                    <option value="roleInvestigation">Investigation officer</option>
+                    <option value="roleAdmin">{t("roleAdmin")}</option>
+                    <option value="roleDailyMail">{t("roleDailyMail")}</option>
+                    <option value="roleSubject">{t("roleSubject")}</option>
+                    <option value="roleInvestigation">{t("roleInvestigation")}</option>
                   </select>
                 </div>
               </div>
               
               <div className="modal-footer-box">
                 <button type="button" className="btn-form-cancel" onClick={() => setIsAddOfficerOpen(false)}>
-                  Cancel
+                  {t("cancelBtn")}
                 </button>
                 <button type="submit" className="btn-form-submit">
-                  Save Account
+                  {t("saveAccountBtn")}
                 </button>
               </div>
             </form>
