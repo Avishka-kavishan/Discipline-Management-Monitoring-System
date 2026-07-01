@@ -10,120 +10,11 @@
   background-color: #f8fafc;
 }
 
-/* ── Header Overrides matching Screenshot ── */
-.dashboard-header {
-  background-color: #ffffff;
-  border-bottom: 2px solid #e2e8f0;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-}
 
-.dashboard-main-title {
-  font-family: var(--font-sans);
-  color: #1e293b;
-  font-size: calc(24px * var(--font-scale, 1));
-  font-weight: 800;
-  margin: 0;
-}
-
-.dashboard-main-subtitle {
-  color: #64748b;
-  font-size: calc(12px * var(--font-scale, 1));
-  margin: 4px 0 0 0;
-  font-weight: 500;
-}
-
-/* Date Display Badge */
-.date-badge {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 6px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: calc(13px * var(--font-scale, 1));
-  font-weight: 700;
-  color: #0f172a;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.date-icon {
-  width: 18px;
-  height: 18px;
-  color: #0f172a;
-}
-
-/* Accessibility Sizing Panel */
-.accessibility-adjuster-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #e2e8f0;
-  padding: 3px;
-  border-radius: 20px;
-}
-
-.size-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-weight: bold;
-  font-size: 13px;
-  color: #475569;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.size-btn-small {
-  font-size: 11px;
-}
-
-.size-btn-large {
-  font-size: 16px;
-}
-
-.size-btn.active {
-  background-color: #0e162f;
-  color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-/* Language Selector Pills */
-.trilingual-language-selector {
-  display: flex;
-  gap: 8px;
-}
-
-.lang-btn {
-  background-color: #e2e8f0;
-  color: #1e293b;
-  border-radius: 16px;
-  padding: 6px 16px;
-  font-size: calc(12px * var(--font-scale, 1));
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.lang-btn.active {
-  background-color: #0e162f;
-  color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
 /* ── Welcome Greeting ── */
 .welcome-greeting-section {
-  padding: 24px 24px 8px 24px;
+  padding: 0;
 }
 
 .greeting-text {
@@ -139,7 +30,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
-  padding: 16px 24px;
+  padding: 0 0 12px 0;
 }
 
 .action-pill-btn {
@@ -184,55 +75,94 @@
 }
 
 /* ── Grey Stat Cards (Screenshot Matching) ── */
-.screenshot-stats-grid {
+.subject-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: 20px;
-  padding: 12px 24px;
   margin-bottom: 12px;
 }
 
-.screenshot-stat-card {
-  background-color: #e2e8f0;
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
+@media (max-width: 1024px) {
+  .subject-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
-.screenshot-stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+@media (max-width: 640px) {
+  .subject-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
-.stat-left-box {
+.stat-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #1e293b;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .stat-card-icon {
-  width: 24px;
-  height: 24px;
-  color: #475569;
-  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
 
-.stat-card-label {
-  font-size: calc(14px * var(--font-scale, 1));
-  font-weight: 800;
-  line-height: 1.3;
-  max-width: 140px;
-}
-
-.stat-right-val {
-  font-size: calc(38px * var(--font-scale, 1));
-  font-weight: 900;
+.stat-value {
+  font-size: calc(36px * var(--font-scale, 1));
+  font-weight: 700;
+  margin: 0;
   line-height: 1;
+}
+
+/* Colors for stat card values matching the mockup */
+.text-blue {
+  color: #1d4ed8;
+}
+.text-orange {
+  color: #ea580c;
+}
+.text-yellow {
+  color: #eab308;
+}
+.text-green {
+  color: #16a34a;
+}
+
+/* Icon colors replacing inline styles */
+.icon-blue {
+  color: #1d4ed8;
+}
+.icon-orange {
+  color: #ea580c;
+}
+.icon-yellow {
+  color: #eab308;
+}
+.icon-green {
+  color: #16a34a;
+}
+
+/* Rounded grey container cards */
+.stat-card-total,
+.stat-card-inprogress,
+.stat-card-pending,
+.stat-card-close {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-card-total h4,
+.stat-card-inprogress h4,
+.stat-card-pending h4,
+.stat-card-close h4 {
+  font-size: calc(14px * var(--font-scale, 1));
+  color: #475569;
+  font-weight: 600;
+  margin: 0;
 }
 
 /* Metric Colors */
@@ -247,7 +177,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 20px;
-  margin: 12px 24px;
+  margin: 0 0 12px 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -335,7 +265,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  padding: 12px 24px;
+  padding: 0;
 }
 
 @media (min-width: 1024px) {
@@ -449,13 +379,13 @@
 
 .donut-slice {
   fill: none;
-  stroke-width: 16px;
-  transition: stroke-dasharray 0.5s ease-in-out, stroke 0.3s ease;
+  stroke-width: 6px;
+  transition: stroke-dasharray 0.5s ease-in-out, stroke 0.3s ease, stroke-width 0.2s ease;
   cursor: pointer;
 }
 
 .donut-slice:hover {
-  stroke-width: 18px;
+  stroke-width: 7.5px;
 }
 
 .donut-center-text {
@@ -514,13 +444,13 @@
 .trend-chart-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
   margin-top: 10px;
 }
 
 .trend-svg {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
 }
 
 .trend-dot {
@@ -790,21 +720,9 @@
   border-bottom-color: #2563eb;
 }
 
-/* ── Centered Footer matching design guidelines ── */
-.admin-footer-bar {
-  background-color: #f1f5f9;
-  border-top: 1px solid #e2e8f0;
-  padding: 12px 24px;
-  text-align: center;
-  font-size: calc(11px * var(--font-scale, 1));
-  color: #64748b;
-  font-weight: 700;
-}
+
 
 /* ── Inline Style Replacements ── */
-#dashboard-main-content {
-  padding: 0;
-}
 
 .admin-tab-content {
   animation: fadeIn 0.2s ease-out;
@@ -862,7 +780,5 @@
   width: auto;
 }
 
-.users-directory-section {
-  margin: 24px;
-}
+
 

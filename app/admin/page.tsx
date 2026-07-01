@@ -125,7 +125,6 @@ export default function AdminPage() {
   const router = useRouter();
 
   // Refs to bypass static checker expression limitations
-  const sidebarToggleRef = useRef<HTMLButtonElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   // ── Layout, Theme, A11y & Language State ──
@@ -202,12 +201,7 @@ export default function AdminPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Sync aria-expanded to satisfy naive static analysis tool
-  useEffect(() => {
-    if (sidebarToggleRef.current) {
-      sidebarToggleRef.current.setAttribute("aria-expanded", String(isSidebarOpen));
-    }
-  }, [isSidebarOpen]);
+
 
   // Sync tooltip position styling to satisfy static analysis tool
   useEffect(() => {
@@ -424,40 +418,29 @@ export default function AdminPage() {
       />
 
       <div className="dashboard-layout">
-        {/* ============================================================
-           MAIN WORKSPACE CONTENT AREA
-           ============================================================ */}
         <main id="dashboard-main-content" className="dashboard-content">
           
-          {/* ── Header exactly matching the Screenshot ── */}
+          {/* ── Top App Bar Header ── */}
           <header className="dashboard-header">
             <div className="dashboard-header-left">
-              <button
-                ref={sidebarToggleRef}
-                className="menu-toggle-btn"
+              <button 
+                className="menu-toggle-btn" 
                 aria-label="Toggle Sidebar Menu"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                {...(isSidebarOpen ? { "aria-expanded": "true" } : { "aria-expanded": "false" })}
               >
                 <svg className="hamburger-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
               <div className="dashboard-title-area">
-                <h1 className="dashboard-main-title">
-                  {lang === "si" ? "පරිපාලක" : lang === "ta" ? "நிர்வாகி" : "Admin"}
-                </h1>
-                <p className="dashboard-main-subtitle">
-                  {lang === "si" 
-                    ? "විනය කළමනාකරණ පද්ධතිය අධීක්ෂණය සහ කළමනාකරණය කරන්න." 
-                    : lang === "ta" 
-                    ? "ஒழுக்க மேலாண்மை அமைப்பை மேற்பார்வையிட்டு நிர்வகிக்கவும்." 
-                    : "Oversee and manage the disciplinary management system."}
-                </p>
+                <h2 className="dashboard-main-title">{t("adminDashboardTitle")}</h2>
+                <p className="dashboard-main-subtitle">{t("adminDashboardDesc")}</p>
               </div>
             </div>
 
             <div className="dashboard-header-right">
-              {/* Localized Live Date */}
+              {/* Date display badge */}
               <div className="date-badge">
                 <svg className="date-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -472,65 +455,95 @@ export default function AdminPage() {
 
               <div className="divider-line" aria-hidden="true" />
 
-              {/* Accessibility Font Size Radio Adjusters */}
+              {/* Accessibility Scale Radio Group */}
               <div className="accessibility-adjuster-bar" role="radiogroup" aria-label="Font Sizing Adjustment">
-                <button 
-                  className={`size-btn size-btn-small${fontScale === "small" ? " active" : ""}`}
-                  onClick={() => setFontScale("small")}
-                  aria-label={t("fontSmall")}
-                >
+                <label className={`size-btn size-btn-small${fontScale === "small" ? " active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="dashboardFontScale"
+                    value="small"
+                    checked={fontScale === "small"}
+                    onChange={() => setFontScale("small")}
+                    aria-label={t("fontSmall")}
+                    className="sr-only"
+                  />
                   A
-                </button>
-                <button 
-                  className={`size-btn size-btn-medium${fontScale === "medium" ? " active" : ""}`}
-                  onClick={() => setFontScale("medium")}
-                  aria-label={t("fontMedium")}
-                >
+                </label>
+                <label className={`size-btn size-btn-medium${fontScale === "medium" ? " active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="dashboardFontScale"
+                    value="medium"
+                    checked={fontScale === "medium"}
+                    onChange={() => setFontScale("medium")}
+                    aria-label={t("fontMedium")}
+                    className="sr-only"
+                  />
                   A
-                </button>
-                <button 
-                  className={`size-btn size-btn-large${fontScale === "large" ? " active" : ""}`}
-                  onClick={() => setFontScale("large")}
-                  aria-label={t("fontLarge")}
-                >
+                </label>
+                <label className={`size-btn size-btn-large${fontScale === "large" ? " active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="dashboardFontScale"
+                    value="large"
+                    checked={fontScale === "large"}
+                    onChange={() => setFontScale("large")}
+                    aria-label={t("fontLarge")}
+                    className="sr-only"
+                  />
                   A
-                </button>
+                </label>
               </div>
 
               <div className="divider-line" aria-hidden="true" />
 
-              {/* Language Switcher Pills */}
+              {/* Translation controls */}
               <div className="trilingual-language-selector" role="radiogroup" aria-label="Translate Dashboard Language">
-                <button 
-                  className={`lang-btn${lang === "si" ? " active" : ""}`}
-                  onClick={() => changeLanguage("si")}
-                  aria-label="Switch dashboard language to Sinhala"
-                >
-                  Sinhala
-                </button>
-                <button 
-                  className={`lang-btn${lang === "ta" ? " active" : ""}`}
-                  onClick={() => changeLanguage("ta")}
-                  aria-label="Switch dashboard language to Tamil"
-                >
-                  Tamil
-                </button>
-                <button 
-                  className={`lang-btn${lang === "en" ? " active" : ""}`}
-                  onClick={() => changeLanguage("en")}
-                  aria-label="Switch dashboard language to English"
-                >
+                <label className={`lang-btn${lang === "si" ? " active" : ""}`} lang="si">
+                  <input
+                    type="radio"
+                    name="dashboardLang"
+                    value="si"
+                    checked={lang === "si"}
+                    onChange={() => changeLanguage("si")}
+                    aria-label="Switch dashboard language to Sinhala"
+                    className="sr-only"
+                  />
+                  සිංහල
+                </label>
+                <label className={`lang-btn${lang === "ta" ? " active" : ""}`} lang="ta">
+                  <input
+                    type="radio"
+                    name="dashboardLang"
+                    value="ta"
+                    checked={lang === "ta"}
+                    onChange={() => changeLanguage("ta")}
+                    aria-label="Switch dashboard language to Tamil"
+                    className="sr-only"
+                  />
+                  தமிழ்
+                </label>
+                <label className={`lang-btn${lang === "en" ? " active" : ""}`} lang="en">
+                  <input
+                    type="radio"
+                    name="dashboardLang"
+                    value="en"
+                    checked={lang === "en"}
+                    onChange={() => changeLanguage("en")}
+                    aria-label="Switch dashboard language to English"
+                    className="sr-only"
+                  />
                   English
-                </button>
+                </label>
               </div>
             </div>
           </header>
 
-          {/* ── Welcome Nathasha Banner Section ── */}
+          {/* ── Dynamic Welcome Banner Greeting ── */}
           <section className="welcome-greeting-section">
-            <h2 className="greeting-text">
+            <h3 className="greeting-text">
               {lang === "si" ? "සාදරයෙන් පිළිගනිමු, නතාෂා!" : lang === "ta" ? "வரவேற்கிறோம், நடாஷா!" : "Welcome, Nathasha!"}
-            </h2>
+            </h3>
           </section>
 
           {/* ── Quick Action Pills (Screenshot Matching) ── */}
@@ -549,58 +562,58 @@ export default function AdminPage() {
             </button>
           </section>
 
-          {/* ── Stat Cards (Screenshot Matching counts: 56, 10, 10, 05) ── */}
-          <section className="screenshot-stats-grid">
+          {/* Stats section */}
+          <section className="dashboard-stats-grid subject-stats-grid">
             {/* Total Cases */}
-            <div className="screenshot-stat-card">
-              <div className="stat-left-box">
-                <svg className="stat-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <div className="stat-card-total">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span className="stat-card-label">Total Cases</span>
+                <h4>Total Cases</h4>
               </div>
-              <span className="stat-right-val val-blue">
+              <p className="stat-value text-blue">
                 {String(metrics.total).padStart(2, "0")}
-              </span>
+              </p>
             </div>
 
             {/* Closed Cases */}
-            <div className="screenshot-stat-card">
-              <div className="stat-left-box">
-                <svg className="stat-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+            <div className="stat-card-close">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="stat-card-label">Closed Cases</span>
+                <h4>Closed Cases</h4>
               </div>
-              <span className="stat-right-val val-red">
+              <p className="stat-value text-green">
                 {String(metrics.closed).padStart(2, "0")}
-              </span>
+              </p>
             </div>
 
-            {/* Under Investigation Officer */}
-            <div className="screenshot-stat-card">
-              <div className="stat-left-box">
-                <svg className="stat-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+            {/* Under Investigation */}
+            <div className="stat-card-inprogress">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
                 </svg>
-                <span className="stat-card-label">Under Investigation Officer</span>
+                <h4>Under Investigation</h4>
               </div>
-              <span className="stat-right-val val-orange">
+              <p className="stat-value text-orange">
                 {String(metrics.underInvestigation).padStart(2, "0")}
-              </span>
+              </p>
             </div>
 
-            {/* Under Subject Officer */}
-            <div className="screenshot-stat-card">
-              <div className="stat-left-box">
-                <svg className="stat-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            {/* Under Subject */}
+            <div className="stat-card-pending">
+              <div className="stat-card-header">
+                <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="stat-card-label">Under Subject Officer</span>
+                <h4>Under Subject</h4>
               </div>
-              <span className="stat-right-val val-lime">
+              <p className="stat-value text-yellow">
                 {String(metrics.underSubject).padStart(2, "0")}
-              </span>
+              </p>
             </div>
           </section>
 
@@ -783,7 +796,7 @@ export default function AdminPage() {
                 <div className="pbi-chart-card chart-full-width">
                   <h3 className="pbi-chart-title">Monthly Case Registration Trend (2026)</h3>
                   <div className="trend-chart-wrapper">
-                    <svg className="trend-svg" viewBox="0 0 600 200" preserveAspectRatio="none">
+                    <svg className="trend-svg" viewBox="0 0 600 200">
                       <defs>
                         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
@@ -828,7 +841,7 @@ export default function AdminPage() {
 
                       {/* X Axis Labels */}
                       {monthlyTrendData.points.map((p, i) => (
-                        <text key={i} x={p.x} y="185" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
+                        <text key={i} x={p.x} y="190" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
                           {p.month}
                         </text>
                       ))}
@@ -845,7 +858,7 @@ export default function AdminPage() {
               </section>
 
               {/* ── Cases Ledger Table ── */}
-              <section className="letters-list-section pbi-table-section">
+              <section className="letters-list-section">
                 <div className="letters-list-header">
                   <h3 className="section-title">Disciplinary Cases Ledger</h3>
                   <div className="letters-filters-group">
@@ -999,9 +1012,9 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Centered Footer */}
-          <footer className="admin-footer-bar">
-            {t("footerText")}
+          {/* ── Footer Branding Notice ── */}
+          <footer className="dashboard-content-footer">
+            <p>{t("footerText")}</p>
           </footer>
         </main>
       </div>
