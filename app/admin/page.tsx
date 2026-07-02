@@ -122,7 +122,7 @@ export default function AdminDashboard() {
       <div className="admin-dashboard-header">
         <div>
 
-          <h3 className="admin-dashboard-title">Dashboard</h3>
+          <h3 className="admin-dashboard-title1">Dashboard</h3>
           <h2 className="admin-dashboard-title">{greeting}</h2>
           <p className="admin-dashboard-subtitle">
             5 officers · 3 institutes · 84 total cases
