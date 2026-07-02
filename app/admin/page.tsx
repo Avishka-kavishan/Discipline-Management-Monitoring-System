@@ -174,6 +174,12 @@ export default function AdminDashboard() {
   const closedCount = Math.round(activeCases.filter(c => c.status === "Closed").length * periodMultiplier);
   const underSubjectOfficerCount = Math.round(activeCases.filter(c => c.status === "Under Subject Officer").length * periodMultiplier);
 
+  // Calculate percentages dynamically
+  const totalPct = "100%";
+  const underInvestigationPct = totalCasesCount > 0 ? `+${Math.round((underInvestigationCount / totalCasesCount) * 100)}%` : "0%";
+  const closedPct = totalCasesCount > 0 ? `+${Math.round((closedCount / totalCasesCount) * 100)}%` : "0%";
+  const underSubjectOfficerPct = totalCasesCount > 0 ? `+${Math.round((underSubjectOfficerCount / totalCasesCount) * 100)}%` : "0%";
+
   // Dynamically scale Cases over time chart data by active filters
   const ratio = activeCases.length / 84;
   const dynamicallyFilteredChartData = chartData.map(item => ({
@@ -264,30 +270,34 @@ export default function AdminDashboard() {
         <StatCard
           title={t("totalCases", "TOTAL CASES")}
           value={totalCasesCount.toString()}
-          subtitle={t("allRegistered", "All registered")}
-          icon={<Folder style={{ width: 20, height: 20, color: '#4f46e5' }} />}
-          iconBg="admin-bg-indigo"
+          percentage={totalPct}
+          icon={<Folder className="premium-card-icon" />}
+          cardClass="total-cases-card"
+          sparklineD="M 5,22 Q 25,10 45,20 T 75,8 T 95,15"
         />
         <StatCard
           title={t("underInvestigation", "UNDER INVESTIGATION")}
           value={underInvestigationCount.toString()}
-          subtitle={t("activeInvestigations", "Active investigations")}
-          icon={<Search style={{ width: 20, height: 20, color: '#2563eb' }} />}
-          iconBg="admin-bg-blue"
+          percentage={underInvestigationPct}
+          icon={<Search className="premium-card-icon" />}
+          cardClass="inprogress-cases-card"
+          sparklineD="M 5,20 Q 25,25 45,12 T 75,5 T 95,15"
         />
         <StatCard
           title={t("closed", "CLOSED")}
           value={closedCount.toString()}
-          subtitle={t("resolvedCases", "Resolved cases")}
-          icon={<CheckCircle2 style={{ width: 20, height: 20, color: '#059669' }} />}
-          iconBg="admin-bg-emerald"
+          percentage={closedPct}
+          icon={<CheckCircle2 className="premium-card-icon" />}
+          cardClass="closed-cases-card"
+          sparklineD="M 5,25 Q 25,20 45,8 T 75,5 T 95,12"
         />
         <StatCard
           title={t("underSubjectOfficer", "UNDER SUBJECT OFFICER")}
           value={underSubjectOfficerCount.toString()}
-          subtitle={t("awaitingSubjectOfficer", "Awaiting subject officer")}
-          icon={<User style={{ width: 20, height: 20, color: '#d97706' }} />}
-          iconBg="admin-bg-amber"
+          percentage={underSubjectOfficerPct}
+          icon={<User className="premium-card-icon" />}
+          cardClass="pending-cases-card"
+          sparklineD="M 5,15 Q 25,8 45,22 T 75,12 T 95,25"
         />
       </div>
 
@@ -518,33 +528,41 @@ export default function AdminDashboard() {
     </div>
   );
 }
-
 function StatCard({ 
   title, 
   value, 
-  subtitle, 
+  percentage, 
   icon, 
-  iconBg 
+  cardClass, 
+  sparklineD 
 }: { 
   title: string; 
   value: string; 
-  subtitle: string; 
+  percentage: string; 
   icon: React.ReactNode; 
-  iconBg: string; 
+  cardClass: string; 
+  sparklineD: string; 
 }) {
   return (
-    <div className="admin-stat-card">
-      <div className="admin-stat-header">
-        <div className="admin-stat-title">
-          {title}
-        </div>
-        <div className={`admin-stat-icon-wrapper ${iconBg}`}>
+    <div className={`premium-stat-card ${cardClass}`}>
+      <div className="premium-card-top">
+        <div className="premium-card-title-area">
           {icon}
+          <span>{title}</span>
         </div>
+        <span className="premium-card-percentage">{percentage}</span>
       </div>
-      <div>
-        <div className="admin-stat-value">{value}</div>
-        <div className="admin-stat-subtitle">{subtitle}</div>
+      <div className="premium-card-bottom">
+        <div className="premium-card-value-area">
+          <span className="premium-card-value">{value}</span>
+          <span className="premium-card-label">cases</span>
+        </div>
+        <div className="premium-card-sparkline">
+          <svg viewBox="0 0 100 30" width="80" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d={sparklineD} strokeLinecap="round" />
+            <circle cx="75" cy="8" r="3" fill="#ffffff" />
+          </svg>
+        </div>
       </div>
     </div>
   );
