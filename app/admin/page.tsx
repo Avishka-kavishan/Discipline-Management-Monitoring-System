@@ -21,17 +21,17 @@ import {
 import "./admin.css";
 
 const monthlyData = [
-  { name: "Aug", cases: 7 },
-  { name: "Sep", cases: 6 },
-  { name: "Oct", cases: 5 },
-  { name: "Nov", cases: 10 },
+  { name: "Aug", cases: 8 },
+  { name: "Sep", cases: 7 },
+  { name: "Oct", cases: 6 },
+  { name: "Nov", cases: 12 },
   { name: "Dec", cases: 5 },
-  { name: "Jan", cases: 7 },
-  { name: "Feb", cases: 6 },
-  { name: "Mar", cases: 6 },
-  { name: "Apr", cases: 9 },
-  { name: "May", cases: 5 },
-  { name: "Jun", cases: 6 },
+  { name: "Jan", cases: 8 },
+  { name: "Feb", cases: 7 },
+  { name: "Mar", cases: 7 },
+  { name: "Apr", cases: 10 },
+  { name: "May", cases: 6 },
+  { name: "Jun", cases: 8 },
   { name: "Jul", cases: 0 },
 ];
 
@@ -89,13 +89,45 @@ const typeData = [
 ];
 
 const recentCases = [
-  { id: "1", caseNo: "CASE-2026-0084", dateFiled: "2026-06-28", subject: "Misuse of government funds in procurement", assignedTo: "N. Senanayake", priority: "High", status: "Under Investigation" },
-  { id: "2", caseNo: "CASE-2026-0083", dateFiled: "2026-06-25", subject: "Unauthorized data access in IT department", assignedTo: "S. Silva", priority: "High", status: "Under Investigation" },
-  { id: "3", caseNo: "CASE-2026-0082", dateFiled: "2026-06-22", subject: "Employee misconduct during office hours", assignedTo: "K. Perera", priority: "Medium", status: "Under Subject Officer" },
-  { id: "4", caseNo: "CASE-2026-0081", dateFiled: "2026-06-20", subject: "Forged attendance records submission", assignedTo: "R. Fernando", priority: "Medium", status: "Under Subject Officer" },
-  { id: "5", caseNo: "CASE-2026-0080", dateFiled: "2026-06-18", subject: "Property damage at Colombo branch office", assignedTo: "N. Senanayake", priority: "Low", status: "Closed" },
-  { id: "6", caseNo: "CASE-2026-0079", dateFiled: "2026-06-15", subject: "Harassment complaint filed by junior staff", assignedTo: "S. Silva", priority: "High", status: "Under Investigation" },
-  { id: "7", caseNo: "CASE-2026-0078", dateFiled: "2026-06-12", subject: "Inventory discrepancy in Kandy warehouse", assignedTo: "K. Perera", priority: "Low", status: "Closed" },
+  { id: "1", caseNo: "CASE-2026-0084", dateFiled: "2026-06-28", subject: "Misuse of government funds in procurement", assignedTo: "N. Senanayake", priority: "High", status: "Under Investigation", type: "Fraud" },
+  { id: "2", caseNo: "CASE-2026-0083", dateFiled: "2026-06-25", subject: "Unauthorized data access in IT department", assignedTo: "S. Silva", priority: "High", status: "Under Investigation", type: "Cybercrime" },
+  { id: "3", caseNo: "CASE-2026-0082", dateFiled: "2026-06-22", subject: "Employee misconduct during office hours", assignedTo: "K. Perera", priority: "Medium", status: "Under Subject Officer", type: "Assault" },
+  { id: "4", caseNo: "CASE-2026-0081", dateFiled: "2026-06-20", subject: "Forged attendance records submission", assignedTo: "R. Fernando", priority: "Medium", status: "Under Subject Officer", type: "Forgery" },
+  { id: "5", caseNo: "CASE-2026-0080", dateFiled: "2026-06-18", subject: "Property damage at Colombo branch office", assignedTo: "N. Senanayake", priority: "Low", status: "Closed", type: "Theft" },
+  { id: "6", caseNo: "CASE-2026-0079", dateFiled: "2026-06-15", subject: "Harassment complaint filed by junior staff", assignedTo: "S. Silva", priority: "High", status: "Under Investigation", type: "Assault" },
+  { id: "7", caseNo: "CASE-2026-0078", dateFiled: "2026-06-12", subject: "Inventory discrepancy in Kandy warehouse", assignedTo: "K. Perera", priority: "Low", status: "Closed", type: "Theft" },
+];
+
+const allCases = [
+  // Fraud (17 total: 10 Investigation, 5 Closed, 2 Subject)
+  ...Array(10).fill(null).map(() => ({ type: "Fraud", status: "Under Investigation" })),
+  ...Array(5).fill(null).map(() => ({ type: "Fraud", status: "Closed" })),
+  ...Array(2).fill(null).map(() => ({ type: "Fraud", status: "Under Subject Officer" })),
+  
+  // Cybercrime (15 total: 8 Investigation, 4 Closed, 3 Subject)
+  ...Array(8).fill(null).map(() => ({ type: "Cybercrime", status: "Under Investigation" })),
+  ...Array(4).fill(null).map(() => ({ type: "Cybercrime", status: "Closed" })),
+  ...Array(3).fill(null).map(() => ({ type: "Cybercrime", status: "Under Subject Officer" })),
+
+  // Assault (12 total: 6 Investigation, 4 Closed, 2 Subject)
+  ...Array(6).fill(null).map(() => ({ type: "Assault", status: "Under Investigation" })),
+  ...Array(4).fill(null).map(() => ({ type: "Assault", status: "Closed" })),
+  ...Array(2).fill(null).map(() => ({ type: "Assault", status: "Under Subject Officer" })),
+
+  // Theft (15 total: 8 Investigation, 5 Closed, 2 Subject)
+  ...Array(8).fill(null).map(() => ({ type: "Theft", status: "Under Investigation" })),
+  ...Array(5).fill(null).map(() => ({ type: "Theft", status: "Closed" })),
+  ...Array(2).fill(null).map(() => ({ type: "Theft", status: "Under Subject Officer" })),
+
+  // Narcotics (11 total: 6 Investigation, 3 Closed, 2 Subject)
+  ...Array(6).fill(null).map(() => ({ type: "Narcotics", status: "Under Investigation" })),
+  ...Array(3).fill(null).map(() => ({ type: "Narcotics", status: "Closed" })),
+  ...Array(2).fill(null).map(() => ({ type: "Narcotics", status: "Under Subject Officer" })),
+
+  // Forgery (14 total: 10 Investigation, 2 Closed, 2 Subject)
+  ...Array(10).fill(null).map(() => ({ type: "Forgery", status: "Under Investigation" })),
+  ...Array(2).fill(null).map(() => ({ type: "Forgery", status: "Closed" })),
+  ...Array(2).fill(null).map(() => ({ type: "Forgery", status: "Under Subject Officer" })),
 ];
 
 export default function AdminDashboard() {
@@ -103,6 +135,11 @@ export default function AdminDashboard() {
   const [chartPeriod, setChartPeriod] = useState("Monthly");
   const chartData = chartDataMap[chartPeriod];
   const [greeting, setGreeting] = useState("");
+
+  // Dashboard filter states
+  const [selectedType, setSelectedType] = useState("All types");
+  const [selectedStatus, setSelectedStatus] = useState("All statuses");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -116,30 +153,104 @@ export default function AdminDashboard() {
     setGreeting(`${t(greetingKey, "Good Morning")}, ${firstName}!`);
   }, [t]);
 
+  // Base multipliers for periods (representing average cases per period vs baseline of 84)
+  const periodMultiplierMap: Record<string, number> = {
+    Daily: 21 / 84,
+    Weekly: 86 / 84,
+    Monthly: 84 / 84,
+    Yearly: 438 / 84,
+  };
+
+  const periodMultiplier = periodMultiplierMap[chartPeriod] || 1;
+
+  // Dynamically compute stats card values based on active filters and period multiplier
+  const activeCases = allCases.filter(c => 
+    (selectedType === "All types" || c.type === selectedType) &&
+    (selectedStatus === "All statuses" || c.status === selectedStatus)
+  );
+
+  const totalCasesCount = Math.round(activeCases.length * periodMultiplier);
+  const underInvestigationCount = Math.round(activeCases.filter(c => c.status === "Under Investigation").length * periodMultiplier);
+  const closedCount = Math.round(activeCases.filter(c => c.status === "Closed").length * periodMultiplier);
+  const underSubjectOfficerCount = Math.round(activeCases.filter(c => c.status === "Under Subject Officer").length * periodMultiplier);
+
+  // Dynamically scale Cases over time chart data by active filters
+  const ratio = activeCases.length / 84;
+  const dynamicallyFilteredChartData = chartData.map(item => ({
+    ...item,
+    cases: Math.round(item.cases * (selectedType === "All types" && selectedStatus === "All statuses" ? 1 : ratio))
+  }));
+
+  // Filter the recent cases table by selected type, status, and search query
+  const filteredRecentCases = recentCases.filter(c => {
+    const matchesType = selectedType === "All types" || c.type === selectedType;
+    const matchesStatus = selectedStatus === "All statuses" || c.status === selectedStatus;
+    const matchesSearch = searchQuery.trim() === "" || 
+      c.caseNo.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      c.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.assignedTo.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesType && matchesStatus && matchesSearch;
+  });
+
+  // Dynamically compute Status Distribution based on active filters and period multiplier
+  const dynamicStatusData = [
+    { name: "Under Investigation", value: Math.round(activeCases.filter(c => c.status === "Under Investigation").length * periodMultiplier), color: "#6366f1" },
+    { name: "Closed", value: Math.round(activeCases.filter(c => c.status === "Closed").length * periodMultiplier), color: "#10b981" },
+    { name: "Under Subject Officer", value: Math.round(activeCases.filter(c => c.status === "Under Subject Officer").length * periodMultiplier), color: "#f59e0b" },
+  ];
+
+  // Dynamically compute Cases by Type based on active filters and period multiplier
+  const dynamicTypeData = [
+    { name: "Fraud", value: Math.round(activeCases.filter(c => c.type === "Fraud").length * periodMultiplier), color: "#6366f1" },
+    { name: "Cybercrime", value: Math.round(activeCases.filter(c => c.type === "Cybercrime").length * periodMultiplier), color: "#8b5cf6" },
+    { name: "Assault", value: Math.round(activeCases.filter(c => c.type === "Assault").length * periodMultiplier), color: "#0ea5e9" },
+    { name: "Theft", value: Math.round(activeCases.filter(c => c.type === "Theft").length * periodMultiplier), color: "#f59e0b" },
+    { name: "Narcotics", value: Math.round(activeCases.filter(c => c.type === "Narcotics").length * periodMultiplier), color: "#10b981" },
+    { name: "Forgery", value: Math.round(activeCases.filter(c => c.type === "Forgery").length * periodMultiplier), color: "#3b82f6" },
+  ];
+
   return (
     <div className="admin-dashboard-container">
       {/* Header section */}
       <div className="admin-dashboard-header">
         <div>
-
           <h3 className="admin-dashboard-title1">Dashboard</h3>
           <h2 className="admin-dashboard-title">{greeting}</h2>
           <p className="admin-dashboard-subtitle">
-            5 officers · 3 institutes · 84 total cases
+            5 officers · 3 institutes · {totalCasesCount} total cases
           </p>
         </div>
         <div className="admin-filters-container">
           <div style={{ position: 'relative' }}>
-            <select aria-label="Filter by case type" className="admin-filter-select">
-              <option>All types</option>
+            <select 
+              aria-label="Filter by case type" 
+              className="admin-filter-select"
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+            >
+              <option value="All types">All types</option>
+              <option value="Fraud">Fraud</option>
+              <option value="Cybercrime">Cybercrime</option>
+              <option value="Assault">Assault</option>
+              <option value="Theft">Theft</option>
+              <option value="Narcotics">Narcotics</option>
+              <option value="Forgery">Forgery</option>
             </select>
             <div className="admin-filter-icon">
               <ChevronDown style={{ width: 16, height: 16 }} />
             </div>
           </div>
           <div style={{ position: 'relative' }}>
-            <select aria-label="Filter by status" className="admin-filter-select">
-              <option>All statuses</option>
+            <select 
+              aria-label="Filter by status" 
+              className="admin-filter-select"
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+            >
+              <option value="All statuses">All statuses</option>
+              <option value="Under Investigation">Under Investigation</option>
+              <option value="Closed">Closed</option>
+              <option value="Under Subject Officer">Under Subject Officer</option>
             </select>
             <div className="admin-filter-icon">
               <ChevronDown style={{ width: 16, height: 16 }} />
@@ -152,28 +263,28 @@ export default function AdminDashboard() {
       <div className="admin-stats-grid">
         <StatCard
           title="TOTAL CASES"
-          value="84"
+          value={totalCasesCount.toString()}
           subtitle="All registered"
           icon={<Folder style={{ width: 20, height: 20, color: '#4f46e5' }} />}
           iconBg="#eef2ff"
         />
         <StatCard
           title="UNDER INVESTIGATION"
-          value="25"
+          value={underInvestigationCount.toString()}
           subtitle="Active investigations"
           icon={<Search style={{ width: 20, height: 20, color: '#2563eb' }} />}
           iconBg="#eff6ff"
         />
         <StatCard
           title="CLOSED"
-          value="37"
+          value={closedCount.toString()}
           subtitle="Resolved cases"
           icon={<CheckCircle2 style={{ width: 20, height: 20, color: '#059669' }} />}
           iconBg="#ecfdf5"
         />
         <StatCard
           title="UNDER SUBJECT OFFICER"
-          value="22"
+          value={underSubjectOfficerCount.toString()}
           subtitle="Awaiting subject officer"
           icon={<User style={{ width: 20, height: 20, color: '#d97706' }} />}
           iconBg="#fffbeb"
@@ -201,7 +312,7 @@ export default function AdminDashboard() {
         </div>
         <div className="admin-chart-wrapper">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={dynamicallyFilteredChartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="caseGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#4F46E5" stopOpacity={0.3} />
@@ -250,7 +361,7 @@ export default function AdminDashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={statusData}
+                  data={dynamicStatusData}
                   cx="50%"
                   cy="45%"
                   innerRadius={60}
@@ -259,7 +370,7 @@ export default function AdminDashboard() {
                   dataKey="value"
                   stroke="none"
                 >
-                  {statusData.map((entry, index) => (
+                  {dynamicStatusData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -282,7 +393,7 @@ export default function AdminDashboard() {
           <h3 className="admin-secondary-chart-title">Cases by type</h3>
           <div className="admin-bar-chart-wrapper">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={typeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={dynamicTypeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                 <XAxis 
                   dataKey="name" 
@@ -302,7 +413,7 @@ export default function AdminDashboard() {
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                  {typeData.map((entry, index) => (
+                  {dynamicTypeData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Bar>
@@ -330,9 +441,20 @@ export default function AdminDashboard() {
                 type="text"
                 placeholder="Search cases..."
                 className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <a href="#" className="view-all-reset-link">
+            <a 
+              href="#" 
+              className="view-all-reset-link"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedType("All types");
+                setSelectedStatus("All statuses");
+                setSearchQuery("");
+              }}
+            >
               View All <span className="arrow-span">→</span>
             </a>
           </div>
@@ -352,33 +474,41 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {recentCases.map((item) => (
-                <tr key={item.id} className="letter-table-row">
-                  <td style={{ fontWeight: 600, color: '#1e293b' }}>{item.caseNo}</td>
-                  <td>{item.dateFiled}</td>
-                  <td className="subject-cell">{item.subject}</td>
-                  <td>{item.assignedTo}</td>
-                  <td>
-                    <span className={`badge-badge ${
-                      item.priority === "High" ? "badge-priority-high" :
-                      item.priority === "Medium" ? "badge-priority-medium" : "badge-priority-low"
-                    }`}>
-                      {item.priority}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge-badge ${
-                      item.status === "Under Investigation" ? "badge-status-inprogress" :
-                      item.status === "Closed" ? "badge-status-closed" : "badge-status-pending"
-                    }`}>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <a href="#" className="add-details-link">View</a>
+              {filteredRecentCases.length > 0 ? (
+                filteredRecentCases.map((item) => (
+                  <tr key={item.id} className="letter-table-row">
+                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{item.caseNo}</td>
+                    <td>{item.dateFiled}</td>
+                    <td className="subject-cell">{item.subject}</td>
+                    <td>{item.assignedTo}</td>
+                    <td>
+                      <span className={`badge-badge ${
+                        item.priority === "High" ? "badge-priority-high" :
+                        item.priority === "Medium" ? "badge-priority-medium" : "badge-priority-low"
+                      }`}>
+                        {item.priority}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`badge-badge ${
+                        item.status === "Under Investigation" ? "badge-status-inprogress" :
+                        item.status === "Closed" ? "badge-status-closed" : "badge-status-pending"
+                      }`}>
+                        {item.status}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <a href="#" className="add-details-link">View</a>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '24px 0', color: '#64748b' }}>
+                    No cases match the selected filters.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
