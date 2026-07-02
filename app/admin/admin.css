@@ -153,35 +153,66 @@
   color: #16a34a;
 }
 
-/* Rounded grey container cards */
+/* Rounded gradient container cards matching reference design */
 .stat-card-total,
 .stat-card-inprogress,
 .stat-card-pending,
 .stat-card-close {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  border: none;
   border-radius: 16px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  height: 130px;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.stat-card-total:hover,
+.stat-card-inprogress:hover,
+.stat-card-pending:hover,
+.stat-card-close:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card-total { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.stat-card-close { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+.stat-card-inprogress { background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%); }
+.stat-card-pending { background: linear-gradient(135deg, #1d4ed8 0%, #1e1b4b 100%); }
 
 .stat-card-total h4,
 .stat-card-inprogress h4,
 .stat-card-pending h4,
 .stat-card-close h4 {
   font-size: calc(14px * var(--font-scale, 1));
-  color: #475569;
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 700;
   margin: 0;
 }
 
-/* Metric Colors */
-.val-blue { color: #1565c0; }
-.val-red { color: #c62828; }
-.val-orange { color: #e65100; }
-.val-lime { color: #9e9d24; }
+.stat-card-icon {
+  width: 22px;
+  height: 22px;
+  color: #ffffff !important;
+}
+
+.stat-value {
+  font-size: calc(30px * var(--font-scale, 1));
+  font-weight: 800;
+  color: #ffffff !important;
+  margin: 0;
+  line-height: 1;
+}
+
+.sparkline {
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.25));
+  opacity: 0.85;
+}
 
 /* ── Power BI Interactive Filter Slicer Panel ── */
 .slicer-filter-panel {
@@ -901,4 +932,225 @@
 
 .scrollable-chart-container::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* ── Green Gradient Trend Card (Meal Statistic Reference) ── */
+.trend-chart-card-green {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 25px -5px rgba(4, 120, 87, 0.3), 0 8px 10px -6px rgba(4, 120, 87, 0.3) !important;
+}
+
+.trend-chart-card-green .pbi-chart-title {
+  color: #ffffff !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+}
+
+.trend-chart-card-green .trend-interval-selector {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.trend-chart-card-green .interval-btn {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: transparent;
+}
+
+.trend-chart-card-green .interval-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.trend-chart-card-green .interval-btn.active {
+  background-color: #ffffff !important;
+  color: #047857 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Refactoring away inline styles ── */
+
+.stat-card-header-inner {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.stat-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-card-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.18);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.stat-card-body-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.pbi-chart-card-premium {
+  padding: 24px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.pbi-chart-title-clean {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #1e293b !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.pbi-chart-filter-all-btn {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vertical-stacked-chart-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.bar-group-interactive {
+  cursor: pointer;
+}
+
+.chart-legend-flex {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.chart-legend-item-white {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.chart-legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Green Trend Card Specific legend dot colors */
+.green-card-dot-registered {
+  background-color: #cffafe;
+}
+.green-card-dot-under-subject-officer {
+  background-color: #fef08a;
+}
+.green-card-dot-under-investigation {
+  background-color: #ffffff;
+}
+.green-card-dot-closed {
+  background-color: #a7f3d0;
+}
+
+/* Standard chart legend dot colors */
+.legend-dot-closed {
+  background-color: #10b981;
+}
+.legend-dot-inprogress {
+  background-color: #1e293b;
+}
+.legend-dot-registered {
+  background-color: #cbd5e1;
+}
+
+.chart-title-legend-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chart-legend-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.trend-bar-segment {
+  transition: all 0.2s ease;
+}
+
+.trend-catcher-rect {
+  cursor: pointer;
+}
+
+/* Stacked Bar & Trend Tooltip Styles */
+.tooltip-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tooltip-title {
+  font-weight: 800;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.tooltip-label {
+  font-size: 11px;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tooltip-value {
+  font-size: 11px;
+  font-weight: bold;
+}
+.tooltip-total-row {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 4px;
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
 }

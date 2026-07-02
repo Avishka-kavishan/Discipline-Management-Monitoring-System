@@ -158,7 +158,7 @@ export default function AdminPage() {
   // ── Interactive Chart Hover/Tooltip State ──
   const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-  const [tooltipText, setTooltipText] = useState("");
+  const [tooltipText, setTooltipText] = useState<React.ReactNode>("");
 
   // ── Initial Mock State Data ──
   const [institutes, setInstitutes] = useState<Institute[]>([
@@ -393,9 +393,41 @@ export default function AdminPage() {
     });
   }, [casesByStatus]);
 
+  // Institute cases by status breakdown for vertical stacked bars
+  const casesByInstituteWithStatus = useMemo(() => {
+    return institutes.map(inst => {
+      const instCases = filteredCases.filter(c => c.institute === inst.name);
+      const registered = instCases.filter(c => c.status === "Registered").length;
+      const inProgress = instCases.filter(c => c.status === "Under Subject Officer" || c.status === "Under Investigation").length;
+      const closed = instCases.filter(c => c.status === "Closed").length;
+      const total = instCases.length;
+      return {
+        name: inst.name,
+        code: inst.code,
+        registered,
+        inProgress,
+        closed,
+        total
+      };
+    });
+  }, [filteredCases, institutes]);
+
+  const maxInstCount = useMemo(() => {
+    return Math.max(...casesByInstituteWithStatus.map(item => item.total), 1);
+  }, [casesByInstituteWithStatus]);
+
   // 3. Dynamic intake statistics (Trend Chart)
   const trendData = useMemo(() => {
-    let items: { label: string; count: number; tooltip: string }[] = [];
+    let items: {
+      label: string;
+      counts: {
+        Registered: number;
+        "Under Subject Officer": number;
+        "Under Investigation": number;
+        Closed: number;
+        total: number;
+      };
+    }[] = [];
     
     // Find min and max dates in filteredCases
     const dates = filteredCases.map(c => new Date(c.receivedDate)).filter(d => !isNaN(d.getTime()));
@@ -403,6 +435,17 @@ export default function AdminPage() {
     // Fallbacks if no cases match
     const minDate = dates.length > 0 ? new Date(Math.min(...dates.map(d => d.getTime()))) : new Date(2024, 0, 1);
     const maxDate = dates.length > 0 ? new Date(Math.max(...dates.map(d => d.getTime()))) : new Date(2026, 6, 2);
+
+    const getCounts = (filterFn: (c: Case) => boolean) => {
+      const filtered = filteredCases.filter(filterFn);
+      return {
+        Registered: filtered.filter(c => c.status === "Registered").length,
+        "Under Subject Officer": filtered.filter(c => c.status === "Under Subject Officer").length,
+        "Under Investigation": filtered.filter(c => c.status === "Under Investigation").length,
+        Closed: filtered.filter(c => c.status === "Closed").length,
+        total: filtered.length
+      };
+    };
     
     if (trendInterval === "daily") {
       // Generate all days from minDate to maxDate
@@ -419,11 +462,9 @@ export default function AdminPage() {
       items = days.map(d => {
         const dateStr = d.toISOString().split("T")[0];
         const label = d.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { year: "numeric", month: "short", day: "numeric" });
-        const count = filteredCases.filter(c => c.receivedDate === dateStr).length;
         return {
           label,
-          count,
-          tooltip: `${label}: ${count} ${t("cases")}`
+          counts: getCounts(c => c.receivedDate === dateStr)
         };
       });
     } else if (trendInterval === "weekly") {
@@ -456,11 +497,9 @@ export default function AdminPage() {
         const endStr = sunday.toISOString().split("T")[0];
         
         const label = `${monday.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { month: "short", day: "numeric" })} - ${sunday.toLocaleDateString(lang === "si" ? "si-LK" : lang === "ta" ? "ta-LK" : "en-US", { month: "short", day: "numeric" })}`;
-        const count = filteredCases.filter(c => c.receivedDate >= startStr && c.receivedDate <= endStr).length;
         return {
           label,
-          count,
-          tooltip: `${label}: ${count} ${t("cases")}`
+          counts: getCounts(c => c.receivedDate >= startStr && c.receivedDate <= endStr)
         };
       });
     } else if (trendInterval === "monthly") {
@@ -485,13 +524,11 @@ export default function AdminPage() {
       const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       items = months.map(item => {
         const monthNum = String(item.month + 1).padStart(2, "0");
-        const count = filteredCases.filter(c => c.receivedDate.startsWith(`${item.year}-${monthNum}`)).length;
         const translatedMonth = getTranslatedMonth(monthLabels[item.month]);
         const label = `${translatedMonth} ${item.year}`;
         return {
           label,
-          count,
-          tooltip: `${label}: ${count} ${t("cases")}`
+          counts: getCounts(c => c.receivedDate.startsWith(`${item.year}-${monthNum}`))
         };
       });
     } else if (trendInterval === "yearly") {
@@ -503,11 +540,9 @@ export default function AdminPage() {
       }
       
       items = years.map(yr => {
-        const count = filteredCases.filter(c => c.receivedDate.startsWith(String(yr))).length;
         return {
           label: String(yr),
-          count,
-          tooltip: `${yr}: ${count} ${t("cases")}`
+          counts: getCounts(c => c.receivedDate.startsWith(String(yr)))
         };
       });
     }
@@ -519,22 +554,63 @@ export default function AdminPage() {
     const calculatedWidth = paddingLeft + paddingRight + items.length * itemWidth;
     const width = Math.max(950, calculatedWidth);
 
-    const maxVal = Math.max(...items.map(item => item.count), 1);
+    const maxVal = Math.max(...items.map(item => Math.max(item.counts.Registered, item.counts["Under Subject Officer"], item.counts["Under Investigation"], item.counts.Closed)), 1);
+    const maxTotalVal = Math.max(...items.map(item => item.counts.total), 1);
     const chartWidth = width - paddingLeft - paddingRight;
     const numPoints = items.length;
     
     const points = items.map((item, index) => {
       const x = paddingLeft + (index / Math.max(numPoints - 1, 1)) * chartWidth;
-      const y = 160 - (item.count / maxVal) * 120; // 160 base height, 120 range
-      return { label: item.label, count: item.count, tooltip: item.tooltip, x, y };
+      const y = 160 - (item.counts.total / maxTotalVal) * 120; // 160 base height, 120 range
+      return { label: item.label, count: item.counts.total, x, y };
     });
 
-    const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
-    const areaPath = points.length > 0 
-      ? `${linePath} L ${points[points.length - 1].x} 160 L ${points[0].x} 160 Z`
-      : "";
+    const statusKeys = [
+      { key: "Registered", color: "#cffafe" },
+      { key: "Under Subject Officer", color: "#fef08a" },
+      { key: "Under Investigation", color: "#ffffff" },
+      { key: "Closed", color: "#a7f3d0" }
+    ] as const;
 
-    return { points, linePath, areaPath, width };
+    const getBezierPath = (pts: {x: number, y: number}[]) => {
+      if (pts.length === 0) return "";
+      if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
+      let path = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p0 = pts[i];
+        const p1 = pts[i + 1];
+        const cpX1 = p0.x + (p1.x - p0.x) / 2;
+        const cpY1 = p0.y;
+        const cpX2 = p0.x + (p1.x - p0.x) / 2;
+        const cpY2 = p1.y;
+        path += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p1.x} ${p1.y}`;
+      }
+      return path;
+    };
+
+    const statusLines = statusKeys.map((status) => {
+      const linePoints = items.map((item, index) => {
+        const x = paddingLeft + (index / Math.max(numPoints - 1, 1)) * chartWidth;
+        const count = item.counts[status.key];
+        const y = 160 - (count / maxVal) * 120;
+        return { x, y, count };
+      });
+
+      const linePath = getBezierPath(linePoints);
+      const areaPath = linePoints.length > 0 
+        ? `${linePath} L ${linePoints[linePoints.length - 1].x} 160 L ${linePoints[0].x} 160 Z`
+        : "";
+
+      return {
+        key: status.key,
+        color: status.color,
+        points: linePoints,
+        linePath,
+        areaPath
+      };
+    });
+
+    return { items, points, statusLines, maxVal, maxTotalVal, width };
   }, [filteredCases, trendInterval, lang, t]);
 
   // Reset Slicer Panel filters
@@ -708,54 +784,90 @@ export default function AdminPage() {
           <section className="dashboard-stats-grid subject-stats-grid">
             {/* Total Cases */}
             <div className="stat-card-total">
-              <div className="stat-card-header">
-                <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h4>{t("totalCases")}</h4>
+              <div className="stat-card-header-inner">
+                <div className="stat-card-title-group">
+                  <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <h4>{t("totalCases")}</h4>
+                </div>
+                <span className="stat-card-badge">+8%</span>
               </div>
-              <p className="stat-value text-blue">
-                {String(metrics.total).padStart(2, "0")}
-              </p>
+              <div className="stat-card-body-row">
+                <p className="stat-value text-blue">
+                  {String(metrics.total).padStart(2, "0")}
+                </p>
+                <svg className="sparkline" viewBox="0 0 100 30" width="70" height="24">
+                  <path d="M 0 25 Q 25 5 50 20 T 100 12" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="100" cy="12" r="3" fill="#ffffff" />
+                </svg>
+              </div>
             </div>
 
             {/* Closed Cases */}
             <div className="stat-card-close">
-              <div className="stat-card-header">
-                <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h4>{t("closedCases")}</h4>
+              <div className="stat-card-header-inner">
+                <div className="stat-card-title-group">
+                  <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h4>{t("closedCases")}</h4>
+                </div>
+                <span className="stat-card-badge">+12%</span>
               </div>
-              <p className="stat-value text-green">
-                {String(metrics.closed).padStart(2, "0")}
-              </p>
+              <div className="stat-card-body-row">
+                <p className="stat-value text-green">
+                  {String(metrics.closed).padStart(2, "0")}
+                </p>
+                <svg className="sparkline" viewBox="0 0 100 30" width="70" height="24">
+                  <path d="M 0 20 Q 30 10 50 22 T 100 15" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="100" cy="15" r="3" fill="#ffffff" />
+                </svg>
+              </div>
             </div>
 
             {/* Under Investigation */}
             <div className="stat-card-inprogress">
-              <div className="stat-card-header">
-                <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
-                </svg>
-                <h4>{t("underInvestigation")}</h4>
+              <div className="stat-card-header-inner">
+                <div className="stat-card-title-group">
+                  <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
+                  </svg>
+                  <h4>{t("underInvestigation")}</h4>
+                </div>
+                <span className="stat-card-badge">+18%</span>
               </div>
-              <p className="stat-value text-orange">
-                {String(metrics.underInvestigation).padStart(2, "0")}
-              </p>
+              <div className="stat-card-body-row">
+                <p className="stat-value text-orange">
+                  {String(metrics.underInvestigation).padStart(2, "0")}
+                </p>
+                <svg className="sparkline" viewBox="0 0 100 30" width="70" height="24">
+                  <path d="M 0 15 Q 25 25 50 10 T 100 18" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="100" cy="18" r="3" fill="#ffffff" />
+                </svg>
+              </div>
             </div>
 
             {/* Under Subject */}
             <div className="stat-card-pending">
-              <div className="stat-card-header">
-                <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h4>{t("underSubject")}</h4>
+              <div className="stat-card-header-inner">
+                <div className="stat-card-title-group">
+                  <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h4>{t("underSubject")}</h4>
+                </div>
+                <span className="stat-card-badge">+15%</span>
               </div>
-              <p className="stat-value text-yellow">
-                {String(metrics.underSubject).padStart(2, "0")}
-              </p>
+              <div className="stat-card-body-row">
+                <p className="stat-value text-yellow">
+                  {String(metrics.underSubject).padStart(2, "0")}
+                </p>
+                <svg className="sparkline" viewBox="0 0 100 30" width="70" height="24">
+                  <path d="M 0 22 Q 25 8 50 18 T 100 10" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="100" cy="10" r="3" fill="#ffffff" />
+                </svg>
+              </div>
             </div>
           </section>
 
@@ -848,7 +960,7 @@ export default function AdminPage() {
                   {/* Slicer 4: Real-time Search */}
                   <div className="slicer-control">
                     <label className="slicer-label" htmlFor="slicer-search">{t("searchKeyword")}</label>
-                    <input
+<input
                       id="slicer-search"
                       type="text"
                       className="slicer-input"
@@ -863,27 +975,110 @@ export default function AdminPage() {
               {/* ── Charts Grid ── */}
               <section className="pbi-charts-container">
                 {/* 1. Bar Chart: Cases by Institute */}
-                <div className="pbi-chart-card">
-                  <h3 className="pbi-chart-title">{t("casesByInstituteChart")}</h3>
-                  <div className="bar-chart-list">
-                    {casesByInstitute.map((item, idx) => (
-                      <div 
-                        key={idx} 
-                        className="bar-chart-row"
-                        onClick={() => setFilterInstitute(item.name === filterInstitute ? "All" : item.name)}
-                        title={t("clickToFilter", { name: item.name })}
-                      >
-                        <div className="bar-label" title={item.name}>{item.name}</div>
-                        <div className="bar-container">
-                          <BarFill percent={item.percent} active={item.name === filterInstitute}>
-                            {item.percent > 12 && (
-                              <span className="bar-percentage">{item.percent}%</span>
+                <div className="pbi-chart-card pbi-chart-card-premium">
+                  <div className="pbi-chart-header-row">
+                    <h3 className="pbi-chart-title pbi-chart-title-clean">
+                      {t("casesByInstituteChart")}
+                    </h3>
+                    <span className="pbi-chart-filter-all-btn">
+                      {t("allInstitutes")} <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#64748b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </span>
+                  </div>
+
+                  <div className="vertical-stacked-chart-container">
+                    <svg width="100%" height="160" viewBox="0 0 400 160">
+                      {casesByInstituteWithStatus.map((item, idx) => {
+                        const x = 40 + idx * 80;
+                        const maxBarHeight = 90;
+                        const barYStart = 30;
+                        const hClosed = item.total > 0 ? (item.closed / maxInstCount) * maxBarHeight : 0;
+                        const hInProgress = item.total > 0 ? (item.inProgress / maxInstCount) * maxBarHeight : 0;
+                        const hRegistered = item.total > 0 ? (item.registered / maxInstCount) * maxBarHeight : 0;
+                        const yBase = 120;
+
+                        return (
+                          <g 
+                            key={idx} 
+                            className="bar-group-interactive"
+                            onClick={() => setFilterInstitute(item.name === filterInstitute ? "All" : item.name)}
+                          >
+                            <text x={x} y="15" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
+                              {item.code}
+                            </text>
+                            <rect x={x - 4} y={barYStart} width="8" height={maxBarHeight} rx="4" fill="#f1f5f9" />
+                            {hRegistered > 0 && (
+                              <rect x={x - 4} y={yBase - hClosed - hInProgress - hRegistered} width="8" height={hRegistered} rx="4" fill="#cbd5e1" />
                             )}
-                          </BarFill>
-                        </div>
-                        <div className="bar-value">{item.count}</div>
-                      </div>
-                    ))}
+                            {hInProgress > 0 && (
+                              <rect x={x - 4} y={yBase - hClosed - hInProgress} width="8" height={hInProgress} rx="4" fill="#1e293b" />
+                            )}
+                            {hClosed > 0 && (
+                              <rect x={x - 4} y={yBase - hClosed} width="8" height={hClosed} rx="4" fill="#10b981" />
+                            )}
+                            <rect
+                              x={x - 20}
+                              y={10}
+                              width="40"
+                              height="140"
+                              fill="transparent"
+                              onMouseEnter={() => {
+                                setHoveredPoint(idx + 100);
+                                setTooltipPos({ x: x + 10, y: yBase - hClosed - hInProgress - hRegistered });
+                                const tooltipContent = (
+                                  <div className="tooltip-container">
+                                    <div className="tooltip-title">
+                                      {item.name}
+                                    </div>
+                                    <div className="tooltip-row">
+                                      <span className="tooltip-label">
+                                        <span className="chart-legend-dot green-card-dot-registered" />
+                                        {t("statusRegistered")}:
+                                      </span>
+                                      <span className="tooltip-value">{item.registered}</span>
+                                    </div>
+                                    <div className="tooltip-row">
+                                      <span className="tooltip-label">
+                                        <span className="chart-legend-dot legend-dot-inprogress" />
+                                        {t("statusInProgress")}:
+                                      </span>
+                                      <span className="tooltip-value">{item.inProgress}</span>
+                                    </div>
+                                    <div className="tooltip-row">
+                                      <span className="tooltip-label">
+                                        <span className="chart-legend-dot legend-dot-closed" />
+                                        {t("statusClosed")}:
+                                      </span>
+                                      <span className="tooltip-value">{item.closed}</span>
+                                    </div>
+                                    <div className="tooltip-total-row">
+                                      <span>{t("totalCases")}</span>
+                                      <span>{item.total}</span>
+                                    </div>
+                                  </div>
+                                );
+                                setTooltipText(tooltipContent);
+                              }}
+                              onMouseLeave={() => setHoveredPoint(null)}
+                            />
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  </div>
+
+                  <div className="chart-legend-flex">
+                    <div className="chart-legend-item">
+                      <span className="chart-legend-dot legend-dot-closed" />
+                      <span>{t("statusClosed")}</span>
+                    </div>
+                    <div className="chart-legend-item">
+                      <span className="chart-legend-dot legend-dot-inprogress" />
+                      <span>{t("statusInProgress")}</span>
+                    </div>
+                    <div className="chart-legend-item">
+                      <span className="chart-legend-dot legend-dot-registered" />
+                      <span>{t("statusRegistered")}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -935,36 +1130,63 @@ export default function AdminPage() {
                 </div>
 
                 {/* 3. Trend Line/Bar Chart (Full Width) */}
-                <div className="pbi-chart-card chart-full-width">
+                <div className="pbi-chart-card chart-full-width trend-chart-card-green">
                   <div className="chart-header-row">
-                    <h3 className="pbi-chart-title">{t("caseRegistrationTrendChart")}</h3>
+                    <div className="chart-title-legend-col">
+                      <h3 className="pbi-chart-title">{t("caseRegistrationTrendChart")}</h3>
+                      <div className="chart-legend-row">
+                        {[
+                          { key: "Registered", label: t("statusRegistered") },
+                          { key: "Under Subject Officer", label: t("underSubject") },
+                          { key: "Under Investigation", label: t("underInvestigation") },
+                          { key: "Closed", label: t("statusClosed") }
+                        ].map((s) => (
+                          <div key={s.key} className="chart-legend-item-white">
+                            <span className={`chart-legend-dot green-card-dot-${s.key.toLowerCase().replace(/ /g, "-")}`} />
+                            <span>{s.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                     <div className="chart-header-controls">
                       {/* Interval selector */}
                       <div className="trend-interval-selector" role="radiogroup" aria-label="Select trend interval">
                         <button
                           className={`interval-btn${trendInterval === "daily" ? " active" : ""}`}
-                          onClick={() => setTrendInterval("daily")}
+                          onClick={() => {
+                            setTrendInterval("daily");
+                            setChartType("line");
+                          }}
                           type="button"
                         >
                           {t("dailyTrend")}
                         </button>
                         <button
                           className={`interval-btn${trendInterval === "weekly" ? " active" : ""}`}
-                          onClick={() => setTrendInterval("weekly")}
+                          onClick={() => {
+                            setTrendInterval("weekly");
+                            setChartType("line");
+                          }}
                           type="button"
                         >
                           {t("weeklyTrend")}
                         </button>
                         <button
                           className={`interval-btn${trendInterval === "monthly" ? " active" : ""}`}
-                          onClick={() => setTrendInterval("monthly")}
+                          onClick={() => {
+                            setTrendInterval("monthly");
+                            setChartType("line");
+                          }}
                           type="button"
                         >
                           {t("monthlyTrend")}
                         </button>
                         <button
                           className={`interval-btn${trendInterval === "yearly" ? " active" : ""}`}
-                          onClick={() => setTrendInterval("yearly")}
+                          onClick={() => {
+                            setTrendInterval("yearly");
+                            setChartType("line");
+                          }}
                           type="button"
                         >
                           {t("yearlyTrend")}
@@ -991,80 +1213,105 @@ export default function AdminPage() {
                     </div>
                   </div>
                   <div className="trend-chart-wrapper scrollable-chart-container">
-                    <svg className="trend-svg" viewBox={`0 0 ${trendData.width} 200`} style={{ width: trendData.width, minWidth: trendData.width }}>
+                    <svg className="trend-svg" viewBox={`0 0 ${trendData.width} 200`} width={trendData.width} height="200">
                       <defs>
-                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
-                        </linearGradient>
-                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#3b82f6" />
-                          <stop offset="100%" stopColor="#1d4ed8" />
+                        <linearGradient id="whiteAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15" />
+                          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.00" />
                         </linearGradient>
                       </defs>
 
                       {/* Grid Lines */}
                       {[40, 80, 120, 160].map((yVal, index) => (
-                        <line key={index} x1="50" y1={yVal} x2={trendData.width - 50} y2={yVal} stroke="#e2e8f0" strokeDasharray="4 4" />
+                        <line key={index} x1="50" y1={yVal} x2={trendData.width - 50} y2={yVal} stroke="rgba(255, 255, 255, 0.15)" strokeDasharray="4 4" />
                       ))}
 
-                      {/* Area Fill (Line Chart Only) */}
-                      {chartType === "line" && trendData.areaPath && (
-                        <path d={trendData.areaPath} fill="url(#areaGrad)" />
+                      {/* Crosshair (Vertical guide line on hover) */}
+                      {hoveredPoint !== null && (
+                        <line
+                          x1={trendData.points[hoveredPoint].x}
+                          y1={40}
+                          x2={trendData.points[hoveredPoint].x}
+                          y2={160}
+                          stroke="rgba(255,255,255,0.4)"
+                          strokeWidth="1.5"
+                          strokeDasharray="3 3"
+                          pointerEvents="none"
+                        />
                       )}
 
-                      {/* Connection Line (Line Chart Only) */}
-                      {chartType === "line" && trendData.linePath && (
-                        <path d={trendData.linePath} fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round" />
-                      )}
-
-                      {/* Bar Columns (Bar Chart Only) */}
-                      {chartType === "bar" && trendData.points.map((p, i) => {
-                        const barWidth = trendInterval === "daily" ? 12 : trendInterval === "weekly" ? 35 : trendInterval === "monthly" ? 25 : 55;
-                        return (
-                          <rect
-                            key={`bar-${i}`}
-                            x={p.x - barWidth / 2}
-                            y={p.y}
-                            width={barWidth}
-                            height={Math.max(160 - p.y, 2)}
-                            fill="url(#barGrad)"
-                            rx="3"
-                            ry="3"
-                            className="trend-bar"
-                            onMouseEnter={() => {
-                              setHoveredPoint(i);
-                              setTooltipPos({ x: p.x, y: p.y });
-                              setTooltipText(p.tooltip);
-                            }}
-                            onMouseLeave={() => setHoveredPoint(null)}
+                      {/* Connection Lines (Line Chart Only) */}
+                      {chartType === "line" && trendData.statusLines.map((line) => (
+                        <g key={`lines-group-${line.key}`}>
+                          <path
+                            d={line.areaPath}
+                            fill="url(#whiteAreaGrad)"
+                            pointerEvents="none"
                           />
+                          <path
+                            d={line.linePath}
+                            fill="none"
+                            stroke={line.color}
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </g>
+                      ))}
+
+                      {/* Bar Columns (Stacked Bar Chart Only) */}
+                      {chartType === "bar" && trendData.items.map((item, i) => {
+                        const x = trendData.points[i].x;
+                        const barWidth = trendInterval === "daily" ? 12 : trendInterval === "weekly" ? 35 : trendInterval === "monthly" ? 25 : 55;
+                        
+                        const statusColors = [
+                          { key: "Closed", color: "#a7f3d0" },
+                          { key: "Under Investigation", color: "#ffffff" },
+                          { key: "Under Subject Officer", color: "#fef08a" },
+                          { key: "Registered", color: "#cffafe" }
+                        ] as const;
+
+                        let currentY = 160;
+                        return (
+                          <g key={`bar-group-${i}`}>
+                            {statusColors.map((status) => {
+                              const count = item.counts[status.key];
+                              if (count === 0) return null;
+                              const height = (count / trendData.maxTotalVal) * 120;
+                              const y = currentY - height;
+                              currentY = y;
+                              return (
+                                <rect
+                                  key={`bar-${status.key}-${i}`}
+                                  x={x - barWidth / 2}
+                                  y={y}
+                                  width={barWidth}
+                                  height={Math.max(height, 1)}
+                                  fill={status.color}
+                                  className="trend-bar-segment"
+                                />
+                              );
+                            })}
+                          </g>
                         );
                       })}
 
-                      {/* Trend Points (Line Chart Only) */}
-                      {chartType === "line" && trendData.points.map((p, i) => (
-                        <circle
-                          key={i}
-                          className="trend-dot"
-                          cx={p.x}
-                          cy={p.y}
-                          r={trendInterval === "daily" ? "3" : "5"}
-                          fill="#ffffff"
-                          stroke="#2563eb"
-                          strokeWidth="3"
-                          onMouseEnter={() => {
-                            setHoveredPoint(i);
-                            setTooltipPos({ x: p.x, y: p.y });
-                            setTooltipText(p.tooltip);
-                          }}
-                          onMouseLeave={() => setHoveredPoint(null)}
-                        />
-                      ))}
+                      {/* Glowing Highlighted Dots on Hover (Line Chart Only) */}
+                      {chartType === "line" && hoveredPoint !== null && trendData.statusLines.map((line) => {
+                        const p = line.points[hoveredPoint];
+                        if (p.count === 0 && trendInterval === "daily") {
+                          return null;
+                        }
+                        return (
+                          <g key={`glow-${line.key}`}>
+                            <circle cx={p.x} cy={p.y} r="8" fill="#ffffff" fillOpacity="0.3" pointerEvents="none" />
+                            <circle cx={p.x} cy={p.y} r="4" fill="#ffffff" pointerEvents="none" />
+                          </g>
+                        );
+                      })}
 
-                      {/* Point Value Labels (High-contrast badges) */}
-                      {trendData.points.map((p, i) => {
-                        // For daily trend, only show labels for non-zero count points to avoid clutter
+                      {/* Point Value Labels (High-contrast badges showing TOTAL count at peak, Bar Chart Only) */}
+                      {chartType === "bar" && trendData.points.map((p, i) => {
                         if (trendInterval === "daily" && p.count === 0) {
                           return null;
                         }
@@ -1072,7 +1319,7 @@ export default function AdminPage() {
                         const badgeWidth = isDoubleDigit ? 24 : 18;
                         const badgeHeight = 16;
                         return (
-                          <g key={`val-${i}`} className="trend-badge-group">
+                          <g key={`val-${i}`} className="trend-badge-group" pointerEvents="none">
                             <rect
                               x={p.x - badgeWidth / 2}
                               y={p.y - 24}
@@ -1104,9 +1351,58 @@ export default function AdminPage() {
                           return null;
                         }
                         return (
-                          <text key={i} x={p.x} y="190" textAnchor="middle" fill="#64748b" fontSize="11" fontWeight="700">
+                          <text key={i} x={p.x} y="190" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontWeight="700">
                             {p.label}
                           </text>
+                        );
+                      })}
+
+                      {/* Transparent Hover Catcher Overlay Zones */}
+                      {trendData.points.map((p, i) => {
+                        const catcherWidth = trendInterval === "daily" ? 16 : trendInterval === "weekly" ? 45 : trendInterval === "monthly" ? 40 : 70;
+                        const item = trendData.items[i];
+                        return (
+                          <rect
+                            key={`hover-catcher-${i}`}
+                            x={p.x - catcherWidth / 2}
+                            y={30}
+                            width={catcherWidth}
+                            height={140}
+                            fill="transparent"
+                            className="trend-catcher-rect"
+                            onMouseEnter={() => {
+                              setHoveredPoint(i);
+                              setTooltipPos({ x: p.x, y: p.y });
+                              
+                              const tooltipContent = (
+                                <div className="tooltip-container">
+                                  <div className="tooltip-title">
+                                    {item.label}
+                                  </div>
+                                  {[
+                                    { key: "Registered", label: t("statusRegistered") },
+                                    { key: "Under Subject Officer", label: t("underSubject") },
+                                    { key: "Under Investigation", label: t("underInvestigation") },
+                                    { key: "Closed", label: t("statusClosed") }
+                                  ].map(s => (
+                                    <div key={s.key} className="tooltip-row">
+                                      <span className="tooltip-label">
+                                        <span className={`chart-legend-dot green-card-dot-${s.key.toLowerCase().replace(/ /g, "-")}`} />
+                                        {s.label}
+                                      </span>
+                                      <span className="tooltip-value">{item.counts[s.key as keyof typeof item.counts]}</span>
+                                    </div>
+                                  ))}
+                                  <div className="tooltip-total-row">
+                                    <span>{t("totalCases")}</span>
+                                    <span>{item.counts.total}</span>
+                                  </div>
+                                </div>
+                              );
+                              setTooltipText(tooltipContent);
+                            }}
+                            onMouseLeave={() => setHoveredPoint(null)}
+                          />
                         );
                       })}
                     </svg>
@@ -1121,7 +1417,6 @@ export default function AdminPage() {
                 </div>
               </section>
 
-              {/* ── Cases Ledger Table ── */}
               <section className="letters-list-section">
                 <div className="letters-list-header">
                   <h3 className="section-title">{t("disciplinaryCasesLedger")}</h3>
