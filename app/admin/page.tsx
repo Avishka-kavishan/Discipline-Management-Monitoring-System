@@ -214,10 +214,10 @@ export default function AdminDashboard() {
       {/* Header section */}
       <div className="admin-dashboard-header">
         <div>
-          <h3 className="admin-dashboard-title1">Dashboard</h3>
+          <h3 className="admin-dashboard-title1">{t("dashboard", "Dashboard")}</h3>
           <h2 className="admin-dashboard-title">{greeting}</h2>
           <p className="admin-dashboard-subtitle">
-            5 officers · 3 institutes · {totalCasesCount} total cases
+            {t("adminSubtitle", "5 officers · 3 institutes · {{count}} total cases", { count: totalCasesCount })}
           </p>
         </div>
         <div className="admin-filters-container">
@@ -228,13 +228,13 @@ export default function AdminDashboard() {
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
             >
-              <option value="All types">All types</option>
-              <option value="Fraud">Fraud</option>
-              <option value="Cybercrime">Cybercrime</option>
-              <option value="Assault">Assault</option>
-              <option value="Theft">Theft</option>
-              <option value="Narcotics">Narcotics</option>
-              <option value="Forgery">Forgery</option>
+              <option value="All types">{t("allTypes", "All types")}</option>
+              <option value="Fraud">{t("typeFraud", "Fraud")}</option>
+              <option value="Cybercrime">{t("typeCybercrime", "Cybercrime")}</option>
+              <option value="Assault">{t("typeAssault", "Assault")}</option>
+              <option value="Theft">{t("typeTheft", "Theft")}</option>
+              <option value="Narcotics">{t("typeNarcotics", "Narcotics")}</option>
+              <option value="Forgery">{t("typeForgery", "Forgery")}</option>
             </select>
             <div className="admin-filter-icon">
               <ChevronDown />
@@ -247,10 +247,10 @@ export default function AdminDashboard() {
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
             >
-              <option value="All statuses">All statuses</option>
-              <option value="Under Investigation">Under Investigation</option>
-              <option value="Closed">Closed</option>
-              <option value="Under Subject Officer">Under Subject Officer</option>
+              <option value="All statuses">{t("allStatuses", "All statuses")}</option>
+              <option value="Under Investigation">{t("statusUnderInvestigation", "Under Investigation")}</option>
+              <option value="Closed">{t("statusClosed", "Closed")}</option>
+              <option value="Under Subject Officer">{t("statusUnderSubjectOfficer", "Under Subject Officer")}</option>
             </select>
             <div className="admin-filter-icon">
               <ChevronDown />
@@ -262,30 +262,30 @@ export default function AdminDashboard() {
       {/* Stats Cards */}
       <div className="admin-stats-grid">
         <StatCard
-          title="TOTAL CASES"
+          title={t("totalCases", "TOTAL CASES")}
           value={totalCasesCount.toString()}
-          subtitle="All registered"
+          subtitle={t("allRegistered", "All registered")}
           icon={<Folder style={{ width: 20, height: 20, color: '#4f46e5' }} />}
           iconBg="admin-bg-indigo"
         />
         <StatCard
-          title="UNDER INVESTIGATION"
+          title={t("underInvestigation", "UNDER INVESTIGATION")}
           value={underInvestigationCount.toString()}
-          subtitle="Active investigations"
+          subtitle={t("activeInvestigations", "Active investigations")}
           icon={<Search style={{ width: 20, height: 20, color: '#2563eb' }} />}
           iconBg="admin-bg-blue"
         />
         <StatCard
-          title="CLOSED"
+          title={t("closed", "CLOSED")}
           value={closedCount.toString()}
-          subtitle="Resolved cases"
+          subtitle={t("resolvedCases", "Resolved cases")}
           icon={<CheckCircle2 style={{ width: 20, height: 20, color: '#059669' }} />}
           iconBg="admin-bg-emerald"
         />
         <StatCard
-          title="UNDER SUBJECT OFFICER"
+          title={t("underSubjectOfficer", "UNDER SUBJECT OFFICER")}
           value={underSubjectOfficerCount.toString()}
-          subtitle="Awaiting subject officer"
+          subtitle={t("awaitingSubjectOfficer", "Awaiting subject officer")}
           icon={<User style={{ width: 20, height: 20, color: '#d97706' }} />}
           iconBg="admin-bg-amber"
         />
@@ -295,8 +295,8 @@ export default function AdminDashboard() {
       <div className="admin-chart-card">
         <div className="admin-chart-header">
           <div>
-            <h3 className="admin-chart-title">Cases over time</h3>
-            <p className="admin-chart-subtitle">New cases per period</p>
+            <h3 className="admin-chart-title">{t("casesOverTime", "Cases over time")}</h3>
+            <p className="admin-chart-subtitle">{t("newCasesPerPeriod", "New cases per period")}</p>
           </div>
           <div className="admin-chart-filters">
             {["Daily", "Weekly", "Monthly", "Yearly"].map((period) => (
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
                 className={chartPeriod === period ? "admin-chart-filter-btn-active" : "admin-chart-filter-btn"}
                 onClick={() => setChartPeriod(period)}
               >
-                {period}
+                {t(period.toLowerCase(), period)}
               </button>
             ))}
           </div>
@@ -356,7 +356,7 @@ export default function AdminDashboard() {
       <div className="admin-secondary-charts-grid">
         {/* Status Distribution */}
         <div className="admin-chart-card">
-          <h3 className="admin-secondary-chart-title">Status distribution</h3>
+          <h3 className="admin-secondary-chart-title">{t("statusDistribution", "Status distribution")}</h3>
           <div className="admin-pie-chart-wrapper">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -390,7 +390,7 @@ export default function AdminDashboard() {
 
         {/* Cases by type */}
         <div className="admin-chart-card">
-          <h3 className="admin-secondary-chart-title">Cases by type</h3>
+          <h3 className="admin-secondary-chart-title">{t("casesByType", "Cases by type")}</h3>
           <div className="admin-bar-chart-wrapper">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dynamicTypeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
@@ -430,7 +430,7 @@ export default function AdminDashboard() {
             <svg className="admin-section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <span>Recent Cases</span>
+            <span>{t("recentCases", "Recent Cases")}</span>
           </h3>
           <div className="letters-filters-group">
             <div className="search-box">
@@ -439,7 +439,7 @@ export default function AdminDashboard() {
               </svg>
               <input
                 type="text"
-                placeholder="Search cases..."
+                placeholder={t("searchCasesPlaceholder", "Search cases...")}
                 className="search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -455,7 +455,7 @@ export default function AdminDashboard() {
                 setSearchQuery("");
               }}
             >
-              View All <span className="arrow-span">→</span>
+              {t("viewAll", "View All")} <span className="arrow-span">→</span>
             </a>
           </div>
         </div>
@@ -464,13 +464,13 @@ export default function AdminDashboard() {
           <table className="letters-data-table">
             <thead>
               <tr>
-                <th scope="col">Case No</th>
-                <th scope="col">Date Filed</th>
-                <th scope="col">Subject</th>
-                <th scope="col">Assigned To</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Status</th>
-                <th scope="col" className="admin-table-header-center">Action</th>
+                <th scope="col">{t("caseNo", "Case No")}</th>
+                <th scope="col">{t("dateFiled", "Date Filed")}</th>
+                <th scope="col">{t("subjectText", "Subject")}</th>
+                <th scope="col">{t("assignedTo", "Assigned To")}</th>
+                <th scope="col">{t("priority", "Priority")}</th>
+                <th scope="col">{t("status", "Status")}</th>
+                <th scope="col" className="admin-table-header-center">{t("action", "Action")}</th>
               </tr>
             </thead>
             <tbody>
@@ -486,7 +486,7 @@ export default function AdminDashboard() {
                         item.priority === "High" ? "badge-priority-high" :
                         item.priority === "Medium" ? "badge-priority-medium" : "badge-priority-low"
                       }`}>
-                        {item.priority}
+                        {item.priority === "High" ? t("priorityHigh", "High") : item.priority === "Medium" ? t("priorityMedium", "Medium") : t("priorityLow", "Low")}
                       </span>
                     </td>
                     <td>
@@ -494,18 +494,20 @@ export default function AdminDashboard() {
                         item.status === "Under Investigation" ? "badge-status-inprogress" :
                         item.status === "Closed" ? "badge-status-closed" : "badge-status-pending"
                       }`}>
-                        {item.status}
+                        {item.status === "Under Investigation" ? t("statusUnderInvestigation", "Under Investigation") :
+                         item.status === "Closed" ? t("statusClosed", "Closed") :
+                         t("statusUnderSubjectOfficer", "Under Subject Officer")}
                       </span>
                     </td>
                     <td className="admin-table-cell-center">
-                      <a href="#" className="add-details-link">View</a>
+                      <a href="#" className="add-details-link">{t("view", "View")}</a>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td colSpan={7} className="admin-table-no-data">
-                    No cases match the selected filters.
+                    {t("noCasesMatchFilters", "No cases match the selected filters.")}
                   </td>
                 </tr>
               )}

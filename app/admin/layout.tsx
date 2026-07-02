@@ -18,11 +18,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const lang = i18n.language;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const pageTitleMap: Record<string, { title: string; subtitle: string }> = {
-    "/admin": { title: "System Admin", subtitle: "Manage cases and user access" },
-    "/admin/subject-officers": { title: "Subject Officer", subtitle: "Oversee subject officer tasks" },
+  const getPageTitleAndSubtitle = () => {
+    if (pathname === "/admin/subject-officers") {
+      return {
+        title: t("subjectOfficer", "Subject Officer"),
+        subtitle: t("subjectOfficerDesc", "Oversee subject officer tasks")
+      };
+    }
+    return {
+      title: t("adminDashboardTitle", "System Admin"),
+      subtitle: t("adminDashboardDesc", "Manage cases and user access")
+    };
   };
-  const { title, subtitle } = pageTitleMap[pathname] || pageTitleMap["/admin"];
+
+  const { title, subtitle } = getPageTitleAndSubtitle();
 
   const getFormattedDate = () => {
     const date = new Date();
