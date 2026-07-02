@@ -270,49 +270,100 @@ export default function SubjectPage() {
 
           {/* Stats section */}
           <section className="dashboard-stats-grid subject-stats-grid">
-            <div className="stat-card-total">
-              <div className="stat-card-header">
-                <div className="stat-icon-wrapper">
-                  <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <div className="premium-stat-card total-cases-card">
+              <div className="premium-card-top">
+                <div className="premium-card-title-area">
+                  <svg className="premium-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
+                  <span>{t("totalCases")}</span>
                 </div>
-                <h4>{t("totalCases")}</h4>
+                <span className="premium-card-percentage">100%</span>
               </div>
-              <p className="stat-value text-blue">56</p>
+              <div className="premium-card-bottom">
+                <div className="premium-card-value-area">
+                  <span className="premium-card-value">56</span>
+                  <span className="premium-card-label">cases</span>
+                </div>
+                <div className="premium-card-sparkline">
+                  <svg viewBox="0 0 100 30" width="80" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M 5,22 Q 25,10 45,20 T 75,8 T 95,15" strokeLinecap="round" />
+                    <circle cx="75" cy="8" r="3" fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div className="stat-card-inprogress">
-              <div className="stat-card-header">
-                <div className="stat-icon-wrapper">
-                  <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+
+            <div className="premium-stat-card inprogress-cases-card">
+              <div className="premium-card-top">
+                <div className="premium-card-title-area">
+                  <svg className="premium-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
                   </svg>
+                  <span>{t("inProgressCases")}</span>
                 </div>
-                <h4>{t("inProgressCases")}</h4>
+                <span className="premium-card-percentage">+18%</span>
               </div>
-              <p className="stat-value text-orange">10</p>
+              <div className="premium-card-bottom">
+                <div className="premium-card-value-area">
+                  <span className="premium-card-value">10</span>
+                  <span className="premium-card-label">cases</span>
+                </div>
+                <div className="premium-card-sparkline">
+                  <svg viewBox="0 0 100 30" width="80" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M 5,20 Q 25,25 45,12 T 75,5 T 95,15" strokeLinecap="round" />
+                    <circle cx="75" cy="5" r="3" fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div className="stat-card-pending">
-              <div className="stat-card-header">
-                <div className="stat-icon-wrapper">
-                  <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+
+            <div className="premium-stat-card pending-cases-card">
+              <div className="premium-card-top">
+                <div className="premium-card-title-area">
+                  <svg className="premium-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
+                  <span>{t("pendingCases")}</span>
                 </div>
-                <h4>{t("pendingCases")}</h4>
+                <span className="premium-card-percentage">+9%</span>
               </div>
-              <p className="stat-value text-yellow">05</p>
-            </div>
-            <div className="stat-card-close">
-              <div className="stat-card-header">
-                <div className="stat-icon-wrapper">
-                  <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <div className="premium-card-bottom">
+                <div className="premium-card-value-area">
+                  <span className="premium-card-value">05</span>
+                  <span className="premium-card-label">cases</span>
+                </div>
+                <div className="premium-card-sparkline">
+                  <svg viewBox="0 0 100 30" width="80" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M 5,15 Q 25,8 45,22 T 75,12 T 95,25" strokeLinecap="round" />
+                    <circle cx="75" cy="12" r="3" fill="#ffffff" />
                   </svg>
                 </div>
-                <h4>{t("closeCases")}</h4>
               </div>
-              <p className="stat-value text-green">32</p>
+            </div>
+
+            <div className="premium-stat-card closed-cases-card">
+              <div className="premium-card-top">
+                <div className="premium-card-title-area">
+                  <svg className="premium-card-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>{t("closeCases")}</span>
+                </div>
+                <span className="premium-card-percentage">+57%</span>
+              </div>
+              <div className="premium-card-bottom">
+                <div className="premium-card-value-area">
+                  <span className="premium-card-value">32</span>
+                  <span className="premium-card-label">cases</span>
+                </div>
+                <div className="premium-card-sparkline">
+                  <svg viewBox="0 0 100 30" width="80" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M 5,25 Q 25,20 45,8 T 75,5 T 95,12" strokeLinecap="round" />
+                    <circle cx="75" cy="5" r="3" fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
             </div>
           </section>
 
