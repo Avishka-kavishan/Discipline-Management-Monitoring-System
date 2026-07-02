@@ -272,36 +272,44 @@ export default function SubjectPage() {
           <section className="dashboard-stats-grid subject-stats-grid">
             <div className="stat-card-total">
               <div className="stat-card-header">
-                <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+                <div className="stat-icon-wrapper">
+                  <svg className="stat-card-icon icon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
                 <h4>{t("totalCases")}</h4>
               </div>
               <p className="stat-value text-blue">56</p>
             </div>
             <div className="stat-card-inprogress">
               <div className="stat-card-header">
-                <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
-                </svg>
+                <div className="stat-icon-wrapper">
+                  <svg className="stat-card-icon icon-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18" />
+                  </svg>
+                </div>
                 <h4>{t("inProgressCases")}</h4>
               </div>
               <p className="stat-value text-orange">10</p>
             </div>
             <div className="stat-card-pending">
               <div className="stat-card-header">
-                <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <div className="stat-icon-wrapper">
+                  <svg className="stat-card-icon icon-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
                 <h4>{t("pendingCases")}</h4>
               </div>
               <p className="stat-value text-yellow">05</p>
             </div>
             <div className="stat-card-close">
               <div className="stat-card-header">
-                <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <div className="stat-icon-wrapper">
+                  <svg className="stat-card-icon icon-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
                 <h4>{t("closeCases")}</h4>
               </div>
               <p className="stat-value text-green">32</p>
