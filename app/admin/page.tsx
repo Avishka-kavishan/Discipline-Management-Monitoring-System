@@ -221,7 +221,7 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div className="admin-filters-container">
-          <div style={{ position: 'relative' }}>
+          <div className="admin-filter-wrapper">
             <select 
               aria-label="Filter by case type" 
               className="admin-filter-select"
@@ -237,10 +237,10 @@ export default function AdminDashboard() {
               <option value="Forgery">Forgery</option>
             </select>
             <div className="admin-filter-icon">
-              <ChevronDown style={{ width: 16, height: 16 }} />
+              <ChevronDown />
             </div>
           </div>
-          <div style={{ position: 'relative' }}>
+          <div className="admin-filter-wrapper">
             <select 
               aria-label="Filter by status" 
               className="admin-filter-select"
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
               <option value="Under Subject Officer">Under Subject Officer</option>
             </select>
             <div className="admin-filter-icon">
-              <ChevronDown style={{ width: 16, height: 16 }} />
+              <ChevronDown />
             </div>
           </div>
         </div>
@@ -266,28 +266,28 @@ export default function AdminDashboard() {
           value={totalCasesCount.toString()}
           subtitle="All registered"
           icon={<Folder style={{ width: 20, height: 20, color: '#4f46e5' }} />}
-          iconBg="#eef2ff"
+          iconBg="admin-bg-indigo"
         />
         <StatCard
           title="UNDER INVESTIGATION"
           value={underInvestigationCount.toString()}
           subtitle="Active investigations"
           icon={<Search style={{ width: 20, height: 20, color: '#2563eb' }} />}
-          iconBg="#eff6ff"
+          iconBg="admin-bg-blue"
         />
         <StatCard
           title="CLOSED"
           value={closedCount.toString()}
           subtitle="Resolved cases"
           icon={<CheckCircle2 style={{ width: 20, height: 20, color: '#059669' }} />}
-          iconBg="#ecfdf5"
+          iconBg="admin-bg-emerald"
         />
         <StatCard
           title="UNDER SUBJECT OFFICER"
           value={underSubjectOfficerCount.toString()}
           subtitle="Awaiting subject officer"
           icon={<User style={{ width: 20, height: 20, color: '#d97706' }} />}
-          iconBg="#fffbeb"
+          iconBg="admin-bg-amber"
         />
       </div>
 
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                   verticalAlign="bottom" 
                   height={36} 
                   iconType="circle"
-                  formatter={(value) => <span style={{ fontSize: 14, color: '#4b5563', marginLeft: 4 }}>{value}</span>}
+                  formatter={(value) => <span className="admin-legend-label">{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -427,14 +427,14 @@ export default function AdminDashboard() {
       <section className="letters-list-section">
         <div className="letters-list-header">
           <h3 className="section-title">
-            <svg style={{ width: 20, height: 20, marginRight: 8, flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <svg className="admin-section-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
             <span>Recent Cases</span>
           </h3>
           <div className="letters-filters-group">
             <div className="search-box">
-              <svg style={{ width: 18, height: 18, position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <svg className="admin-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -470,14 +470,14 @@ export default function AdminDashboard() {
                 <th scope="col">Assigned To</th>
                 <th scope="col">Priority</th>
                 <th scope="col">Status</th>
-                <th scope="col" style={{ textAlign: 'center' }}>Action</th>
+                <th scope="col" className="admin-table-header-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredRecentCases.length > 0 ? (
                 filteredRecentCases.map((item) => (
                   <tr key={item.id} className="letter-table-row">
-                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{item.caseNo}</td>
+                    <td className="admin-table-case-no">{item.caseNo}</td>
                     <td>{item.dateFiled}</td>
                     <td className="subject-cell">{item.subject}</td>
                     <td>{item.assignedTo}</td>
@@ -497,14 +497,14 @@ export default function AdminDashboard() {
                         {item.status}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'center' }}>
+                    <td className="admin-table-cell-center">
                       <a href="#" className="add-details-link">View</a>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '24px 0', color: '#64748b' }}>
+                  <td colSpan={7} className="admin-table-no-data">
                     No cases match the selected filters.
                   </td>
                 </tr>
@@ -536,7 +536,7 @@ function StatCard({
         <div className="admin-stat-title">
           {title}
         </div>
-        <div className="admin-stat-icon-wrapper" style={{ backgroundColor: iconBg }}>
+        <div className={`admin-stat-icon-wrapper ${iconBg}`}>
           {icon}
         </div>
       </div>
