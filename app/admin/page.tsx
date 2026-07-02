@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "../../i18n";
 import { Folder, Search, CheckCircle2, User, ChevronDown } from "lucide-react";
 import {
   AreaChart,
@@ -97,15 +99,29 @@ const recentCases = [
 ];
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const [chartPeriod, setChartPeriod] = useState("Monthly");
   const chartData = chartDataMap[chartPeriod];
+  const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    let greetingKey = "greetingMorning";
+    if (hour >= 12 && hour < 17) {
+      greetingKey = "greetingAfternoon";
+    } else if (hour >= 17 || hour < 5) {
+      greetingKey = "greetingEvening";
+    }
+    const firstName = t("adminName", "Aruni").split(" ")[0];
+    setGreeting(`${t(greetingKey, "Good Morning")}, ${firstName}!`);
+  }, [t]);
 
   return (
     <div className="admin-dashboard-container">
       {/* Header section */}
       <div className="admin-dashboard-header">
         <div>
-          <h2 className="admin-dashboard-title">Dashboard</h2>
+          <h2 className="admin-dashboard-title">{greeting}</h2>
           <p className="admin-dashboard-subtitle">
             5 officers · 3 institutes · 84 total cases
           </p>

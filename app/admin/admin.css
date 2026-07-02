@@ -24,10 +24,9 @@
 }
 
 .admin-dashboard-title {
-  font-size: calc(24px * var(--font-scale, 1));
-  font-weight: 700;
-  color: #111827;
-  letter-spacing: -0.025em;
+  font-size: calc(20px * var(--font-scale, 1));
+  font-weight: 600;
+  color: #1e293b;
   margin: 0;
 }
 
